@@ -27,7 +27,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const car = byId((await params).id);
-  return { title: `${headline(car)} — windshield cards` };
+  return { title: `${headline(car)} — cartonașe de parbriz` };
 }
 
 export default async function CardsScreen({ params }: { params: Promise<{ id: string }> }) {
@@ -45,10 +45,10 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
         </div>
         <PrintButton />
         <Link href={`/car/${car.id}`} className={styles.toolbarLink}>
-          THE BUILD →
+          PROIECTUL →
         </Link>
         <Link href="/cards" className={styles.toolbarLink}>
-          ALL ENTRIES
+          TOATE ÎNSCRIERILE
         </Link>
       </div>
 
@@ -56,7 +56,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
         {/* ── 1g · Spec plate — black stock, stand number leads ── */}
         <div className={styles.caption}>
           <span className={styles.captionTag}>1g</span>
-          <span>Spec plate — black stock, stand number leads.</span>
+          <span>Plăcuță de specificații — carton negru, numărul de stand conduce.</span>
         </div>
         <div className={`${styles.card} ${styles.dark}`}>
           <div className={styles.band}>
@@ -84,18 +84,18 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
               <div className="spacer" />
               <div className={styles.plateSpecs}>
                 <div className={styles.plateSpec}>
-                  <div className={styles.plateSpecKey}>POWER</div>
+                  <div className={styles.plateSpecKey}>PUTERE</div>
                   <div className={styles.plateSpecValue}>
                     {car.power}
-                    <i> HP</i>
+                    <i> CP</i>
                   </div>
                 </div>
                 <div className={styles.plateSpec}>
-                  <div className={styles.plateSpecKey}>ENGINE</div>
+                  <div className={styles.plateSpecKey}>MOTOR</div>
                   <div className={styles.plateSpecValue}>{car.engine.split(' ')[0]}</div>
                 </div>
                 <div className={styles.plateSpec}>
-                  <div className={styles.plateSpecKey}>DRIVE</div>
+                  <div className={styles.plateSpecKey}>TRACȚIUNE</div>
                   <div className={styles.plateSpecValue}>{car.drive}</div>
                 </div>
               </div>
@@ -104,9 +104,9 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
             <div className={styles.qrCol}>
               <QrCode value={url} size={QR_SIZE} dark="#F2F2F0" light="#0B0B0C" />
               <div className={styles.qrCaption}>
-                SCAN FOR
+                SCANEAZĂ
                 <br />
-                THE BUILD
+                PROIECTUL
               </div>
             </div>
           </div>
@@ -115,25 +115,25 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
             <b>
               {car.owner} · @{car.handle.toUpperCase()} · {car.town}
             </b>
-            <span>LEAVE ON THE WINDSCREEN</span>
+            <span>LASĂ PE PARBRIZ</span>
           </div>
         </div>
 
         {/* ── 1h · Scrutineering slip — paper stock, ink-light ── */}
         <div className={styles.caption}>
           <span className={styles.captionTag}>1h</span>
-          <span>Scrutineering slip — paper stock, ink-light, reads at ten paces.</span>
+          <span>Fișă de verificare — hârtie, puțină cerneală, se citește de la zece pași.</span>
         </div>
         <div className={`${styles.card} ${styles.light}`}>
           <div className={styles.slipBody}>
             <div className={styles.entryCol}>
-              <div className={styles.entryLabel}>ENTRY №</div>
+              <div className={styles.entryLabel}>ÎNSCRIERE №</div>
               <div className={styles.entryNo}>{car.no}</div>
               <div className="spacer" />
               <div className={styles.entryFoot}>
-                CLASS · {car.cls}
+                CLASĂ · {car.cls}
                 <br />
-                PADDOCK {paddockOf(car)}
+                PADOC {paddockOf(car)}
               </div>
             </div>
 
@@ -151,10 +151,10 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
 
               <div className={styles.slipRows}>
                 {[
-                  ['ENGINE', car.engine],
-                  ['POWER', `${car.power} HP`],
-                  ['DRIVETRAIN', car.drive],
-                  ['PAINT', car.paint],
+                  ['MOTOR', car.engine],
+                  ['PUTERE', `${car.power} CP`],
+                  ['TRACȚIUNE', car.drive],
+                  ['VOPSEA', car.paint],
                 ].map(([k, v]) => (
                   <div key={k} className={styles.slipRow}>
                     <b>{k}</b>
@@ -168,11 +168,11 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
               <div className={styles.slipScan}>
                 <QrCode value={url} size={QR_SIZE} dark="#0B0B0C" light="#F4F3EF" />
                 <p>
-                  SCAN FOR MOD LIST,
+                  SCANEAZĂ PENTRU LISTA
                   <br />
-                  BUILD STORY AND
+                  DE MODIFICĂRI, POVESTE
                   <br />
-                  THE OWNER&apos;S SOCIALS.
+                  ȘI REȚELELE PROPRIETARULUI.
                 </p>
               </div>
             </div>
@@ -180,18 +180,18 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
 
           <div className={styles.slipFoot}>
             <b>SHOW.X / {car.no}</b>
-            <span>VOTING CLOSES {EVENT.votingCloses}</span>
+            <span>VOTUL SE ÎNCHIDE LA {EVENT.votingCloses}</span>
           </div>
         </div>
 
         {/* ── 1i · Photo plate — the car on the card ── */}
         <div className={styles.caption}>
           <span className={styles.captionTag}>1i</span>
-          <span>Photo plate — costlier to print, best for award winners.</span>
+          <span>Plăcuță foto — mai scumpă de tipărit, potrivită pentru câștigători.</span>
         </div>
         <div className={`${styles.card} ${styles.dark}`}>
           <div className={styles.photoBand}>
-            <ImageSlot id={`hero-${car.id}-0`} hint="Drop the car's hero photo" />
+            <ImageSlot id={`hero-${car.id}-0`} hint="Pune poza principală a mașinii" />
             <div className={styles.photoScrim} />
             <div className={styles.photoBadge}>{EVENT.edition}</div>
             <div className={styles.photoCaption}>
@@ -209,12 +209,12 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
             <QrCode value={url} size={QR_SIZE} dark="#F2F2F0" light="#0B0B0C" />
             <div className={styles.photoSpecs}>
               {[
-                ['ENGINE', car.engine],
-                ['POWER', `${car.power} HP`],
-                ['TORQUE', `${car.tq} NM`],
-                ['DRIVE', car.drive],
-                ['WEIGHT', `${car.weight} KG`],
-                ['CLASS', car.cls],
+                ['MOTOR', car.engine],
+                ['PUTERE', `${car.power} CP`],
+                ['CUPLU', `${car.tq} NM`],
+                ['TRACȚIUNE', car.drive],
+                ['GREUTATE', `${car.weight} KG`],
+                ['CLASĂ', car.cls],
               ].map(([k, v]) => (
                 <div key={k} className={styles.photoSpec}>
                   <b>{k}</b>
@@ -225,7 +225,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
           </div>
 
           <div className={styles.photoFoot}>
-            SCAN FOR THE FULL BUILD · {modCount(car)} MODS · {car.town}
+            SCANEAZĂ PENTRU TOT PROIECTUL · {modCount(car)} MODIFICĂRI · {car.town}
           </div>
         </div>
       </div>

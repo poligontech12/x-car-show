@@ -14,19 +14,19 @@ export default function PartnersScreen() {
           <button
             type="button"
             className={styles.back}
-            aria-label="Back"
+            aria-label="Înapoi"
             onClick={() => router.back()}
           >
             ←
           </button>
           <h1 className="t-title" style={{ flex: 1 }}>
-            PARTNERS
+            PARTENERI
           </h1>
         </div>
         <p className={styles.note}>
-          EVERY SHOP HERE HAS WORK ON AT LEAST
+          FIECARE ATELIER DE AICI A LUCRAT LA CEL PUȚIN
           <br />
-          ONE CAR IN THE ROSTER. NO PAID PLACEMENT.
+          O MAȘINĂ DIN LISTĂ. FĂRĂ PLASĂRI PLĂTITE.
         </p>
       </div>
 

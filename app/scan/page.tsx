@@ -24,7 +24,7 @@ export default function ScanScreen() {
       <button
         type="button"
         className={styles.viewfinder}
-        aria-label={found ? 'Clear the match' : 'Simulate scanning a windshield card'}
+        aria-label={found ? 'Renunță la potrivire' : 'Simulează scanarea unui cartonaș de parbriz'}
         onClick={() => setFound((f) => !f)}
       >
         <span className={styles.card} />
@@ -35,9 +35,9 @@ export default function ScanScreen() {
           <i />
           <span className={styles.line} />
         </span>
-        <span className={styles.label}>SCAN A WINDSHIELD CARD</span>
+        <span className={styles.label}>SCANEAZĂ UN CARTONAȘ DE PARBRIZ</span>
         <span className={`${styles.hint} ${found ? styles.hintFound : ''}`}>
-          {found ? `CARD ${car.no} · MATCHED` : 'TAP THE VIEWFINDER TO SIMULATE A SCAN'}
+          {found ? `CARTONAȘ ${car.no} · GĂSIT` : 'ATINGE VIZORUL PENTRU O SCANARE DEMO'}
         </span>
       </button>
 
@@ -49,7 +49,7 @@ export default function ScanScreen() {
         >
           <span className={styles.thumb} />
           <span className={styles.matchBody}>
-            <span className={styles.matchKind}>MATCH · CARD {car.no}</span>
+            <span className={styles.matchKind}>POTRIVIRE · CARTONAȘ {car.no}</span>
             <span className={styles.matchName}>{headline(car)}</span>
             <span className={styles.matchMeta}>
               {car.owner} · STAND {car.stand}
@@ -60,7 +60,7 @@ export default function ScanScreen() {
       ) : (
         <div className={styles.recents}>
           <div className={styles.recentsHead}>
-            <SectionRule label="RECENTLY SCANNED" />
+            <SectionRule label="SCANATE RECENT" />
           </div>
           {RECENT_SCANS.map(([id, ago]) => {
             const c = byId(id);

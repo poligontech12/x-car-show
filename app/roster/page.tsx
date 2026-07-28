@@ -16,7 +16,7 @@ import styles from './roster.module.css';
 export default function RosterScreen() {
   const { classFilter, setClassFilter } = useStore();
 
-  const list = CARS.filter((c) => classFilter === 'ALL' || c.cls === classFilter);
+  const list = CARS.filter((c) => classFilter === 'TOATE' || c.cls === classFilter);
   const [feature, ...rest] = list;
   const unfiltered = list.length === CARS.length;
 
@@ -24,14 +24,14 @@ export default function RosterScreen() {
     <>
       <StickyHeader>
         <HeaderRow>
-          <h1 className="t-title">ROSTER</h1>
+          <h1 className="t-title">ÎNSCRIȘI</h1>
           <HeaderRule />
           <div className={styles.count}>
-            {unfiltered ? `${ROSTER_TOTAL} ENTRIES` : `${list.length} OF ${ROSTER_TOTAL}`}
+            {unfiltered ? `${ROSTER_TOTAL} ÎNSCRIERI` : `${list.length} DIN ${ROSTER_TOTAL}`}
           </div>
         </HeaderRow>
 
-        <FilterRow label="Filter by class">
+        <FilterRow label="Filtrează după clasă">
           {CLASSES.map((c) => (
             <Chip key={c} label={c} on={classFilter === c} onClick={() => setClassFilter(c)} />
           ))}
@@ -48,7 +48,7 @@ export default function RosterScreen() {
           <div className={styles.scrim} />
           <div className={styles.featureCaption}>
             <b>{headline(feature)}</b>
-            <span>{`${feature.no} · ${feature.cls} · ${feature.power} HP`}</span>
+            <span>{`${feature.no} · ${feature.cls} · ${feature.power} CP`}</span>
           </div>
         </Link>
       )}
@@ -61,7 +61,7 @@ export default function RosterScreen() {
             <div className={styles.tileScrim} />
             <div className={styles.tileCaption}>
               <b>{displayModel(c)}</b>
-              <span>{`${c.year} · ${c.power} HP`}</span>
+              <span>{`${c.year} · ${c.power} CP`}</span>
             </div>
           </Link>
         ))}
@@ -69,8 +69,8 @@ export default function RosterScreen() {
 
       <div className={styles.foot}>
         {unfiltered
-          ? `END OF PAGE 1 · ${ROSTER_TOTAL - CARS.length} MORE`
-          : 'FILTERED VIEW'}
+          ? `SFÂRȘITUL PAGINII 1 · ÎNCĂ ${ROSTER_TOTAL - CARS.length}`
+          : 'VIZUALIZARE FILTRATĂ'}
       </div>
     </>
   );

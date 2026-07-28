@@ -9,14 +9,14 @@ import { useStore, type Drive } from '@/lib/store';
 import styles from './onboard.module.css';
 
 const STEPS = [
-  ['What is it?', 'Pick the badge and the year. We fill in the boring parts.'],
-  ['Numbers.', 'Rough is fine. Nobody is checking your dyno sheet.'],
-  ['Three photos.', 'One hero, two details. You can add more later.'],
-  ['Tell it like you would at the meet.', 'This is the bit people actually read.'],
-  ['You’re in.', 'Card printed. Stand assigned. See you on the 22nd.'],
+  ['Ce e?', 'Alege sigla și anul. Restul completăm noi.'],
+  ['Cifrele.', 'Aproximativ e în regulă. Nu verifică nimeni fișa de dyno.'],
+  ['Trei poze.', 'Una principală, două detalii. Poți adăuga mai multe mai târziu.'],
+  ['Spune-o cum ai spune-o la întâlnire.', 'Asta e partea pe care o citește lumea.'],
+  ['Ești înscris.', 'Cartonaș tipărit. Stand alocat. Ne vedem pe 22.'],
 ] as const;
 
-const NEXT_LABELS = ['CONTINUE', 'CONTINUE', 'LOOKS GOOD', 'FINISH', 'SEE THE ROSTER'];
+const NEXT_LABELS = ['CONTINUĂ', 'CONTINUĂ', 'ARATĂ BINE', 'GATA', 'VEZI LISTA'];
 
 const MAKES = [
   'NISSAN',
@@ -29,7 +29,7 @@ const MAKES = [
   'AUDI',
   'MITSUBISHI',
   'ARO',
-  'OTHER',
+  'ALTA',
 ];
 const YEARS = ['1978', '1989', '1994', '1998', '2003', '2005', '2016'];
 const DRIVES: Drive[] = ['FWD', 'RWD', 'AWD'];
@@ -66,13 +66,13 @@ export default function OnboardScreen() {
           <button
             type="button"
             className={styles.close}
-            aria-label="Close"
+            aria-label="Închide"
             onClick={() => router.back()}
           >
             ×
           </button>
-          <div className={styles.label}>REGISTER A CAR</div>
-          <div className={styles.stepLabel}>{done ? 'DONE' : `STEP ${step + 1}/4`}</div>
+          <div className={styles.label}>ÎNSCRIE O MAȘINĂ</div>
+          <div className={styles.stepLabel}>{done ? 'GATA' : `PASUL ${step + 1}/4`}</div>
         </div>
         <div className={styles.progress} aria-hidden="true">
           {[0, 1, 2, 3].map((i) => (
@@ -87,7 +87,7 @@ export default function OnboardScreen() {
 
         {step === 0 && (
           <>
-            <div className={styles.opts} role="group" aria-label="Make">
+            <div className={styles.opts} role="group" aria-label="Marcă">
               {MAKES.map((m) => (
                 <button
                   key={m}
@@ -101,8 +101,8 @@ export default function OnboardScreen() {
               ))}
             </div>
 
-            <div className={`${styles.fieldLabel} ${styles.spaced}`}>YEAR</div>
-            <div className={`${styles.opts} ${styles.optsTight}`} role="group" aria-label="Year">
+            <div className={`${styles.fieldLabel} ${styles.spaced}`}>AN</div>
+            <div className={`${styles.opts} ${styles.optsTight}`} role="group" aria-label="An">
               {YEARS.map((y) => (
                 <button
                   key={y}
@@ -120,32 +120,32 @@ export default function OnboardScreen() {
 
         {step === 1 && (
           <>
-            <div className={`${styles.fieldLabel} ${styles.spaced}`}>POWER AT THE WHEELS</div>
+            <div className={`${styles.fieldLabel} ${styles.spaced}`}>PUTERE LA ROȚI</div>
             <div className={styles.stepper}>
               <button
                 type="button"
                 className={styles.pm}
-                aria-label="Less power"
+                aria-label="Mai puțină putere"
                 onClick={() => patchOnboarding({ power: Math.max(40, onboarding.power - 10) })}
               >
                 −
               </button>
               <div className={styles.power}>
                 <div className={styles.powerValue}>{onboarding.power}</div>
-                <div className={styles.powerUnit}>HP</div>
+                <div className={styles.powerUnit}>CP</div>
               </div>
               <button
                 type="button"
                 className={styles.pm}
-                aria-label="More power"
+                aria-label="Mai multă putere"
                 onClick={() => patchOnboarding({ power: onboarding.power + 10 })}
               >
                 +
               </button>
             </div>
 
-            <div className={`${styles.fieldLabel} ${styles.spaced}`}>DRIVETRAIN</div>
-            <div className={styles.driveRow} role="group" aria-label="Drivetrain">
+            <div className={`${styles.fieldLabel} ${styles.spaced}`}>TRACȚIUNE</div>
+            <div className={styles.driveRow} role="group" aria-label="Tracțiune">
               {DRIVES.map((d) => (
                 <button
                   key={d}
@@ -164,14 +164,14 @@ export default function OnboardScreen() {
         {step === 2 && (
           <>
             <div className={styles.heroSlot}>
-              <ImageSlot id="ob-hero" hint="Hero shot — 3/4 front" />
+              <ImageSlot id="ob-hero" hint="Poza principală — 3/4 față" />
             </div>
             <div className={styles.pair}>
               <div className={styles.pairSlot}>
-                <ImageSlot id="ob-2" hint="Engine bay" />
+                <ImageSlot id="ob-2" hint="Compartiment motor" />
               </div>
               <div className={styles.pairSlot}>
-                <ImageSlot id="ob-3" hint="Interior / detail" />
+                <ImageSlot id="ob-3" hint="Interior / detaliu" />
               </div>
             </div>
           </>
@@ -182,7 +182,7 @@ export default function OnboardScreen() {
             <textarea
               className={styles.story}
               maxLength={STORY_LIMIT}
-              placeholder="Where you found it, what broke, who helped, why you kept it."
+              placeholder="Unde ai găsit-o, ce s-a stricat, cine te-a ajutat, de ce ai păstrat-o."
               value={story}
               onChange={(e) => setStory(e.target.value)}
             />
@@ -211,14 +211,15 @@ export default function OnboardScreen() {
                   <div className={styles.cardStandLabel}>STAND</div>
                   <div className={styles.cardStand}>{STAND}</div>
                   <div className={styles.cardLine}>
-                    {`${onboarding.make ?? 'NISSAN'} · ${onboarding.year} · ${onboarding.power} HP · ${onboarding.drive}`}
+                    {`${onboarding.make ?? 'NISSAN'} · ${onboarding.year} · ${onboarding.power} CP · ${onboarding.drive}`}
                   </div>
                 </div>
               </div>
             </div>
             <p className={styles.doneNote}>
-              We print this card and hand it to you at the gate. People scan it, your page opens,
-              and you keep talking instead of repeating your spec list forty times.
+              Tipărim cartonașul ăsta și ți-l dăm la poartă. Lumea îl scanează, ți se deschide
+              pagina, și tu continui să vorbești în loc să repeți lista de specificații de
+              patruzeci de ori.
             </p>
           </>
         )}
@@ -229,7 +230,7 @@ export default function OnboardScreen() {
       <div className={styles.footer}>
         {step > 0 && step < 4 && (
           <button type="button" className={styles.back} onClick={() => setStep(step - 1)}>
-            BACK
+            ÎNAPOI
           </button>
         )}
         <button type="button" className="btn btn--primary" onClick={next}>

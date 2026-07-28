@@ -1,18 +1,15 @@
 /**
- * The roster. Twelve builds modelled end to end against the
- * 142-car entry list — JDM, German, muscle, stance, off-road,
- * and the Dacia/ARO classics that actually turn up in Bucovina.
+ * The roster. Twelve builds modelled end to end against the 142-car
+ * entry list — JDM, German, muscle, stance, off-road, and the Dacia/ARO
+ * classics that actually turn up in Bucovina.
+ *
+ * Part names, engine codes and manufacturer paint names stay as the
+ * trade writes them; everything a person reads as a sentence is Romanian.
  */
 
-export type CarClass =
-  | 'JDM'
-  | 'GERMAN'
-  | 'MUSCLE'
-  | 'CLASSIC'
-  | 'STANCE'
-  | 'OFF-ROAD';
+export type CarClass = 'JDM' | 'GERMANE' | 'MUSCLE' | 'CLASICE' | 'STANCE' | 'OFF-ROAD';
 
-export type ModCategory = 'ENGINE' | 'SUSPENSION' | 'WHEELS' | 'EXTERIOR' | 'INTERIOR';
+export type ModCategory = 'MOTOR' | 'SUSPENSIE' | 'JANTE' | 'EXTERIOR' | 'INTERIOR';
 
 export interface ModGroup {
   name: ModCategory;
@@ -42,7 +39,7 @@ export interface Car {
   followers: string;
   /** What the owner calls it. Printed on the card under the headline. */
   nickname?: string;
-  /** Year this car took Car of the Show, if it ever has. */
+  /** Year this car took car of the show, if it ever has. */
   win: string | null;
   mods: ModGroup[];
   story: string;
@@ -64,7 +61,7 @@ export const CARS: Car[] = [
     tq: '480',
     weight: '1240',
     drive: 'RWD',
-    gbox: '5MT · 1.5W LSD',
+    gbox: '5MT · DIFERENȚIAL 1.5W',
     wheels: 'WORK MEISTER S1 3P',
     paint: 'BAYSIDE BLUE',
     stand: 'A-14',
@@ -76,15 +73,20 @@ export const CARS: Car[] = [
     win: null,
     mods: mods([
       [
-        'ENGINE',
-        ['GT2871R turbo, 1.06 A/R', 'Tomei Poncam 260°', 'Link G4X standalone', '600×300 front-mount'],
+        'MOTOR',
+        [
+          'Turbină GT2871R, 1.06 A/R',
+          'Tomei Poncam 260°',
+          'ECU standalone Link G4X',
+          'Intercooler frontal 600×300',
+        ],
       ],
-      ['SUSPENSION', ['BC Racing ER coilovers', 'Wisefab lock kit', '6-point bolt-in cage']],
-      ['WHEELS', ['Work Meister S1 3P 18×9.5 / 18×10.5', 'Nankang NS-2R 235/265']],
-      ['EXTERIOR', ['BN Sports front bar', 'Origin ducktail', 'Bayside Blue respray']],
+      ['SUSPENSIE', ['Coilovere BC Racing ER', 'Kit unghi Wisefab', 'Cușcă demontabilă în 6 puncte']],
+      ['JANTE', ['Work Meister S1 3P 18×9.5 / 18×10.5', 'Nankang NS-2R 235/265']],
+      ['EXTERIOR', ['Bară față BN Sports', 'Eleron Origin ducktail', 'Revopsită în Bayside Blue']],
     ]),
     story:
-      'Bought it off a guy in Iași in 2019. Blown SR, half a cage, and a boot full of somebody else’s receipts.\n\nTwo winters in a garage with no heating to get it running right. The engine went together three times. My father still thinks I bought a wreck, and for eighteen months he was correct.\n\nIt is not a trailer queen. I drive it to Bucovina and back, and the paint is Bayside Blue because I could not afford the R34 the colour belongs on.',
+      'Am luat-o de la un tip din Iași în 2019. SR-ul ars, jumătate de cușcă și un portbagaj plin cu chitanțele altcuiva.\n\nDouă ierni într-un garaj neîncălzit ca să meargă cum trebuie. Motorul l-am asamblat de trei ori. Tata încă crede că am cumpărat o epavă, și optsprezece luni a avut dreptate.\n\nNu e mașină de remorcă. O conduc prin Bucovina și înapoi, iar vopseaua e Bayside Blue pentru că nu mi-am permis R34-ul căruia îi aparține culoarea.',
   },
   {
     id: 'sup',
@@ -108,13 +110,13 @@ export const CARS: Car[] = [
     followers: '640',
     win: '2022',
     mods: mods([
-      ['ENGINE', ['Precision 6466', 'Built bottom end', 'E85 conversion']],
-      ['SUSPENSION', ['KW V3', 'Front strut brace']],
-      ['WHEELS', ['Volk TE37 18×10', 'Michelin PS4S']],
-      ['EXTERIOR', ['Ridox front lip', 'TRD ducktail']],
+      ['MOTOR', ['Precision 6466', 'Bloc motor forjat', 'Conversie E85']],
+      ['SUSPENSIE', ['KW V3', 'Bară de rigidizare față']],
+      ['JANTE', ['Volk TE37 18×10', 'Michelin PS4S']],
+      ['EXTERIOR', ['Buză față Ridox', 'Eleron TRD ducktail']],
     ]),
     story:
-      'Imported from Japan in 2016 with 190,000 km and a stock exhaust. It has not been stock since the drive home from Constanța.',
+      'Adusă din Japonia în 2016 cu 190.000 km și evacuare de serie. N-a mai fost de serie din drumul de întoarcere de la Constanța.',
   },
   {
     id: 'e30',
@@ -122,13 +124,13 @@ export const CARS: Car[] = [
     year: 1989,
     make: 'BMW',
     model: 'E30 325i',
-    cls: 'GERMAN',
+    cls: 'GERMANE',
     engine: 'M50B25 SWAP 2.5',
     power: '240',
     tq: '285',
     weight: '1180',
     drive: 'RWD',
-    gbox: '5MT · 3.46 LSD',
+    gbox: '5MT · DIFERENȚIAL 3.46',
     wheels: 'BBS RS 16"',
     paint: 'ALPINWEISS II',
     stand: 'B-07',
@@ -138,13 +140,13 @@ export const CARS: Car[] = [
     followers: '312',
     win: '2023',
     mods: mods([
-      ['ENGINE', ['M50B25 swap, OBD1', 'Individual throttle bodies', 'Custom manifold']],
-      ['SUSPENSION', ['Bilstein B14', 'Front camber plates']],
-      ['WHEELS', ['BBS RS 16×8 / 16×9', 'Refinished gold centres']],
-      ['EXTERIOR', ['Mtech I kit', 'Euro bumpers, deleted trim']],
+      ['MOTOR', ['Swap M50B25, OBD1', 'Clapete individuale', 'Galerie pe comandă']],
+      ['SUSPENSIE', ['Bilstein B14', 'Plăci camber față']],
+      ['JANTE', ['BBS RS 16×8 / 16×9', 'Centre refăcute în auriu']],
+      ['EXTERIOR', ['Kit Mtech I', 'Bare euro, ornamente scoase']],
     ]),
     story:
-      'Sixteen years in the same family. My uncle drove it to Germany for work every summer; I put ITBs on it and ruined his fuel economy forever.',
+      'Șaisprezece ani în aceeași familie. Unchiul meu mergea cu ea în Germania la muncă în fiecare vară; eu i-am pus clapete individuale și i-am stricat consumul pe vecie.',
   },
   {
     id: 'g2',
@@ -152,7 +154,7 @@ export const CARS: Car[] = [
     year: 1991,
     make: 'VOLKSWAGEN',
     model: 'GOLF MK2 GTI',
-    cls: 'GERMAN',
+    cls: 'GERMANE',
     engine: '1.8 16V TURBO',
     power: '285',
     tq: '340',
@@ -168,13 +170,13 @@ export const CARS: Car[] = [
     followers: '188',
     win: null,
     mods: mods([
-      ['ENGINE', ['GT3071R', 'Forged rods, 8.5:1', 'Water/meth injection']],
-      ['SUSPENSION', ['Coilovers, 60mm drop', 'Rear beam bushings']],
-      ['WHEELS', ['BBS RM 15×7', 'Federal 595 semis']],
-      ['INTERIOR', ['Recaro Pole Position', 'Boost gauge in vent']],
+      ['MOTOR', ['GT3071R', 'Biele forjate, 8.5:1', 'Injecție apă/metanol']],
+      ['SUSPENSIE', ['Coilovere, coborâtă 60mm', 'Bucșe punte spate']],
+      ['JANTE', ['BBS RM 15×7', 'Federal 595 semi-slick']],
+      ['INTERIOR', ['Recaro Pole Position', 'Ceas de presiune în grilă']],
     ]),
     story:
-      'Under a tonne, no traction, and the steering wheel tries to leave your hands in second gear. Best money I ever spent.',
+      'Sub o tonă, fără tracțiune, iar volanul încearcă să-ți fugă din mâini în treapta a doua. Cei mai bine cheltuiți bani din viața mea.',
   },
   {
     id: 'd13',
@@ -182,14 +184,14 @@ export const CARS: Car[] = [
     year: 1978,
     make: 'DACIA',
     model: '1300',
-    cls: 'CLASSIC',
-    engine: '1.4 8V CARBURETTOR',
+    cls: 'CLASICE',
+    engine: '1.4 8V CARBURATOR',
     power: '96',
     tq: '128',
     weight: '900',
     drive: 'RWD',
     gbox: '4MT',
-    wheels: 'STEELIES 13"',
+    wheels: 'JANTE TABLĂ 13"',
     paint: 'ALB POLAR',
     stand: 'C-01',
     owner: 'MIHAI B.',
@@ -198,13 +200,13 @@ export const CARS: Car[] = [
     followers: '890',
     win: '2024',
     mods: mods([
-      ['ENGINE', ['Twin Weber 40 DCOE', 'Ported head', 'Stainless manifold']],
-      ['SUSPENSION', ['Lowered 40mm', 'Uprated dampers']],
-      ['EXTERIOR', ['Original paint, preserved', 'Period-correct 1310 grille']],
-      ['INTERIOR', ['Retrimmed in original vinyl', 'Period radio, works']],
+      ['MOTOR', ['Două carburatoare Weber 40 DCOE', 'Chiulasă prelucrată', 'Galerie inox']],
+      ['SUSPENSIE', ['Coborâtă 40mm', 'Amortizoare întărite']],
+      ['EXTERIOR', ['Vopsea originală, păstrată', 'Grilă 1310 de epocă']],
+      ['INTERIOR', ['Retapițată în material original', 'Radio de epocă, funcțional']],
     ]),
     story:
-      'My grandfather queued eleven months for this car in 1978 and never let anyone else drive it. Now I drive it. The Webers are the only lie on it.',
+      'Bunicul meu a stat unsprezece luni la coadă pentru mașina asta în 1978 și n-a lăsat pe nimeni altcineva s-o conducă. Acum o conduc eu. Carburatoarele Weber sunt singura minciună de pe ea.',
   },
   {
     id: 'aro',
@@ -218,8 +220,8 @@ export const CARS: Car[] = [
     tq: '320',
     weight: '1820',
     drive: '4WD',
-    gbox: '4MT + LOW RANGE',
-    wheels: 'STEEL 16" BEADLOCK',
+    gbox: '4MT + REDUCTOR',
+    wheels: 'TABLĂ 16" BEADLOCK',
     paint: 'VERDE MILITAR',
     stand: 'D-44',
     owner: 'GEORGE T.',
@@ -228,13 +230,13 @@ export const CARS: Car[] = [
     followers: '274',
     win: null,
     mods: mods([
-      ['ENGINE', ['Toyota 2L-TE swap', 'Intercooled', 'Snorkel']],
-      ['SUSPENSION', ['+3 inch leaf packs', 'Long-travel shocks']],
-      ['WHEELS', ['33" mud terrains', 'Beadlocks front and rear']],
-      ['EXTERIOR', ['Winch bumper', 'Roof rack, spare on the back']],
+      ['MOTOR', ['Swap Toyota 2L-TE', 'Intercooler', 'Snorkel']],
+      ['SUSPENSIE', ['Arcuri +3 inch', 'Amortizoare cu cursă lungă']],
+      ['JANTE', ['Anvelope M/T 33"', 'Beadlock față și spate']],
+      ['EXTERIOR', ['Bară cu troliu', 'Portbagaj de plafon, roata de rezervă în spate']],
     ]),
     story:
-      'It goes anywhere and arrives late. New leaf packs put it 3cm taller and now it does not fit in my garage, which my wife considers a design flaw.',
+      'Merge oriunde și ajunge târziu. Arcurile noi l-au făcut cu 3 cm mai înalt și acum nu mai intră în garaj, ceea ce soția mea consideră un defect de proiectare.',
   },
   {
     id: 'mus',
@@ -258,13 +260,13 @@ export const CARS: Car[] = [
     followers: '520',
     win: null,
     mods: mods([
-      ['ENGINE', ['302 rebuild, 10:1', 'Edelbrock Performer', 'Long-tube headers']],
-      ['SUSPENSION', ['Shelby drop', 'Front disc conversion']],
-      ['WHEELS', ['American Racing Torq Thrust 15×7']],
-      ['EXTERIOR', ['Bare-metal respray', 'GT stripes, hand-laid']],
+      ['MOTOR', ['Motor 302 refăcut, 10:1', 'Edelbrock Performer', 'Galerii lungi']],
+      ['SUSPENSIE', ['Shelby drop', 'Conversie frâne disc față']],
+      ['JANTE', ['American Racing Torq Thrust 15×7']],
+      ['EXTERIOR', ['Revopsită la metal', 'Dungi GT trasate manual']],
     ]),
     story:
-      'Shipped from Ohio in a container in 2011. Everything under it is new; everything you can see is exactly as it left the factory.',
+      'Adusă din Ohio într-un container în 2011. Tot ce e dedesubt e nou; tot ce se vede e exact cum a ieșit din fabrică.',
   },
   {
     id: 'pas',
@@ -288,13 +290,16 @@ export const CARS: Car[] = [
     followers: '160',
     win: null,
     mods: mods([
-      ['SUSPENSION', ['Air Lift Performance 3P', 'Notched subframe', 'Custom rear struts']],
-      ['WHEELS', ['Rotiform 19×9.5 ET35', 'Stretched 215/35']],
-      ['EXTERIOR', ['Smoothed bay', 'Deleted badges']],
-      ['INTERIOR', ['Tank and management in boot, glassed in']],
+      [
+        'SUSPENSIE',
+        ['Air Lift Performance 3P', 'Punte spate decupată', 'Amortizoare spate pe comandă'],
+      ],
+      ['JANTE', ['Rotiform 19×9.5 ET35', 'Anvelope întinse 215/35']],
+      ['EXTERIOR', ['Compartiment motor netezit', 'Sigle scoase']],
+      ['INTERIOR', ['Rezervor și management în portbagaj, îmbrăcate în fibră']],
     ]),
     story:
-      'People say bagged cars do not drive. Mine does 900 km to Poland and back at ride height 3, and parks flat on the floor when it gets there.',
+      'Lumea zice că mașinile pe perne nu merg. A mea face 900 km până în Polonia și înapoi pe înălțimea 3, și stă lipită de asfalt când ajunge acolo.',
   },
   {
     id: 'evo',
@@ -318,13 +323,13 @@ export const CARS: Car[] = [
     followers: '405',
     win: null,
     mods: mods([
-      ['ENGINE', ['FP Black turbo', 'Built 2.0', 'E85, flex fuel']],
-      ['SUSPENSION', ['Ohlins Road & Track', 'Whiteline sway bars']],
-      ['WHEELS', ['Enkei RPF1 17×9', 'Semi-slicks for tarmac stages']],
-      ['INTERIOR', ['Hydraulic handbrake', 'Intercom, unused']],
+      ['MOTOR', ['Turbină FP Black', 'Motor 2.0 forjat', 'E85, flex fuel']],
+      ['SUSPENSIE', ['Ohlins Road & Track', 'Bare antiruliu Whiteline']],
+      ['JANTE', ['Enkei RPF1 17×9', 'Semi-slick pentru probele pe asfalt']],
+      ['INTERIOR', ['Frână de mână hidraulică', 'Stație radio, nefolosită']],
     ]),
     story:
-      'Half rally car, half daily. It has been up Transfăgărășan more times than most tourists and it still has the original seats.',
+      'Jumătate mașină de raliu, jumătate mașină de zi cu zi. A urcat pe Transfăgărășan de mai multe ori decât majoritatea turiștilor și încă are scaunele originale.',
   },
   {
     id: 's2',
@@ -332,7 +337,7 @@ export const CARS: Car[] = [
     year: 1994,
     make: 'AUDI',
     model: 'S2 COUPÉ',
-    cls: 'GERMAN',
+    cls: 'GERMANE',
     engine: '3B 2.2 20V TURBO',
     power: '380',
     tq: '480',
@@ -348,12 +353,12 @@ export const CARS: Car[] = [
     followers: '233',
     win: null,
     mods: mods([
-      ['ENGINE', ['Hybrid K26/28', 'Big front-mount', 'Standalone ECU']],
-      ['SUSPENSION', ['H&R coilovers', 'Refreshed bushings']],
-      ['WHEELS', ['Speedline Mistral 17×8']],
-      ['EXTERIOR', ['RS2 mirrors', 'Full respray in RS green']],
+      ['MOTOR', ['Turbină hibrid K26/28', 'Intercooler frontal mare', 'ECU standalone']],
+      ['SUSPENSIE', ['Coilovere H&R', 'Bucșe schimbate']],
+      ['JANTE', ['Speedline Mistral 17×8']],
+      ['EXTERIOR', ['Oglinzi RS2', 'Revopsită integral în RS green']],
     ]),
-    story: 'Five cylinders, one turbo the size of a fist, and the best noise at the whole meet.',
+    story: 'Cinci cilindri, o turbină cât pumnul și cel mai frumos sunet din tot show-ul.',
   },
   {
     id: 'cam',
@@ -377,12 +382,12 @@ export const CARS: Car[] = [
     followers: '198',
     win: null,
     mods: mods([
-      ['ENGINE', ['350 rebuild', 'Holley 750', 'Flowmaster 40s']],
-      ['SUSPENSION', ['Rear lowering blocks', 'Poly bushings']],
-      ['WHEELS', ['Cragar S/S 15×8']],
-      ['EXTERIOR', ['Repainted in original Hugger Orange']],
+      ['MOTOR', ['Motor 350 refăcut', 'Carburator Holley 750', 'Tobe Flowmaster 40']],
+      ['SUSPENSIE', ['Distanțiere spate', 'Bucșe poliuretan']],
+      ['JANTE', ['Cragar S/S 15×8']],
+      ['EXTERIOR', ['Revopsită în Hugger Orange original']],
     ]),
-    story: 'It does eleven litres per hundred if I am gentle and I am never gentle.',
+    story: 'Face unsprezece litri la sută dacă sunt blând și nu sunt niciodată blând.',
   },
   {
     id: 'ek4',
@@ -396,7 +401,7 @@ export const CARS: Car[] = [
     tq: '190',
     weight: '1010',
     drive: 'FWD',
-    gbox: '5MT · LSD',
+    gbox: '5MT · DIFERENȚIAL BLOCABIL',
     wheels: 'MUGEN MF10 15"',
     paint: 'MILANO RED',
     stand: 'A-38',
@@ -406,22 +411,22 @@ export const CARS: Car[] = [
     followers: '96',
     win: null,
     mods: mods([
-      ['ENGINE', ['B18C swap, ITBs', 'Hondata K-Pro', '4-1 header']],
-      ['SUSPENSION', ['Spoon-spec dampers', 'Rear tie bar']],
-      ['WHEELS', ['Mugen MF10 15×7', 'Yokohama A052']],
-      ['INTERIOR', ['Bride Zieg', 'Half cage']],
+      ['MOTOR', ['Swap B18C, clapete individuale', 'Hondata K-Pro', 'Galerie 4-1']],
+      ['SUSPENSIE', ['Amortizoare spec Spoon', 'Bară de rigidizare spate']],
+      ['JANTE', ['Mugen MF10 15×7', 'Yokohama A052']],
+      ['INTERIOR', ['Scaune Bride Zieg', 'Semi-cușcă']],
     ]),
     story:
-      'The track car. No radio, no carpet, no reason to own it except that it is the fastest thing I own around Adâncata.',
+      'Mașina de circuit. Fără radio, fără mochetă, fără vreun motiv s-o am în afară de faptul că e cel mai rapid lucru al meu prin Adâncata.',
   },
 ];
 
-export const CLASSES: readonly ('ALL' | CarClass)[] = [
-  'ALL',
+export const CLASSES: readonly ('TOATE' | CarClass)[] = [
+  'TOATE',
   'JDM',
-  'GERMAN',
+  'GERMANE',
   'MUSCLE',
-  'CLASSIC',
+  'CLASICE',
   'STANCE',
   'OFF-ROAD',
 ] as const;
@@ -453,8 +458,8 @@ export const garageOf = (c: Car): Car[] =>
   CARS.filter((o) => o.owner === c.owner && o.id !== c.id);
 
 /**
- * Car of the Show, as it stands. Votes seeded from the running
- * tally; the viewer's own vote is added on top at read time.
+ * Car of the show, as it stands. Votes seeded from the running tally;
+ * the viewer's own vote is added on top at read time.
  */
 export const AWARD_POOL: readonly [string, number][] = [
   ['d13', 612],
@@ -467,7 +472,7 @@ export const AWARD_POOL: readonly [string, number][] = [
   ['pas', 151],
 ] as const;
 
-export const VOTES_CAST_LABEL = '2 530 VOTES CAST SO FAR · STANDINGS UPDATE LIVE';
+export const VOTES_CAST_LABEL = '2 530 DE VOTURI PÂNĂ ACUM · CLASAMENTUL SE ACTUALIZEAZĂ LIVE';
 
 export interface Standing {
   id: string;

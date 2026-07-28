@@ -28,7 +28,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: 'X Car Show — Cajvana',
   description:
-    'Annual meet and year-round community for the Bucovina car scene. 142 entries, one award, one vote each.',
+    'Întâlnirea anuală și comunitatea de peste an a scenei auto din Bucovina. 142 de înscrieri, un premiu, un vot de persoană.',
 };
 
 export const viewport: Viewport = {
@@ -42,7 +42,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
-      lang="en"
+      lang="ro"
       className={`${barlow.variable} ${barlowCondensed.variable} ${plexMono.variable}`}
     >
       <body>

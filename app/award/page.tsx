@@ -22,19 +22,19 @@ export default function AwardScreen() {
     <>
       <StickyHeader>
         <div className={styles.head}>
-          <h1 className="t-title">CAR OF THE SHOW</h1>
+          <h1 className="t-title">MAȘINA SHOW-ULUI</h1>
           <div className={styles.meta}>
-            <span className={styles.metaLeft}>ONE AWARD · ONE VOTE EACH</span>
-            <span className={styles.closes}>CLOSES {EVENT.votingCloses}</span>
+            <span className={styles.metaLeft}>UN PREMIU · UN VOT DE PERSOANĂ</span>
+            <span className={styles.closes}>SE ÎNCHIDE LA {EVENT.votingCloses}</span>
           </div>
         </div>
       </StickyHeader>
 
       {hydrated && !signedIn && (
         <div className={styles.gate}>
-          <div className={styles.gateTitle}>Sign in to vote.</div>
+          <div className={styles.gateTitle}>Conectează-te ca să votezi.</div>
           <p className={styles.gateBody}>
-            Standings are open to everyone. One account, one vote — so nobody stuffs the box.
+            Clasamentul e public. Un cont, un vot — ca să nu umple nimeni urna.
           </p>
           <button
             type="button"
@@ -42,7 +42,7 @@ export default function AwardScreen() {
             style={{ padding: 13 }}
             onClick={() => router.push('/auth?mode=register&role=vote')}
           >
-            SIGN IN OR REGISTER
+            CONECTARE SAU CONT NOU
           </button>
         </div>
       )}
@@ -51,24 +51,24 @@ export default function AwardScreen() {
         <div className={styles.mine}>
           <div className={styles.mineDot} />
           <div className={styles.mineLine}>
-            YOUR VOTE · {byId(vote).model} · CHANGE IT UNTIL {EVENT.votingCloses}
+            VOTUL TĂU · {byId(vote).model} · ÎL POȚI SCHIMBA PÂNĂ LA {EVENT.votingCloses}
           </div>
         </div>
       )}
 
       <div className={styles.colHead}>
         <div className={styles.pos} style={{ fontSize: 'inherit' }}>
-          POS
+          LOC
         </div>
         <div className={styles.no} style={{ fontSize: 'inherit' }}>
           №
         </div>
-        <div className={styles.entry}>ENTRY</div>
+        <div className={styles.entry}>ÎNSCRIERE</div>
         <div className={styles.votes} style={{ fontSize: 'inherit' }}>
-          VOTES
+          VOTURI
         </div>
         <div className={styles.share} style={{ fontSize: 'inherit' }}>
-          SHARE
+          COTĂ
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export default function AwardScreen() {
 
       <p className={styles.foot}>
         {signedIn
-          ? 'TAP A ROW TO CAST OR CHANGE YOUR VOTE. ENTRANTS CANNOT VOTE FOR THEIR OWN CAR.'
+          ? 'ATINGE UN RÂND CA SĂ VOTEZI SAU SĂ ÎȚI SCHIMBI VOTUL. PARTICIPANȚII NU POT VOTA PROPRIA MAȘINĂ.'
           : VOTES_CAST_LABEL}
       </p>
     </>

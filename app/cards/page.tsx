@@ -5,7 +5,7 @@ import { EVENT } from '@/lib/event';
 import styles from './cards.module.css';
 
 export const metadata: Metadata = {
-  title: 'Windshield cards — X Car Show',
+  title: 'Cartonașe de parbriz — X Car Show',
 };
 
 /**
@@ -17,13 +17,13 @@ export default function CardsIndex() {
     <div className={styles.page}>
       <div className={styles.toolbar}>
         <div className={styles.toolbarTitle}>
-          <b>WINDSHIELD CARDS</b>
+          <b>CARTONAȘE DE PARBRIZ</b>
           <span>
-            {EVENT.edition} · {EVENT.dateNumeric} · {CARS.length} ENTRIES ON THIS PAGE
+            {EVENT.edition} · {EVENT.dateNumeric} · {CARS.length} ÎNSCRIERI PE PAGINA ASTA
           </span>
         </div>
         <Link href="/" className={styles.toolbarLink}>
-          ← THE APP
+          ← APLICAȚIA
         </Link>
       </div>
 

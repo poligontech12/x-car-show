@@ -23,7 +23,7 @@ interface Props {
  * The photo persists across reloads; there is no upload, nothing leaves
  * the phone.
  */
-export function ImageSlot({ id, hint = 'Drop a photo', mode = 'fill', className }: Props) {
+export function ImageSlot({ id, hint = 'Pune o poză', mode = 'fill', className }: Props) {
   const [src, setSrc] = useState<string | null>(null);
   const [over, setOver] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -69,7 +69,7 @@ export function ImageSlot({ id, hint = 'Drop a photo', mode = 'fill', className 
         ? {
             role: 'button' as const,
             tabIndex: 0,
-            'aria-label': src ? `Replace photo: ${hint}` : `Add photo: ${hint}`,
+            'aria-label': src ? `Înlocuiește poza: ${hint}` : `Adaugă o poză: ${hint}`,
             onClick: browse,
             onKeyDown: (e: React.KeyboardEvent) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -117,13 +117,13 @@ export function ImageSlot({ id, hint = 'Drop a photo', mode = 'fill', className 
             <circle cx="15.5" cy="5" r="1.75" stroke="currentColor" />
           </svg>
           <div className={styles.cap}>{hint}</div>
-          {fill && <div className={styles.sub}>DROP A PHOTO OR TAP</div>}
+          {fill && <div className={styles.sub}>TRAGE O POZĂ SAU ATINGE</div>}
         </div>
       )}
 
       <div className={styles.ring} />
 
-      {busy && <div className={styles.busy}>PROCESSING</div>}
+      {busy && <div className={styles.busy}>SE PROCESEAZĂ</div>}
 
       {/* One control, top-right: browse while empty, clear once filled. */}
       {!busy && (src || !fill) && (
@@ -137,7 +137,7 @@ export function ImageSlot({ id, hint = 'Drop a photo', mode = 'fill', className 
             else browse();
           }}
         >
-          {src ? 'CLEAR' : '+ PHOTO'}
+          {src ? 'ȘTERGE' : '+ POZĂ'}
         </button>
       )}
 

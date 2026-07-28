@@ -9,15 +9,15 @@ import styles from './TabBar.module.css';
  * (the entry you scanned, the standings) lives in Scan and Award.
  */
 const TABS = [
-  { href: '/', label: 'FEED' },
-  { href: '/roster', label: 'ROSTER' },
-  { href: '/scan', label: 'SCAN' },
-  { href: '/award', label: 'AWARD' },
+  { href: '/', label: 'FLUX', glyph: 'feed' },
+  { href: '/roster', label: 'ÎNSCRIȘI', glyph: 'roster' },
+  { href: '/scan', label: 'SCANARE', glyph: 'scan' },
+  { href: '/award', label: 'PREMIU', glyph: 'award' },
 ] as const;
 
-function Glyph({ label }: { label: string }) {
-  switch (label) {
-    case 'FEED':
+function Glyph({ name }: { name: string }) {
+  switch (name) {
+    case 'feed':
       return (
         <div className={`${styles.glyph} ${styles.feed}`}>
           <i />
@@ -25,7 +25,7 @@ function Glyph({ label }: { label: string }) {
           <i />
         </div>
       );
-    case 'ROSTER':
+    case 'roster':
       return (
         <div className={`${styles.glyph} ${styles.roster}`}>
           <i />
@@ -34,7 +34,7 @@ function Glyph({ label }: { label: string }) {
           <i />
         </div>
       );
-    case 'SCAN':
+    case 'scan':
       return (
         <div className={`${styles.glyph} ${styles.scan}`}>
           <div className={styles.scanBox}>
@@ -61,7 +61,7 @@ export function TabBar() {
   const pathname = usePathname();
 
   return (
-    <nav className={styles.bar} aria-label="Primary">
+    <nav className={styles.bar} aria-label="Navigare principală">
       {TABS.map((t) => {
         // Screens below a tab keep that tab lit: a car profile belongs to
         // the roster you opened it from, partners to the feed.
@@ -78,7 +78,7 @@ export function TabBar() {
             className={styles.tab}
             aria-current={active ? 'page' : undefined}
           >
-            <Glyph label={t.label} />
+            <Glyph name={t.glyph} />
             <span className="t-micro">{t.label}</span>
           </Link>
         );

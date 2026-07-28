@@ -1,101 +1,78 @@
 /**
- * The feed is deliberately thin: follows, no likes, no comments.
- * Three kinds of thing happen between meets — a build moves on,
- * someone spots a car on the road, or a local meet gets called.
+ * The feed is deliberately thin: follows, no likes, no comments. Two things
+ * happen between editions — a build moves on, or somebody spots a car on
+ * the road. (Meets are not a feature yet.)
  */
 
-export type FeedCategory = 'BUILDS' | 'SPOTTED' | 'MEETS';
-export type FeedFilter = 'ALL' | FeedCategory;
+export type FeedCategory = 'PROIECTE' | 'VĂZUTE';
+export type FeedFilter = 'TOATE' | FeedCategory;
 
-interface FeedBase {
+export interface FeedPost {
   /** Persistence key for the photo slot. Must be unique per page. */
   slot?: string;
   kind: string;
-  /** Red for things the community did, grey for ambient sightings. */
+  /** Red for what the community did, grey for ambient sightings. */
   kindAccent: boolean;
   title: string;
   time: string;
   cat: FeedCategory;
-  /** Car this post belongs to, if it belongs to one. */
+  /** The car this post belongs to, if it belongs to one. */
   carId?: string;
   body?: string;
   slotHint?: string;
 }
 
-export interface FeedMeet extends FeedBase {
-  cat: 'MEETS';
-  day: string;
-  month: string;
-  meetTitle: string;
-  meetMeta: string;
-}
-
-export type FeedPost = FeedBase | FeedMeet;
-
-export const isMeet = (p: FeedPost): p is FeedMeet => p.cat === 'MEETS';
-
 export const FEED: FeedPost[] = [
   {
-    kind: 'BUILD UPDATE',
+    kind: 'PROIECT ACTUALIZAT',
     kindAccent: true,
     carId: 's14',
     title: 'SILVIA S14 · #14',
     time: '2H',
     slot: 'feed-1',
-    slotHint: 'Wheels back from powder coat',
-    body: 'Meisters back from the powder coater. Bronze was supposed to be temporary and now I cannot imagine anything else on it.',
-    cat: 'BUILDS',
+    slotHint: 'Jantele întoarse de la vopsit',
+    body: 'Meister-ele s-au întors de la pulverizat. Bronzul trebuia să fie temporar și acum nu mi-o mai imaginez cu altceva.',
+    cat: 'PROIECTE',
   },
   {
-    kind: 'SPOTTED · DN2 PĂTRĂUȚI',
+    kind: 'VĂZUTĂ · DN2 PĂTRĂUȚI',
     kindAccent: false,
-    title: 'SPOTTED BY TUDOR V.',
+    title: 'VĂZUTĂ DE TUDOR V.',
     time: '5H',
     slot: 'feed-2',
-    slotHint: 'E30 touring, roadside',
-    body: 'E30 touring on the Suceava road, on BBS, sitting right. Owner — if you are on here, register it. We have space in Paddock B.',
-    cat: 'SPOTTED',
+    slotHint: 'E30 touring, pe marginea drumului',
+    body: 'E30 touring pe drumul Sucevei, pe BBS, la înălțimea potrivită. Dacă e proprietarul pe aici — înscrie-o. Mai avem loc în Padocul B.',
+    cat: 'VĂZUTE',
   },
   {
-    kind: 'LOCAL MEET · SUNDAY',
-    kindAccent: true,
-    title: 'COFFEE RUN',
-    time: '1D',
-    cat: 'MEETS',
-    day: '02',
-    month: 'AUG',
-    meetTitle: 'COFFEE RUN — GURA HUMORULUI',
-    meetMeta: '07:30 · OMV PARKING · 34 GOING',
-  } as FeedMeet,
-  {
-    kind: 'BUILD UPDATE',
+    kind: 'PROIECT ACTUALIZAT',
     kindAccent: true,
     carId: 'aro',
     title: 'ARO 244 · #44',
-    time: '1D',
+    time: '1Z',
     slot: 'feed-3',
-    slotHint: 'ARO on new leaf packs',
-    body: 'New leaf packs in. It is three centimetres taller and no longer fits in my own garage. Worth it.',
-    cat: 'BUILDS',
+    slotHint: 'ARO pe arcuri noi',
+    body: 'Arcuri noi montate. E cu trei centimetri mai înalt și nu mai intră în propriul meu garaj. A meritat.',
+    cat: 'PROIECTE',
   },
   {
-    kind: 'SPOTTED · CAJVANA CENTRU',
+    kind: 'VĂZUTĂ · CAJVANA CENTRU',
     kindAccent: false,
     carId: 'd13',
-    title: 'SPOTTED BY MIHAI B.',
-    time: '2D',
+    title: 'VĂZUTĂ DE MIHAI B.',
+    time: '2Z',
     slot: 'feed-4',
-    slotHint: 'Dacia 1300 outside the shop',
-    body: 'Out for bread. Same as it has been since 1978.',
-    cat: 'SPOTTED',
+    slotHint: 'Dacia 1300 în fața magazinului',
+    body: 'Ieșită după pâine. La fel cum face din 1978.',
+    cat: 'VĂZUTE',
   },
 ];
 
-export const FEED_FILTERS: readonly FeedFilter[] = ['ALL', 'BUILDS', 'SPOTTED', 'MEETS'] as const;
+export const FEED_FILTERS: readonly FeedFilter[] = ['TOATE', 'PROIECTE', 'VĂZUTE'] as const;
 
-/** Cards recently scanned on the day. Ordered most recent first. */
+/** Cards scanned recently on show day. Most recent first. */
 export const RECENT_SCANS: readonly [string, string][] = [
-  ['sup', '4 MIN AGO'],
-  ['d13', '12 MIN AGO'],
-  ['e30', '36 MIN AGO'],
+  ['sup', 'ACUM 4 MIN'],
+  ['d13', 'ACUM 12 MIN'],
+  ['e30', 'ACUM 36 MIN'],
 ] as const;

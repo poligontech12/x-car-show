@@ -16,11 +16,16 @@ Then open http://localhost:3000. Photography is the product, so **every image
 area is a live drop target** — drag a photo onto any placeholder and it sticks
 across reloads.
 
+**The interface is in Romanian.** Part names, engine codes and manufacturer
+paint names stay as the trade writes them; everything a person reads as a
+sentence is translated. There is no i18n layer — strings live next to the
+layouts that constrain them, because the mono labels are sized to the pixel.
+
 ## What's here
 
 | Route | |
 |---|---|
-| `/` | Feed — builds, sightings, local meets. Filterable, no likes, no comments. |
+| `/` | Feed — builds and sightings. Filterable, no likes, no comments. |
 | `/roster` | 142 entries, photo-first, one filter row. |
 | `/car/[id]` | The car profile. Swipeable hero, three numbers, four specs, mods, the build story, then the owner. |
 | `/scan` | Viewfinder for windshield cards. Tap it to simulate a read. |
@@ -93,7 +98,10 @@ Small, deliberate changes, all of them the canvas's intent applied to working co
 - **Photos that are also links** get a small corner control to browse, so tapping the
   photo opens the car instead of opening a file picker.
 - **Derived, not typed:** paddock comes from the stand letter, the mod count from the
-  mod list.
+  mod list, and the open modification group from the first group on the car (which
+  is suspension on the bagged Passat, not engine).
+- **Meets are not built.** The canvas designs a meet card in the feed with a date
+  block and an RSVP; it is cut here until the feature is real.
 
 ## Still open
 
@@ -103,4 +111,5 @@ From the canvas, and still unanswered — these change real behaviour:
 - Is voting gated to ticket holders (scan at the gate), or open to anyone with an account?
 - Signal in a field outside Cajvana is a real risk. Should the roster and the standings
   work offline on event day?
-- The feed is deliberately thin. Is that too quiet between meets?
+- The feed is deliberately thin — and now thinner, with meets dropped. Is that too
+  quiet between editions, or is a shop/parts board the thing that is missing?

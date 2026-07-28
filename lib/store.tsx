@@ -8,8 +8,8 @@ import {
   useMemo,
   useState,
 } from 'react';
-import type { CarClass } from './cars';
-import type { FeedFilter } from './feed';
+import { CLASSES, type CarClass } from './cars';
+import { FEED_FILTERS, type FeedFilter } from './feed';
 
 /**
  * There is no backend yet. Everything a member does — their account,
@@ -23,7 +23,7 @@ const KEY = 'x-car-show/state';
 
 export type Role = 'car' | 'vote';
 export type Drive = 'FWD' | 'RWD' | 'AWD';
-export type ClassFilter = 'ALL' | CarClass;
+export type ClassFilter = 'TOATE' | CarClass;
 
 export interface Account {
   name: string;
@@ -40,10 +40,9 @@ export interface OnboardingDraft {
 
 interface State {
   account: Account | null;
-  /** Car of the Show. One account, one vote — changeable until 18:00. */
+  /** Car of the show. One account, one vote — changeable until 18:00. */
   vote: string | null;
   following: Record<string, true>;
-  joinedMeet: boolean;
   feedFilter: FeedFilter;
   classFilter: ClassFilter;
   onboarding: OnboardingDraft;
@@ -60,9 +59,8 @@ const INITIAL: State = {
   account: null,
   vote: null,
   following: {},
-  joinedMeet: false,
-  feedFilter: 'ALL',
-  classFilter: 'ALL',
+  feedFilter: 'TOATE',
+  classFilter: 'TOATE',
   onboarding: EMPTY_DRAFT,
 };
 
@@ -76,7 +74,6 @@ interface Store extends State {
   castVote: (carId: string) => void;
   toggleFollow: (carId: string) => void;
   isFollowing: (carId: string) => boolean;
-  toggleJoinMeet: () => void;
   setFeedFilter: (f: FeedFilter) => void;
   setClassFilter: (c: ClassFilter) => void;
   patchOnboarding: (patch: Partial<OnboardingDraft>) => void;
@@ -87,6 +84,15 @@ interface Store extends State {
 
 const StoreContext = createContext<Store | null>(null);
 
+/**
+ * A filter that is no longer one of the options matches nothing and the
+ * screen comes up empty, so fall back rather than trust what was stored.
+ * Filter labels are the values themselves, so renaming one — as the move
+ * to Romanian did — strands every browser that saw the old build.
+ */
+const oneOf = <T,>(value: unknown, allowed: readonly T[], fallback: T): T =>
+  allowed.includes(value as T) ? (value as T) : fallback;
+
 function read(): State {
   try {
     const raw = window.localStorage.getItem(KEY);
@@ -95,6 +101,8 @@ function read(): State {
     return {
       ...INITIAL,
       ...parsed,
+      feedFilter: oneOf(parsed.feedFilter, FEED_FILTERS, 'TOATE'),
+      classFilter: oneOf(parsed.classFilter, CLASSES, 'TOATE'),
       following: parsed.following ?? {},
       onboarding: { ...EMPTY_DRAFT, ...(parsed.onboarding ?? {}) },
     };
@@ -105,7 +113,7 @@ function read(): State {
 
 /** Whatever they typed, shown the way the app shows every name. */
 function nameFrom(typed: string, email: string): string {
-  const base = typed.trim() || email.split('@')[0] || 'MEMBER';
+  const base = typed.trim() || email.split('@')[0] || 'MEMBRU';
   return base.toUpperCase();
 }
 
@@ -164,7 +172,6 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
       isFollowing: (carId) => !!state.following[carId],
 
-      toggleJoinMeet: () => patch((s) => ({ joinedMeet: !s.joinedMeet })),
       setFeedFilter: (feedFilter) => patch({ feedFilter }),
       setClassFilter: (classFilter) => patch({ classFilter }),
 

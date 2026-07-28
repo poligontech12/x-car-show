@@ -9,7 +9,7 @@ import { garageOf, headline, modCount, type Car } from '@/lib/cars';
 import { useStore } from '@/lib/store';
 import styles from './car.module.css';
 
-const HERO_HINTS = ['Drop hero photo', 'Drop engine bay', 'Drop detail shot'];
+const HERO_HINTS = ['Pune poza principală', 'Pune compartimentul motor', 'Pune un detaliu'];
 
 /**
  * The car is the profile. Everything on this page belongs to the car;
@@ -19,7 +19,9 @@ export function CarProfile({ car }: { car: Car }) {
   const router = useRouter();
   const { isFollowing, toggleFollow } = useStore();
   const [hero, setHero] = useState(0);
-  const [openMod, setOpenMod] = useState<string | null>('ENGINE');
+  // The first group is open on arrival — for most cars that is the engine,
+  // but the bagged Passat leads with suspension, so take it from the data.
+  const [openMod, setOpenMod] = useState<string | null>(car.mods[0]?.name ?? null);
 
   const following = isFollowing(car.id);
   const garage = garageOf(car);
@@ -48,7 +50,7 @@ export function CarProfile({ car }: { car: Car }) {
         <button
           type="button"
           className={`icon-btn ${styles.back}`}
-          aria-label="Back"
+          aria-label="Înapoi"
           onClick={() => router.back()}
         >
           ←
@@ -73,7 +75,7 @@ export function CarProfile({ car }: { car: Car }) {
         <div className={styles.win}>
           <div className={styles.diamond} />
           <div className="t-label" style={{ flex: 1 }}>
-            CAR OF THE SHOW
+            MAȘINA SHOW-ULUI
           </div>
           <div className={styles.winYear}>{car.win}</div>
         </div>
@@ -87,19 +89,19 @@ export function CarProfile({ car }: { car: Car }) {
           aria-pressed={following}
           onClick={() => toggleFollow(car.id)}
         >
-          {following ? 'FOLLOWING' : 'FOLLOW'}
+          {following ? 'URMĂREȘTI' : 'URMĂREȘTE'}
         </button>
         <div className={styles.followers}>
-          {(following ? Number(car.followers) + 1 : Number(car.followers)).toLocaleString('en-GB')}{' '}
-          FOLLOWING
+          {(following ? Number(car.followers) + 1 : Number(car.followers)).toLocaleString('ro-RO')}{' '}
+          URMĂRITORI
         </div>
       </div>
 
       <div className={styles.stats}>
         {[
-          { k: 'POWER', v: car.power, u: 'HP' },
-          { k: 'TORQUE', v: car.tq, u: 'NM' },
-          { k: 'WEIGHT', v: car.weight, u: 'KG' },
+          { k: 'PUTERE', v: car.power, u: 'CP' },
+          { k: 'CUPLU', v: car.tq, u: 'NM' },
+          { k: 'GREUTATE', v: car.weight, u: 'KG' },
         ].map((s) => (
           <div key={s.k} className={styles.stat}>
             <div className={styles.k}>{s.k}</div>
@@ -113,10 +115,10 @@ export function CarProfile({ car }: { car: Car }) {
 
       <div className={styles.specs}>
         {[
-          ['ENGINE', car.engine],
-          ['DRIVETRAIN', `${car.drive} · ${car.gbox}`],
-          ['WHEELS', car.wheels],
-          ['PAINT', car.paint],
+          ['MOTOR', car.engine],
+          ['TRACȚIUNE', `${car.drive} · ${car.gbox}`],
+          ['JANTE', car.wheels],
+          ['VOPSEA', car.paint],
         ].map(([k, v]) => (
           <div key={k} className={styles.spec}>
             <div className={styles.k}>{k}</div>
@@ -126,7 +128,7 @@ export function CarProfile({ car }: { car: Car }) {
       </div>
 
       <div className={styles.sectionHead}>
-        <SectionRule label="MODIFICATIONS" trailing={`${modCount(car)} ITEMS`} />
+        <SectionRule label="MODIFICĂRI" trailing={`${modCount(car)} PIESE`} />
       </div>
 
       {car.mods.map((g) => {
@@ -155,7 +157,7 @@ export function CarProfile({ car }: { car: Car }) {
       })}
 
       <div className={styles.storyHead}>
-        <SectionRule label="THE BUILD" />
+        <SectionRule label="POVESTEA" />
       </div>
       <p className={styles.story}>{car.story}</p>
 
@@ -168,7 +170,7 @@ export function CarProfile({ car }: { car: Car }) {
           </span>
         </div>
         <button type="button" className={styles.ownerFollow}>
-          FOLLOW
+          URMĂREȘTE
         </button>
       </div>
 
