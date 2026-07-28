@@ -1,0 +1,152 @@
+.bar {
+  flex: none;
+  display: flex;
+  align-items: stretch;
+  background: rgba(11, 11, 12, 0.97);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid var(--hairline-firm);
+  padding-bottom: var(--safe-bottom);
+  z-index: 20;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 0 9px;
+  color: var(--paper-34);
+  border-top: 2px solid transparent;
+  margin-top: -1px;
+  transition: color 0.14s ease;
+}
+
+.tab:hover {
+  color: var(--paper-55);
+}
+
+/* The red bar rides on top of the tab, in line with the border it
+   replaces — the marker for "you are here". */
+.tab[aria-current='page'] {
+  color: var(--paper);
+  border-top-color: var(--arterial);
+}
+
+.glyph {
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* FEED — three rules, one short, like a stack of posts. */
+.feed {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.5px;
+}
+
+.feed i {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: currentColor;
+}
+
+.feed i:nth-child(2) {
+  width: 11px;
+}
+
+/* ROSTER — a two-by-two grid, the shape of the roster itself. */
+.roster {
+  display: grid;
+  grid-template-columns: 6px 6px;
+  gap: 3px;
+  align-content: center;
+}
+
+.roster i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+}
+
+/* SCAN — viewfinder corners. The scan line keeps its red even when
+   the tab is inactive; it is the one live thing in the bar. */
+.scan {
+  width: 40px;
+}
+
+.scanBox {
+  position: relative;
+  width: 19px;
+  height: 16px;
+}
+
+.scanBox i {
+  position: absolute;
+  width: 6px;
+  height: 5px;
+}
+
+.scanBox i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-top: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+}
+
+.scanBox i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.scanBox i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+}
+
+.scanBox i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.scanLine {
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--arterial);
+}
+
+/* AWARD — a three-bar timing tower, ranked. */
+.award {
+  align-items: flex-end;
+  gap: 2.5px;
+}
+
+.award i {
+  display: block;
+  width: 3px;
+  background: currentColor;
+}
+
+.award i:nth-child(1) {
+  height: 8px;
+}
+.award i:nth-child(2) {
+  height: 14px;
+}
+.award i:nth-child(3) {
+  height: 11px;
+}

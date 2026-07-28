@@ -1,0 +1,72 @@
+.top {
+  padding: var(--safe-top) var(--gutter) 0;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: rgba(242, 242, 240, 0.6);
+  width: 18px;
+}
+
+.note {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+  color: var(--paper-34);
+  margin-top: 14px;
+}
+
+.list {
+  margin-top: 20px;
+}
+
+/* Shops as profiles — a row each, no logos competing for attention. */
+.partner {
+  display: flex;
+  gap: 13px;
+  padding: 15px var(--gutter);
+  border-top: 1px solid var(--hairline-soft);
+  align-items: center;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  background: repeating-linear-gradient(135deg, #1a1b1d 0 7px, #141517 7px 14px);
+  border: 1px solid var(--hairline-firm);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.body b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.body span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  color: var(--paper-40);
+  margin-top: 6px;
+}
+
+.tail {
+  height: 34px;
+}

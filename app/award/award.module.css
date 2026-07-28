@@ -1,0 +1,191 @@
+.head {
+  padding: 8px var(--gutter) 13px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.metaLeft {
+  flex: 1;
+  color: var(--paper-40);
+}
+
+/* The clock is the only live thing on this screen, so it keeps the red. */
+.closes {
+  color: var(--arterial-lt);
+}
+
+/* Standings are open to everyone; the vote is the thing behind the door. */
+.gate {
+  margin: var(--gutter);
+  border: 1px solid var(--hairline-edge);
+  padding: var(--gutter);
+}
+
+.gateTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.05;
+}
+
+.gateBody {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--paper-55);
+  margin: 8px 0 14px;
+}
+
+.mine {
+  margin: var(--gutter) var(--gutter) 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--arterial-edge);
+  padding: 11px 13px;
+}
+
+.mineDot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  background: var(--arterial);
+}
+
+.mineLine {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(242, 242, 240, 0.6);
+}
+
+/* ── The tower ───────────────────────────────────────────────
+   Ranked live, read like a timing board: position, number,
+   entry, count, share. */
+
+.colHead {
+  display: flex;
+  gap: 10px;
+  padding: 18px var(--gutter) 9px;
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.14em;
+  color: var(--paper-26);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.row {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid var(--hairline-faint);
+  overflow: hidden;
+}
+
+.rowMine {
+  background: rgba(224, 27, 34, 0.06);
+}
+
+/* The bar is the result, drawn behind the numbers rather than
+   beside them — no chart furniture. */
+.bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.045);
+  transform-origin: left;
+  animation: xgrow 0.5s ease-out;
+}
+
+.barMine {
+  background: rgba(224, 27, 34, 0.22);
+}
+
+.rowInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px var(--gutter);
+}
+
+.pos {
+  width: 22px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--paper-45);
+}
+
+.posLead {
+  color: var(--arterial-lt);
+}
+
+.no {
+  width: 26px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--paper-40);
+}
+
+.entry {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.entry b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.entry span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--paper-34);
+  margin-top: 5px;
+}
+
+.votes {
+  width: 38px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(242, 242, 240, 0.8);
+}
+
+.share {
+  width: 34px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--paper-55);
+}
+
+.shareMine {
+  color: var(--arterial-lt);
+}
+
+.foot {
+  padding: var(--gutter) var(--gutter) 34px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+  color: var(--paper-30);
+}

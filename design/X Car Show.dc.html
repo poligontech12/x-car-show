@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#0E0E10}
+a{color:#E85159;text-decoration:none}
+a:hover{color:#F2F2F0}
+</style>
+</helmet>
+
+<div style="background:#0B0B0C;border-bottom:1px solid rgba(255,255,255,.1);padding:44px 48px 40px;font-family:Barlow,system-ui,sans-serif;color:#F2F2F0">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:40px;height:40px;background:#E01B22;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:1;color:#fff">X</div>
+<div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:.9;letter-spacing:.04em">X CAR SHOW — APP</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:rgba(242,242,240,.4);margin-top:5px">CAJVANA, SUCEAVA · ANNUAL MEET + YEAR-ROUND COMMUNITY · HI-FI, JULY 2026</div>
+</div>
+</div>
+<div style="display:flex;gap:44px;margin-top:34px;flex-wrap:wrap">
+<div style="flex:1;min-width:300px;max-width:420px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.12)">01 · ASSUMPTIONS</div>
+<div style="font-size:14px;line-height:1.6;color:rgba(242,242,240,.7);margin-top:13px;text-wrap:pretty">No existing brand or codebase was supplied, so the system is built from motorsport print rather than app convention: scrutineering sheets, timing towers, paddock signage.<br><br>Photography is the product — every image area in the prototype is a live drop slot. Drag a photo onto any placeholder and it sticks.<br><br>Twelve real builds are modelled end to end against a 142-car roster: JDM, German, muscle, stance, off-road, and the Dacia/ARO classics that actually turn up in Bucovina.</div>
+</div>
+<div style="flex:1;min-width:300px;max-width:420px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.12)">02 · WHAT DRIVES THE DESIGN</div>
+<div style="font-size:14px;line-height:1.6;color:rgba(242,242,240,.7);margin-top:13px;text-wrap:pretty"><b style="color:#F2F2F0;font-weight:600">The car is the profile.</b> The owner is a card at the foot of the car's page, never the other way round. One person, many cars, one garage.<br><br><b style="color:#F2F2F0;font-weight:600">Numbers are the ornament.</b> Mono carries every spec, time, vote and stand number; nothing decorative sits on top of it.<br><br><b style="color:#F2F2F0;font-weight:600">One red, three jobs.</b> Live/now, your vote, the primary action. Everything else is black, white and hairline.<br><br><b style="color:#F2F2F0;font-weight:600">No cards, no corners.</b> Full-bleed photos and 1px rules instead of rounded containers — the chrome gets out of the photograph's way.</div>
+</div>
+<div style="flex:1;min-width:300px;max-width:420px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.12)">03 · OPEN QUESTIONS FOR YOU</div>
+<div style="font-size:14px;line-height:1.6;color:rgba(242,242,240,.7);margin-top:13px;text-wrap:pretty">— Who assigns stand numbers, owners or marshals? It changes the last step of onboarding.<br>— Is voting gated to ticket holders (scan at the gate), or open to anyone in the app?<br>— Signal in a field outside Cajvana is a real risk. Should roster + map work offline on event day?<br>— Feed is deliberately thin: follows, no likes, no comments. Tell me if that is too quiet between meets.</div>
+</div>
+</div>
+</div>
+
+<section id="t2" style="padding:40px 48px 44px;border-bottom:1px solid rgba(255,255,255,.08);font-family:Barlow,system-ui,sans-serif">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 8px">
+<a href="#t2" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10px;padding:3px 7px;background:#F2F2F0;color:#0B0B0C;text-decoration:none">2</a>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:rgba(242,242,240,.55)">SECOND PASS · EVENT TAB CUT · ONE AWARD · ACCOUNTS ADDED · DENSITY DOWN</span>
+</div>
+<div style="display:flex;gap:36px;flex-wrap:wrap;margin:0 0 26px">
+<div style="max-width:380px;font-size:14px;line-height:1.6;color:rgba(242,242,240,.66);text-wrap:pretty"><b style="color:#F2F2F0;font-weight:600">Four tabs, not five.</b> Event day is gone — no schedule, no paddock map. What was useful there (the entry you scanned, the standings) already lives in Scan and Award.</div>
+<div style="max-width:380px;font-size:14px;line-height:1.6;color:rgba(242,242,240,.66);text-wrap:pretty"><b style="color:#F2F2F0;font-weight:600">One award.</b> Car of the Show, one vote per account, one live ranking. No categories, no ballot, nothing to expand.</div>
+<div style="max-width:380px;font-size:14px;line-height:1.6;color:rgba(242,242,240,.66);text-wrap:pretty"><b style="color:#F2F2F0;font-weight:600">Login and register.</b> One account, two reasons to have one: showing a car or voting. Voting is gated to an account; standings stay public.</div>
+<div style="max-width:380px;font-size:14px;line-height:1.6;color:rgba(242,242,240,.66);text-wrap:pretty"><b style="color:#F2F2F0;font-weight:600">Less on every screen.</b> Cut: countdown strip, feed promo card, mod tags, timeline, socials, three filter trays, the technical-sheet variant, and one onboarding step.</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start">
+
+<div id="2a" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#2a" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:#E01B22;color:#fff;text-decoration:none">2a</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Live prototype — signed out. Register, pick a role, then vote or register a car.</span>
+</div>
+<div style="width:402px">
+<dc-import name="XShowApp2" screen="feed" hint-size="402px,874px"></dc-import>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.9;letter-spacing:.09em;color:rgba(242,242,240,.34);max-width:402px">TRY: SIGN IN → SHOW A CAR → CREATE ACCOUNT → 4 STEPS → AWARD TAB → TAP A ROW</div>
+</div>
+
+<div id="2b" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#2b" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">2b</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Every screen in the trimmed app, including the two account states.</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:26px;max-width:{{ boardMax }}">
+<sc-for list="{{ board2 }}" as="b" hint-placeholder-count="12">
+<div style="width:402px;display:flex;flex-direction:column;gap:9px">
+<div style="display:flex;align-items:baseline;gap:8px;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:7px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.3)">{{ b.n }}</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.05em;color:#F2F2F0">{{ b.name }}</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(242,242,240,.34)">{{ b.note }}</div>
+</div>
+<dc-import name="XShowApp2" screen="{{ b.screen }}" car-id="{{ b.carId }}" signed-in="{{ b.signedIn }}" auth-mode="{{ b.authMode }}" scan-state="{{ b.scanState }}" step="{{ b.step }}" scroll-top="{{ b.scrollTop }}" hint-size="402px,874px"></dc-import>
+</div>
+</sc-for>
+</div>
+</div>
+
+</div>
+
+<p style="margin:34px 0 0;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.08em;color:rgba(242,242,240,.4)">TRY NEXT: “DROP THE PARTNERS PAGE TOO” · “LET ENTRANTS EDIT A CAR AFTER REGISTERING” · “ADD A WINNER-ANNOUNCED STATE TO THE AWARD TAB”</p>
+</section>
+
+<section id="t1" style="padding:40px 48px 44px;border-bottom:1px solid rgba(255,255,255,.08);font-family:Barlow,system-ui,sans-serif">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 24px">
+<a href="#t1" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10px;padding:3px 7px;background:#F2F2F0;color:#0B0B0C;text-decoration:none">1</a>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:rgba(242,242,240,.55)">FIRST PASS · PROTOTYPE, EIGHT SCREENS, AND THREE THINGS EXPLORED TWO WAYS</span>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start">
+
+<div id="1a" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1a" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:#E01B22;color:#fff;text-decoration:none">1a</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Live prototype — tap through it. Every tab, filter, vote and step works.</span>
+</div>
+<div style="width:402px">
+<dc-import name="XShowApp" screen="feed" hint-size="402px,874px"></dc-import>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.9;letter-spacing:.09em;color:rgba(242,242,240,.34);max-width:402px">TRY: ROSTER → FILTER BY CLASS → OPEN A CAR → SCAN TAB → TAP VIEWFINDER<br>DRAG A PHOTO ONTO ANY PLACEHOLDER TO FILL IT.</div>
+</div>
+
+<div id="1b" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1b" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1b</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">The eight screens, side by side.</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:26px;max-width:{{ boardMax }}">
+<sc-for list="{{ board }}" as="b" hint-placeholder-count="10">
+<div style="width:402px;display:flex;flex-direction:column;gap:9px">
+<div style="display:flex;align-items:baseline;gap:8px;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:7px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.3)">{{ b.n }}</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.05em;color:#F2F2F0">{{ b.name }}</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(242,242,240,.34)">{{ b.note }}</div>
+</div>
+<dc-import name="XShowApp" screen="{{ b.screen }}" car-id="{{ b.carId }}" live-tab="{{ b.liveTab }}" scan-state="{{ b.scanState }}" step="{{ b.step }}" scroll-top="{{ b.scrollTop }}" hint-size="402px,874px"></dc-import>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div id="1c" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1c" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1c</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Car profile A — <b style="font-weight:600;color:#F2F2F0">photo leads</b>. Swipeable 462px hero, headline crashes into the fade, numbers as three big cells.</span>
+</div>
+<div style="width:402px"><dc-import name="XShowApp" screen="car" car-id="s14" profile-variant="A" hint-size="402px,874px"></dc-import></div>
+</div>
+
+<div id="1d" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1d" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1d</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Car profile B — <b style="font-weight:600;color:#F2F2F0">sheet leads</b>. Short hero, then a numbered technical sheet you can read like paper.</span>
+</div>
+<div style="width:402px"><dc-import name="XShowApp" screen="car" car-id="s14" profile-variant="B" hint-size="402px,874px"></dc-import></div>
+</div>
+
+<div id="1e" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1e" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1e</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Voting A — <b style="font-weight:600;color:#F2F2F0">ballot</b>. Six categories, expand one, tap to vote, bars fill behind the rows.</span>
+</div>
+<div style="width:402px"><dc-import name="XShowApp" screen="vote" vote-variant="A" hint-size="402px,874px"></dc-import></div>
+</div>
+
+<div id="1f" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1f" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1f</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Voting B — <b style="font-weight:600;color:#F2F2F0">timing tower</b>. One category at a time, ranked live, share on the right like a rally board.</span>
+</div>
+<div style="width:402px"><dc-import name="XShowApp" screen="vote" vote-variant="B" hint-size="402px,874px"></dc-import></div>
+</div>
+
+</div>
+
+<div style="display:flex;align-items:baseline;gap:10px;margin:44px 0 20px;padding-top:26px;border-top:1px solid rgba(255,255,255,.1)">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;color:rgba(242,242,240,.55)">THE PRINTED WINDSHIELD CARD · A5 LANDSCAPE, 210 × 148 MM</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start">
+
+<div id="1g" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1g" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1g</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Spec plate — black stock, stand number leads.</span>
+</div>
+<div style="width:520px;height:366px;background:#0B0B0C;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;overflow:hidden">
+<div style="background:#E01B22;padding:12px 20px;display:flex;align-items:center;gap:12px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;letter-spacing:.05em;color:#fff">X CAR SHOW 04</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.82)">CAJVANA · 22.08.2026</div>
+</div>
+<div style="flex:1;display:flex;padding:20px;gap:20px">
+<div style="flex:none;width:130px;border-right:1px solid rgba(255,255,255,.12);padding-right:18px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(242,242,240,.4)">STAND</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:74px;line-height:.82;color:#F2F2F0;margin-top:8px">A-14</div>
+<div style="display:inline-block;background:#E01B22;color:#fff;padding:4px 9px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;margin-top:16px">JDM</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:34px;line-height:.92;color:#F2F2F0">1998 NISSAN<br>SILVIA S14</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:#E85159;margin-top:9px">“KOUKI”</div>
+<div style="flex:1"></div>
+<div style="display:flex;gap:0;border-top:1px solid rgba(255,255,255,.14);padding-top:12px">
+<div style="flex:1;border-right:1px solid rgba(255,255,255,.1)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.38)">POWER</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:19px;color:#F2F2F0;margin-top:4px">412<span style="font-size:10px;color:rgba(242,242,240,.45)"> HP</span></div>
+</div>
+<div style="flex:1;border-right:1px solid rgba(255,255,255,.1);padding-left:14px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.38)">ENGINE</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:19px;color:#F2F2F0;margin-top:4px">SR20DET</div>
+</div>
+<div style="flex:none;padding-left:14px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.38)">DRIVE</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:19px;color:#F2F2F0;margin-top:4px">RWD</div>
+</div>
+</div>
+</div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:center;gap:8px">
+{{ qrDark }}
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.14em;color:rgba(242,242,240,.45);text-align:center;line-height:1.5">SCAN FOR<br>THE BUILD</div>
+</div>
+</div>
+<div style="border-top:1px solid rgba(255,255,255,.12);padding:10px 20px;display:flex;gap:12px;align-items:center">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.55);flex:1">ANDREI MOROȘANU · @ANDREI.S14 · SUCEAVA</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.28)">LEAVE ON THE WINDSCREEN</div>
+</div>
+</div>
+</div>
+
+<div id="1h" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1h" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1h</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Scrutineering slip — paper stock, ink-light, reads at ten paces.</span>
+</div>
+<div style="width:520px;height:366px;background:#F4F3EF;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.5)">
+<div style="flex:1;display:flex">
+<div style="flex:none;width:196px;border-right:2px solid #E01B22;padding:20px;display:flex;flex-direction:column">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(11,11,12,.45)">ENTRY №</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:132px;line-height:.78;color:#0B0B0C;margin-top:4px;letter-spacing:-.02em">14</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#0B0B0C;border-top:1px solid rgba(11,11,12,.2);padding-top:9px">CLASS · JDM<br>PADDOCK A</div>
+</div>
+<div style="flex:1;padding:20px;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:9px">
+<div style="width:20px;height:20px;background:#E01B22;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:#fff">X</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(11,11,12,.55)">X CAR SHOW 04 · CAJVANA</div>
+</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:29px;line-height:.95;color:#0B0B0C;margin-top:16px">1998 NISSAN SILVIA S14</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:rgba(11,11,12,.5);margin-top:7px">ANDREI MOROȘANU · SUCEAVA</div>
+<div style="margin-top:16px">
+<sc-for list="{{ slipRows }}" as="r" hint-placeholder-count="4">
+<div style="display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:1px dotted rgba(11,11,12,.25)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(11,11,12,.5)">{{ r.k }}</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#0B0B0C">{{ r.v }}</div>
+</div>
+</sc-for>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;align-items:flex-end;gap:12px">
+{{ qrLight }}
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.6;letter-spacing:.1em;color:rgba(11,11,12,.6);padding-bottom:2px">SCAN FOR MOD LIST,<br>BUILD STORY AND<br>THE OWNER'S SOCIALS.</div>
+</div>
+</div>
+</div>
+<div style="background:#0B0B0C;padding:9px 20px;display:flex;gap:12px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(255,255,255,.75);flex:1">SHOW.X / 14</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(255,255,255,.4)">VOTING CLOSES 18:00</div>
+</div>
+</div>
+</div>
+
+<div id="1i" style="flex:none;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:baseline;gap:9px">
+<a href="#1i" style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10.5px;padding:3px 7px;background:rgba(255,255,255,.1);color:#F2F2F0;text-decoration:none">1i</a>
+<span style="font-size:12px;color:rgba(242,242,240,.55)">Photo plate — the car on the card. Costlier to print, best for award winners.</span>
+</div>
+<div style="width:520px;height:366px;background:#0B0B0C;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;overflow:hidden">
+<div style="position:relative;height:168px;background:#141517;flex:none">
+<image-slot id="card-photo" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="Drop the car's hero photo"></image-slot>
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,9,.92) 0%,rgba(8,8,9,0) 60%);pointer-events:none"></div>
+<div style="position:absolute;top:0;left:0;background:#E01B22;color:#fff;padding:7px 12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;pointer-events:none">X CAR SHOW 04</div>
+<div style="position:absolute;left:18px;right:18px;bottom:12px;display:flex;align-items:flex-end;gap:14px;pointer-events:none">
+<div style="flex:1">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:.92;color:#F2F2F0">1998 NISSAN SILVIA S14</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:rgba(242,242,240,.6);margin-top:6px">ANDREI MOROȘANU · SUCEAVA</div>
+</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:52px;line-height:.8;color:#E01B22">14</div>
+</div>
+</div>
+<div style="flex:1;display:flex;padding:16px 18px;gap:18px">
+<div style="flex:none">{{ qrDark2 }}</div>
+<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0 18px;align-content:start">
+<sc-for list="{{ plateRows }}" as="r" hint-placeholder-count="6">
+<div style="border-bottom:1px solid rgba(255,255,255,.1);padding:7px 0">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.16em;color:rgba(242,242,240,.36)">{{ r.k }}</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;color:#F2F2F0;margin-top:2px">{{ r.v }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="border-top:1px solid rgba(255,255,255,.12);padding:9px 18px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.35)">SCAN FOR THE FULL BUILD · 21 MODS · 6 YEARS OF PHOTOS</div>
+</div>
+</div>
+
+</div>
+
+<p style="margin:34px 0 0;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.08em;color:rgba(242,242,240,.4)">TRY NEXT: “KEEP <a href="#1c" style="color:#E85159">1c</a> BUT MOVE THE SPEC SHEET FROM <a href="#1d" style="color:#E85159">1d</a> ABOVE THE MODS” · “MAKE VOTING <a href="#1f" style="color:#E85159">1f</a> THE DEFAULT AND DROP THE BALLOT” · “PRINT <a href="#1h" style="color:#E85159">1h</a> IN TWO SIZES, DASH AND WINDSCREEN”</p>
+</section>
+
+<section id="components" style="padding:40px 48px 44px;border-bottom:1px solid rgba(255,255,255,.08);font-family:Barlow,system-ui,sans-serif">
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:26px">
+<span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10px;padding:3px 7px;background:#F2F2F0;color:#0B0B0C">C</span>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:rgba(242,242,240,.55)">COMPONENT SHEET</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start">
+
+<div style="width:330px;background:#0B0B0C;border:1px solid rgba(255,255,255,.1);padding:20px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.1)">BUTTONS</div>
+<div style="display:flex;flex-direction:column;gap:11px;margin-top:16px">
+<div style="text-align:center;padding:13px;background:#E01B22;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em">FOLLOW</div>
+<div style="text-align:center;padding:13px;border:1px solid rgba(255,255,255,.3);color:#F2F2F0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em">FOLLOWING</div>
+<div style="text-align:center;padding:12px;border:1px solid rgba(255,255,255,.18);color:rgba(242,242,240,.7);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em">+ GARAGE</div>
+<div style="display:flex;gap:9px;align-items:center">
+<div style="width:36px;height:36px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#F2F2F0">←</div>
+<div style="width:36px;height:36px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#F2F2F0">↗</div>
+<div style="border:1px solid rgba(255,255,255,.22);padding:6px 11px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:#F2F2F0">+ CAR</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(242,242,240,.32)">36 / 44 PX</div>
+</div>
+</div>
+</div>
+
+<div style="width:330px;background:#0B0B0C;border:1px solid rgba(255,255,255,.1);padding:20px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.1)">TAGS & CHIPS</div>
+<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+<div style="background:#E01B22;color:#fff;padding:3px 7px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.14em">JDM</div>
+<div style="border:1px solid rgba(255,255,255,.2);padding:3px 7px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:rgba(242,242,240,.7)">STAND A-14</div>
+<div style="border:1px solid rgba(224,27,34,.5);color:#E85159;padding:4px 8px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.12em">+ WHEELS</div>
+<div style="border:1px solid #E01B22;background:#E01B22;color:#fff;padding:4px 8px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.13em">VOTED</div>
+<div style="border:1px solid rgba(255,255,255,.2);color:rgba(242,242,240,.55);padding:4px 8px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.13em">OPEN</div>
+<div style="padding:5px 11px;border:1px solid rgba(255,255,255,.16);color:rgba(242,242,240,.6);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.13em">SPOTTED</div>
+<div style="padding:5px 11px;border:1px solid #E01B22;background:#E01B22;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.13em">ALL</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.12em;color:rgba(242,242,240,.55)">JP</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:rgba(242,242,240,.3);margin-top:16px;line-height:1.7">FILLED RED = STATE YOU CAUSED.<br>OUTLINE RED = A CHANGE ON A CAR.<br>WHITE OUTLINE = NEUTRAL FACT.</div>
+</div>
+
+<div style="width:330px;background:#0B0B0C;border:1px solid rgba(255,255,255,.1);padding:20px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.1)">SPEC ROWS</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid rgba(255,255,255,.1);margin-top:14px">
+<div style="padding:12px 0 12px 0;border-right:1px solid rgba(255,255,255,.08)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:rgba(242,242,240,.36)">POWER</div>
+<div style="display:flex;align-items:baseline;gap:3px;margin-top:6px"><div style="font-family:'IBM Plex Mono',monospace;font-size:25px;line-height:.9;color:#F2F2F0">412</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.4)">HP</div></div>
+</div>
+<div style="padding:12px 0 12px 12px;border-right:1px solid rgba(255,255,255,.08)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:rgba(242,242,240,.36)">TORQUE</div>
+<div style="display:flex;align-items:baseline;gap:3px;margin-top:6px"><div style="font-family:'IBM Plex Mono',monospace;font-size:25px;line-height:.9;color:#F2F2F0">480</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.4)">NM</div></div>
+</div>
+<div style="padding:12px 0 12px 12px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:rgba(242,242,240,.36)">WEIGHT</div>
+<div style="display:flex;align-items:baseline;gap:3px;margin-top:6px"><div style="font-family:'IBM Plex Mono',monospace;font-size:25px;line-height:.9;color:#F2F2F0">1240</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.4)">KG</div></div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="padding:12px 14px 12px 0;border-bottom:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:rgba(242,242,240,.36)">ENGINE</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;margin-top:4px;color:#F2F2F0">SR20DET 2.0T</div>
+</div>
+<div style="padding:12px 0 12px 14px;border-bottom:1px solid rgba(255,255,255,.08)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:rgba(242,242,240,.36)">DRIVETRAIN</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;margin-top:4px;color:#F2F2F0">RWD</div>
+</div>
+</div>
+<div style="display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.28);width:18px">04</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.13em;color:rgba(242,242,240,.45);flex:1">POWER</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:17px;color:#E85159">412 HP</div>
+</div>
+</div>
+
+<div style="width:330px;background:#0B0B0C;border:1px solid rgba(255,255,255,.1);padding:20px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.1)">CAR CARDS</div>
+<div style="display:flex;gap:10px;margin-top:16px">
+<div style="width:126px;position:relative;aspect-ratio:3/4;background:repeating-linear-gradient(135deg,#1A1B1D 0 7px,#141517 7px 14px);overflow:hidden">
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,9,.9) 0%,rgba(8,8,9,0) 46%)"></div>
+<div style="position:absolute;top:7px;left:7px;background:rgba(8,8,9,.8);padding:3px 6px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:#F2F2F0">14</div>
+<div style="position:absolute;top:7px;right:7px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.12em;color:rgba(242,242,240,.62)">JDM</div>
+<div style="position:absolute;left:8px;right:8px;bottom:8px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;line-height:.98;color:#F2F2F0">SILVIA S14</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(242,242,240,.55);margin-top:3px">1998 · 412 HP</div>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:9px">
+<div style="width:30px;height:30px;background:repeating-linear-gradient(135deg,#1A1B1D 0 6px,#141517 6px 12px);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.5)">14</div>
+<div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;line-height:1;color:#F2F2F0">SILVIA S14 · #14</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.13em;color:#E85159;margin-top:3px">BUILD UPDATE</div>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:9px;border-top:1px solid rgba(255,255,255,.08);padding-top:11px">
+<div style="width:30px;height:30px;background:repeating-linear-gradient(135deg,#1A1B1D 0 6px,#141517 6px 12px);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:rgba(242,242,240,.5)">22</div>
+<div style="flex:1">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;line-height:1;color:#F2F2F0">SUPRA MK4</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:rgba(242,242,240,.38);margin-top:4px">PADDOCK A</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(242,242,240,.55)">8 M</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="width:330px;background:#0B0B0C;border:1px solid rgba(255,255,255,.1);padding:20px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.1)">AVATARS & BARS</div>
+<div style="display:flex;align-items:center;gap:12px;margin-top:16px">
+<div style="width:44px;height:44px;border-radius:50%;background:repeating-linear-gradient(135deg,#1D1E21 0 6px,#161719 6px 12px);border:1px solid rgba(255,255,255,.12)"></div>
+<div style="width:34px;height:34px;background:repeating-linear-gradient(135deg,#1D1E21 0 6px,#161719 6px 12px);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.5)">14</div>
+<div style="display:flex;gap:5px">
+<div style="width:18px;height:18px;background:repeating-linear-gradient(135deg,#1D1E21 0 5px,#161719 5px 10px);border:1px solid rgba(255,255,255,.1)"></div>
+<div style="width:18px;height:18px;background:repeating-linear-gradient(135deg,#1D1E21 0 5px,#161719 5px 10px);border:1px solid rgba(255,255,255,.1)"></div>
+<div style="width:18px;height:18px;background:repeating-linear-gradient(135deg,#1D1E21 0 5px,#161719 5px 10px);border:1px solid rgba(255,255,255,.1)"></div>
+</div>
+<div style="width:16px;height:16px;background:#E01B22;transform:rotate(45deg)"></div>
+</div>
+<div style="margin-top:20px;position:relative;border:1px solid #E01B22;overflow:hidden">
+<div style="position:absolute;left:0;top:0;bottom:0;width:39%;background:rgba(224,27,34,.32)"></div>
+<div style="position:relative;display:flex;align-items:center;gap:10px;padding:11px 12px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.4);width:20px">19</div>
+<div style="flex:1;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;color:#fff">PASSAT B5.5</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#fff">39%</div>
+<div style="width:16px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#E01B22">●</div>
+</div>
+</div>
+<div style="display:flex;gap:3px;margin-top:16px">
+<div style="flex:1;height:3px;background:#E01B22"></div><div style="flex:1;height:3px;background:#E01B22"></div><div style="flex:1;height:3px;background:#E01B22"></div>
+<div style="flex:1;height:3px;background:rgba(255,255,255,.14)"></div><div style="flex:1;height:3px;background:rgba(255,255,255,.14)"></div><div style="flex:1;height:3px;background:rgba(255,255,255,.14)"></div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:rgba(242,242,240,.3);margin-top:9px">BALLOT · 3 / 6 CAST</div>
+</div>
+
+</div>
+</section>
+
+<section id="scale" style="padding:40px 48px 60px;font-family:Barlow,system-ui,sans-serif">
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:26px">
+<span style="font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10px;padding:3px 7px;background:#F2F2F0;color:#0B0B0C">T</span>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:rgba(242,242,240,.55)">COLOUR & TYPE SCALE</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start">
+<div style="width:560px;background:#0B0B0C;border:1px solid rgba(255,255,255,.1);padding:22px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)">COLOUR</div>
+<sc-for list="{{ colors }}" as="c" hint-placeholder-count="9">
+<div style="display:flex;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+<div style="width:44px;height:26px;background:{{ c.sw }};border:1px solid rgba(255,255,255,.12);flex:none"></div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.04em;color:#F2F2F0;width:118px">{{ c.name }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(242,242,240,.55);width:172px">{{ c.hex }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;color:rgba(242,242,240,.34);flex:1">{{ c.use }}</div>
+</div>
+</sc-for>
+<div style="font-size:13px;line-height:1.6;color:rgba(242,242,240,.5);margin-top:16px;text-wrap:pretty">Red is rationed. On any given screen it appears at most three times: the live/now marker, the vote you cast, and the one action the screen wants. If a fourth appears, something else has to give it up.</div>
+</div>
+<div style="width:620px;background:#0B0B0C;border:1px solid rgba(255,255,255,.1);padding:22px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#E85159;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)">TYPE</div>
+<div style="display:flex;gap:24px;margin:14px 0 18px;flex-wrap:wrap">
+<div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;color:#F2F2F0">BARLOW CONDENSED</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.36);margin-top:3px">HEADLINES · 600 / 700 · UPPERCASE</div></div>
+<div><div style="font-size:22px;color:#F2F2F0">Barlow</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.36);margin-top:3px">BODY · 400 / 600 · SENTENCE CASE</div></div>
+<div><div style="font-family:'IBM Plex Mono',monospace;font-size:20px;color:#F2F2F0">IBM Plex Mono</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.36);margin-top:3px">EVERY NUMBER AND LABEL</div></div>
+</div>
+<sc-for list="{{ typeRows }}" as="t" hint-placeholder-count="9">
+<div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)">
+<div style="width:86px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:#E85159;flex:none">{{ t.name }}</div>
+<div style="flex:1;min-width:0;color:#F2F2F0;font-family:{{ t.ff }};font-weight:{{ t.fw }};font-size:{{ t.fs }};letter-spacing:{{ t.ls }};line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.sample }}</div>
+<div style="width:150px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;color:rgba(242,242,240,.34);flex:none">{{ t.spec }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;boardColumns&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4,&quot;min&quot;:2,&quot;max&quot;:6,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+function seeded(seed) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return () => { h ^= h << 13; h >>>= 0; h ^= h >> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; };
+}
+
+function qrMatrix(seed) {
+  const N = 25, r = seeded(seed), m = [];
+  for (let y = 0; y < N; y++) { const row = []; for (let x = 0; x < N; x++) row.push(r() > 0.5 ? 1 : 0); m.push(row); }
+  const clear = (ox, oy, w, h) => { for (let y = oy; y < oy + h; y++) for (let x = ox; x < ox + w; x++) if (y >= 0 && y < N && x >= 0 && x < N) m[y][x] = 0; };
+  const finder = (ox, oy) => {
+    clear(ox - 1, oy - 1, 9, 9);
+    for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++)
+      m[oy + y][ox + x] = ((x === 0 || x === 6 || y === 0 || y === 6) || (x > 1 && x < 5 && y > 1 && y < 5)) ? 1 : 0;
+  };
+  finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+  for (let i = 8; i < N - 8; i++) { m[6][i] = i % 2 ? 0 : 1; m[i][6] = i % 2 ? 0 : 1; }
+  for (let y = 0; y < 5; y++) for (let x = 0; x < 5; x++)
+    m[N - 7 + y][N - 7 + x] = ((x === 0 || x === 4 || y === 0 || y === 4) || (x === 2 && y === 2)) ? 1 : 0;
+  return m;
+}
+
+function qrEl(seed, px, dark, light) {
+  const m = qrMatrix(seed), cells = [];
+  for (let y = 0; y < m.length; y++) for (let x = 0; x < m.length; x++)
+    cells.push(React.createElement('div', { key: y + '-' + x, style: { background: m[y][x] ? dark : light } }));
+  return React.createElement('div', {
+    style: {
+      display: 'grid', gridTemplateColumns: 'repeat(25,' + px + 'px)', gridAutoRows: px + 'px',
+      background: light, padding: px * 2, width: 'max-content', flex: 'none'
+    }
+  }, cells);
+}
+
+class Component extends DCLogic {
+  renderVals() {
+    const cols = this.props.boardColumns || 4;
+    return {
+      boardMax: (cols * 402 + (cols - 1) * 26) + 'px',
+      board2: [
+        { n: '01', name: 'FEED · SIGNED OUT', note: 'SIGN IN LIVES IN THE HEADER', screen: 'feed', carId: 's14', signedIn: false, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '02', name: 'REGISTER', note: 'PICK A ROLE, THEN THREE FIELDS', screen: 'auth', carId: 's14', signedIn: false, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '03', name: 'SIGN IN', note: 'EMAIL + PASSWORD', screen: 'auth', carId: 's14', signedIn: false, authMode: 'signin', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '04', name: 'ACCOUNT', note: 'ROLE, VOTE, SIGN OUT', screen: 'auth', carId: 's14', signedIn: true, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '05', name: 'ROSTER', note: 'ONE FILTER ROW, NO TRAYS', screen: 'roster', carId: 's14', signedIn: true, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '06', name: 'CAR PROFILE', note: 'PHOTO, THREE NUMBERS, FOUR SPECS', screen: 'car', carId: 's14', signedIn: true, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '07', name: 'CAR PROFILE · LOWER', note: 'MODS, STORY, OWNER', screen: 'car', carId: 'd13', signedIn: true, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 900 },
+        { n: '08', name: 'AWARD · SIGNED OUT', note: 'STANDINGS OPEN, VOTE GATED', screen: 'award', carId: 's14', signedIn: false, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '09', name: 'AWARD · VOTE CAST', note: 'ONE AWARD, ONE VOTE', screen: 'award', carId: 's14', signedIn: true, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '10', name: 'SCAN', note: 'MATCHED STATE', screen: 'scan', carId: 's14', signedIn: true, authMode: 'register', scanState: 'found', step: 0, scrollTop: 0 },
+        { n: '11', name: 'REGISTER A CAR · 1/4', note: 'BADGE + YEAR IN ONE STEP', screen: 'onboard', carId: 's14', signedIn: true, authMode: 'register', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '12', name: 'REGISTER A CAR · DONE', note: 'CARD + STAND ISSUED', screen: 'onboard', carId: 's14', signedIn: true, authMode: 'register', scanState: 'idle', step: 4, scrollTop: 0 }
+      ],
+      board: [
+        { n: '01', name: 'COMMUNITY FEED', note: 'BUILDS · SPOTTED · MEETS', screen: 'feed', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '02', name: 'EVENT ROSTER', note: 'FILTERABLE, PHOTO-FIRST', screen: 'roster', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '03', name: 'CAR PROFILE', note: 'HERO + SPEC BLOCK', screen: 'car', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '04', name: 'CAR PROFILE · LOWER', note: 'MODS, STORY, OWNER', screen: 'car', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 1180 },
+        { n: '05', name: 'EVENT DAY · MAP', note: 'PLACEMENTS + ANNOUNCEMENT', screen: 'live', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '06', name: 'EVENT DAY · SCHEDULE', note: 'NOW MARKER AT 14:12', screen: 'live', carId: 's14', liveTab: 'SCHEDULE', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '07', name: 'SCAN', note: 'MATCHED STATE', screen: 'scan', carId: 's14', liveTab: 'MAP', scanState: 'found', step: 0, scrollTop: 0 },
+        { n: '08', name: 'VOTING', note: 'BALLOT + LIVE BARS', screen: 'vote', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '09', name: 'ONBOARDING · 1/5', note: 'PICK THE BADGE', screen: 'onboard', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 0 },
+        { n: '10', name: 'ONBOARDING · NUMBERS', note: 'CHIPS AND A STEPPER', screen: 'onboard', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 1, scrollTop: 0 },
+        { n: '11', name: 'ONBOARDING · DONE', note: 'CARD + STAND ISSUED', screen: 'onboard', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 5, scrollTop: 0 },
+        { n: '12', name: 'PARTNERS', note: 'SHOPS AS PROFILES', screen: 'partners', carId: 's14', liveTab: 'MAP', scanState: 'idle', step: 0, scrollTop: 0 }
+      ],
+      qrDark: qrEl('s14-card-a', 3, '#F2F2F0', '#0B0B0C'),
+      qrDark2: qrEl('s14-card-c', 3, '#F2F2F0', '#0B0B0C'),
+      qrLight: qrEl('s14-card-b', 3, '#0B0B0C', '#F4F3EF'),
+      slipRows: [
+        { k: 'ENGINE', v: 'SR20DET 2.0T' },
+        { k: 'POWER', v: '412 HP' },
+        { k: 'DRIVETRAIN', v: 'RWD' },
+        { k: 'PAINT', v: 'BAYSIDE BLUE' }
+      ],
+      plateRows: [
+        { k: 'ENGINE', v: 'SR20DET 2.0T' }, { k: 'POWER', v: '412 HP' },
+        { k: 'TORQUE', v: '480 NM' }, { k: 'DRIVE', v: 'RWD' },
+        { k: 'WEIGHT', v: '1240 KG' }, { k: 'CLASS', v: 'JDM' }
+      ],
+      colors: [
+        { name: 'INK', sw: '#0B0B0C', hex: '#0B0B0C', use: 'APP BACKGROUND' },
+        { name: 'PANEL', sw: '#131315', hex: '#131315', use: 'RAISED BLOCKS, OWNER CARD' },
+        { name: 'PANEL DEEP', sw: '#0E0E10', hex: '#0E0E10', use: 'PARTNER BANDS, CANVAS' },
+        { name: 'HAIRLINE', sw: 'rgba(255,255,255,.09)', hex: 'RGBA(255,255,255,.09)', use: 'EVERY DIVIDER' },
+        { name: 'PAPER', sw: '#F2F2F0', hex: '#F2F2F0', use: 'PRIMARY TEXT' },
+        { name: 'PAPER 55', sw: 'rgba(242,242,240,.55)', hex: 'RGBA(242,242,240,.55)', use: 'SECONDARY TEXT' },
+        { name: 'PAPER 34', sw: 'rgba(242,242,240,.34)', hex: 'RGBA(242,242,240,.34)', use: 'LABELS, META' },
+        { name: 'ARTERIAL', sw: '#E01B22', hex: '#E01B22 · OKLCH(.55 .22 27)', use: 'LIVE · YOUR VOTE · ACTION' },
+        { name: 'ARTERIAL LT', sw: '#E85159', hex: '#E85159', use: 'RED TEXT ON BLACK' },
+        { name: 'ARTERIAL WASH', sw: 'rgba(224,27,34,.14)', hex: 'RGBA(224,27,34,.14)', use: 'RESULT BARS, NOW ROW' }
+      ],
+      typeRows: [
+        { name: 'DISPLAY', sample: '1998 NISSAN SILVIA S14', ff: "'Barlow Condensed',sans-serif", fw: 700, fs: '38px', ls: '.005em', spec: 'COND 700 · 38 / 34' },
+        { name: 'TITLE', sample: 'ROSTER', ff: "'Barlow Condensed',sans-serif", fw: 700, fs: '30px', ls: '.01em', spec: 'COND 700 · 30 / 26' },
+        { name: 'SUBHEAD', sample: 'BEST ENGINE BAY', ff: "'Barlow Condensed',sans-serif", fw: 600, fs: '19px', ls: '.02em', spec: 'COND 600 · 19' },
+        { name: 'LABEL', sample: 'WORK MEISTER S1 3P', ff: "'Barlow Condensed',sans-serif", fw: 600, fs: '16px', ls: '.02em', spec: 'COND 600 · 16' },
+        { name: 'BODY', sample: 'Bought it off a guy in Iași in 2019.', ff: 'Barlow,sans-serif', fw: 400, fs: '15px', ls: '0', spec: 'BARLOW 400 · 15 / 1.5' },
+        { name: 'DATA XL', sample: '412', ff: "'IBM Plex Mono',monospace", fw: 500, fs: '25px', ls: '-.02em', spec: 'MONO 500 · 25' },
+        { name: 'DATA', sample: '16:30 · 402 VOTES', ff: "'IBM Plex Mono',monospace", fw: 400, fs: '13px', ls: '0', spec: 'MONO 400 · 13' },
+        { name: 'META', sample: 'STAND A-14 · PADDOCK A', ff: "'IBM Plex Mono',monospace", fw: 400, fs: '9px', ls: '.14em', spec: 'MONO 400 · 9 / .14EM' },
+        { name: 'MICRO', sample: 'ROSTER', ff: "'IBM Plex Mono',monospace", fw: 400, fs: '7.5px', ls: '.14em', spec: 'MONO 400 · 7.5 · TABS ONLY' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

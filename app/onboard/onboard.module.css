@@ -1,0 +1,357 @@
+.screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  padding: var(--safe-top) var(--gutter) 0;
+  flex: none;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.close {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: rgba(242, 242, 240, 0.6);
+  width: 18px;
+}
+
+.label {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--paper-40);
+}
+
+.stepLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--paper-30);
+}
+
+/* Four segments, not a percentage — you can see how much is left. */
+.progress {
+  display: flex;
+  gap: 3px;
+  margin-top: 12px;
+}
+
+.progress i {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background 0.2s ease;
+}
+
+.progress i[data-done='true'] {
+  background: var(--arterial);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 26px var(--gutter) 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 0.92;
+  letter-spacing: 0.005em;
+}
+
+.sub {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--paper-55);
+  margin-top: 9px;
+}
+
+.fieldLabel {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  color: var(--paper-34);
+}
+
+/* ── Step 1 · badge and year ─────────────────────────────────── */
+
+.opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 22px;
+}
+
+.optsTight {
+  margin-top: 9px;
+}
+
+.make,
+.year,
+.drive {
+  border: 1px solid var(--hairline-edge);
+  background: transparent;
+  color: var(--paper-55);
+  transition: border-color 0.14s ease, background 0.14s ease, color 0.14s ease;
+}
+
+.make[aria-pressed='true'],
+.year[aria-pressed='true'],
+.drive[aria-pressed='true'] {
+  border-color: var(--arterial);
+  background: var(--arterial);
+  color: #fff;
+}
+
+.make {
+  padding: 9px 12px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.03em;
+}
+
+.year {
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.drive {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.spaced {
+  margin-top: 26px;
+}
+
+/* ── Step 2 · numbers ────────────────────────────────────────
+   A stepper, not a text field. Rough is fine. */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.pm {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border: 1px solid var(--hairline-edge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--paper-70);
+}
+
+.pm:hover {
+  border-color: var(--hairline-strong);
+  color: var(--paper);
+}
+
+.power {
+  flex: 1;
+  text-align: center;
+}
+
+.powerValue {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 46px;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.powerUnit {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: rgba(242, 242, 240, 0.36);
+  margin-top: 7px;
+}
+
+.driveRow {
+  display: flex;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+/* ── Step 3 · photos ─────────────────────────────────────────── */
+
+.heroSlot {
+  position: relative;
+  height: 210px;
+  margin-top: 22px;
+  background: var(--slot);
+  border: 1px solid var(--hairline-firm);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pairSlot {
+  position: relative;
+  height: 112px;
+  background: var(--slot);
+  border: 1px solid var(--hairline-firm);
+}
+
+/* ── Step 4 · the story ──────────────────────────────────────── */
+
+.story {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid var(--hairline-firm);
+  padding: 14px;
+  min-height: 150px;
+  background: transparent;
+  color: var(--paper-86);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+.story:focus {
+  border-color: var(--hairline-strong);
+}
+
+.counter {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  color: var(--paper-30);
+}
+
+.counterFull {
+  color: var(--arterial-lt);
+}
+
+/* ── Done · the card they will be handed at the gate ─────────── */
+
+.card {
+  margin-top: 22px;
+  border: 1px solid var(--hairline-edge);
+  overflow: hidden;
+}
+
+.cardHead {
+  background: var(--arterial);
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHead b {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.cardHead span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cardBody {
+  display: flex;
+  gap: 12px;
+  padding: 14px 12px;
+}
+
+.cardQr {
+  width: 78px;
+  height: 78px;
+  flex: none;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardStandLabel {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  color: var(--paper-40);
+}
+
+.cardStand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 0.9;
+  margin-top: 4px;
+}
+
+.cardLine {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  color: var(--paper-45);
+  margin-top: 9px;
+}
+
+.doneNote {
+  margin-top: 16px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: rgba(242, 242, 240, 0.62);
+  text-wrap: pretty;
+}
+
+.tail {
+  height: 26px;
+}
+
+.footer {
+  flex: none;
+  border-top: 1px solid var(--hairline-firm);
+  background: var(--ink);
+  padding: 12px var(--gutter) 30px;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+
+.back {
+  flex: none;
+  width: auto;
+  padding: 15px 16px;
+  border: 1px solid var(--hairline-edge);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(242, 242, 240, 0.65);
+}

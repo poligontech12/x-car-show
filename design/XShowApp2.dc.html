@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#0B0B0C}
+a{color:#E01B22;text-decoration:none}
+a:hover{color:#F2545B}
+*::-webkit-scrollbar{width:0;height:0;display:none}
+input{caret-color:#E01B22}
+input::placeholder{color:rgba(242,242,240,.26)}
+@keyframes xscan{0%{transform:translateY(-92px);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateY(92px);opacity:0}}
+@keyframes xpulse{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes xrise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes xgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+</style>
+</helmet>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" width="{{ 402 }}" height="{{ 874 }}" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#0B0B0C;color:#F2F2F0;font-family:Barlow,system-ui,sans-serif;overflow:hidden;position:relative">
+
+<div id="{{ scrollId }}" style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative">
+<div style="position:sticky;top:0;height:68px;margin-bottom:-68px;z-index:5;pointer-events:none;background:linear-gradient(to bottom,#0B0B0C 0 48px,rgba(11,11,12,0) 68px)"></div>
+
+<sc-if value="{{ isFeed }}" hint-placeholder-val="{{ true }}">
+<div style="position:sticky;top:0;z-index:6;background:rgba(11,11,12,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding-top:56px;border-bottom:1px solid rgba(255,255,255,.09)">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 16px 12px">
+<div style="width:26px;height:26px;background:#E01B22;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;line-height:1;color:#fff">X</div>
+<div style="display:flex;flex-direction:column;gap:3px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;line-height:.9;letter-spacing:.05em">CAR SHOW</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.15em;color:rgba(242,242,240,.36)">CAJVANA · 22 AUG 2026</div>
+</div>
+<div style="flex:1"></div>
+<div onClick="{{ acct.on }}" style="cursor:pointer;border:1px solid {{ acct.bc }};background:{{ acct.bg }};color:{{ acct.fg }};padding:7px 11px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em">{{ acct.label }}</div>
+</div>
+<div style="display:flex;gap:6px;padding:0 16px 11px;overflow-x:auto">
+<sc-for list="{{ feedTabs }}" as="f" hint-placeholder-count="4">
+<div onClick="{{ f.on }}" style="cursor:pointer;padding:6px 11px;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.13em;border:1px solid {{ f.bc }};background:{{ f.bg }};color:{{ f.fg }}">{{ f.label }}</div>
+</sc-for>
+</div>
+</div>
+
+<sc-for list="{{ feed }}" as="p" hint-placeholder-count="4">
+<div style="border-bottom:1px solid rgba(255,255,255,.08);padding:16px 0 18px">
+<div style="display:flex;align-items:center;gap:9px;padding:0 16px 12px">
+<div style="width:30px;height:30px;background:{{ p.tone }};border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.5)">{{ p.no }}</div>
+<div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;line-height:1;letter-spacing:.02em">{{ p.title }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.13em;color:{{ p.kindColor }}">{{ p.kind }}</div>
+</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.3)">{{ p.time }}</div>
+</div>
+<sc-if value="{{ p.hasImage }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ p.open }}" style="cursor:pointer;width:100%;height:266px;position:relative;background:#141517">
+<image-slot id="{{ p.slot }}" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="{{ p.slotHint }}"></image-slot>
+</div>
+</sc-if>
+<sc-if value="{{ p.isMeet }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:14px;padding:2px 16px 0;align-items:center">
+<div style="border:1px solid rgba(255,255,255,.16);padding:9px 12px;text-align:center;min-width:56px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;line-height:.9">{{ p.day }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.14em;color:rgba(242,242,240,.45);margin-top:4px">{{ p.month }}</div>
+</div>
+<div style="flex:1;min-width:0">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:17px;line-height:1.05">{{ p.meetTitle }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(242,242,240,.42);margin-top:6px">{{ p.meetMeta }}</div>
+</div>
+<div onClick="{{ p.join }}" style="cursor:pointer;border:1px solid {{ p.joinBc }};background:{{ p.joinBg }};color:{{ p.joinFg }};padding:9px 12px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.13em">{{ p.joinLabel }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ p.hasBody }}" hint-placeholder-val="{{ true }}">
+<div style="padding:14px 16px 0;font-size:14.5px;line-height:1.45;color:rgba(242,242,240,.86);text-wrap:pretty">{{ p.body }}</div>
+</sc-if>
+</div>
+</sc-for>
+
+<div onClick="{{ goPartners }}" style="cursor:pointer;padding:18px 16px 30px;display:flex;align-items:center;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(242,242,240,.4);flex:1">PARTNERS & SHOPS</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(242,242,240,.3)">→</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isRoster }}" hint-placeholder-val="{{ false }}">
+<div style="position:sticky;top:0;z-index:6;background:rgba(11,11,12,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding-top:56px;border-bottom:1px solid rgba(255,255,255,.09)">
+<div style="display:flex;align-items:flex-end;gap:10px;padding:8px 16px 12px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:.85;letter-spacing:.01em">ROSTER</div>
+<div style="flex:1;height:1px;background:rgba(255,255,255,.12);margin-bottom:5px"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.42)">{{ rosterCount }}</div>
+</div>
+<div style="display:flex;gap:6px;padding:0 16px 11px;overflow-x:auto">
+<sc-for list="{{ classTabs }}" as="ct" hint-placeholder-count="5">
+<div onClick="{{ ct.on }}" style="cursor:pointer;padding:6px 11px;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.13em;border:1px solid {{ ct.bc }};background:{{ ct.bg }};color:{{ ct.fg }}">{{ ct.label }}</div>
+</sc-for>
+</div>
+</div>
+<div onClick="{{ feature.open }}" style="cursor:pointer;position:relative;width:100%;height:238px;background:#141517">
+<image-slot id="{{ feature.slot }}" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="{{ feature.slotHint }}"></image-slot>
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,9,.88) 0%,rgba(8,8,9,0) 52%);pointer-events:none"></div>
+<div style="position:absolute;left:14px;right:14px;bottom:13px;pointer-events:none">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:27px;line-height:.95;letter-spacing:.01em">{{ feature.title }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;color:rgba(242,242,240,.6);margin-top:7px">{{ feature.meta }}</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:2px 0 0">
+<sc-for list="{{ roster }}" as="c" hint-placeholder-count="8">
+<div onClick="{{ c.open }}" style="cursor:pointer;position:relative;aspect-ratio:3/4;background:#141517;overflow:hidden">
+<image-slot id="{{ c.slot }}" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="{{ c.slotHint }}"></image-slot>
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,9,.9) 0%,rgba(8,8,9,0) 46%);pointer-events:none"></div>
+<div style="position:absolute;top:8px;left:8px;background:rgba(8,8,9,.8);padding:3px 6px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;pointer-events:none">{{ c.no }}</div>
+<div style="position:absolute;left:9px;right:9px;bottom:10px;pointer-events:none">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;line-height:.98;letter-spacing:.01em">{{ c.model }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;color:rgba(242,242,240,.55);margin-top:5px">{{ c.line }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="padding:22px 16px 30px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.28)">{{ rosterFoot }}</div>
+</sc-if>
+
+<sc-if value="{{ isCar }}" hint-placeholder-val="{{ false }}">
+<div style="position:relative">
+<div onScroll="{{ onHeroScroll }}" style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:452px">
+<sc-for list="{{ heroSlots }}" as="h" hint-placeholder-count="3">
+<div style="flex:0 0 402px;height:452px;scroll-snap-align:start;background:#141517;position:relative">
+<image-slot id="{{ h.id }}" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="{{ h.hint }}"></image-slot>
+</div>
+</sc-for>
+</div>
+<div style="position:absolute;top:0;left:0;right:0;height:110px;background:linear-gradient(to bottom,rgba(8,8,9,.75),rgba(8,8,9,0));pointer-events:none"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;height:130px;background:linear-gradient(to top,#0B0B0C 4%,rgba(11,11,12,0));pointer-events:none"></div>
+<div onClick="{{ back }}" style="position:absolute;top:58px;left:14px;cursor:pointer;width:36px;height:36px;background:rgba(8,8,9,.6);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:14px">←</div>
+<div style="position:absolute;left:14px;bottom:84px;display:flex;gap:4px">
+<sc-for list="{{ heroDots }}" as="d" hint-placeholder-count="3">
+<div style="width:22px;height:2px;background:{{ d.bg }}"></div>
+</sc-for>
+</div>
+</div>
+<div style="padding:0 16px;margin-top:-54px;position:relative">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+<div style="background:#E01B22;color:#fff;padding:3px 7px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.14em">{{ car.cls }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.14em;color:rgba(242,242,240,.45)">{{ car.standLabel }}</div>
+</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:38px;line-height:.88;letter-spacing:.005em;text-wrap:balance">{{ car.headline }}</div>
+</div>
+<sc-if value="{{ car.hasWin }}" hint-placeholder-val="{{ false }}">
+<div style="margin:16px 16px 0;border:1px solid rgba(224,27,34,.45);padding:11px 13px;display:flex;align-items:center;gap:10px">
+<div style="width:14px;height:14px;background:#E01B22;transform:rotate(45deg);flex:none"></div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.03em;flex:1">CAR OF THE SHOW</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:#E85159">{{ car.winYear }}</div>
+</div>
+</sc-if>
+<div style="display:flex;gap:9px;padding:18px 16px 0;align-items:center">
+<div onClick="{{ toggleFollow }}" style="cursor:pointer;flex:1;text-align:center;padding:13px;background:{{ followBg }};border:1px solid {{ followBc }};color:{{ followFg }};font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em">{{ followLabel }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(242,242,240,.34);width:96px;line-height:1.5">{{ followersLine }}</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;margin:20px 0 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)">
+<sc-for list="{{ bigStats }}" as="s" hint-placeholder-count="3">
+<div style="padding:15px 0 14px 16px;border-right:1px solid rgba(255,255,255,.08)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:rgba(242,242,240,.36)">{{ s.k }}</div>
+<div style="display:flex;align-items:baseline;gap:3px;margin-top:7px">
+<div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:25px;line-height:.9;letter-spacing:-.02em">{{ s.v }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.4)">{{ s.u }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<sc-for list="{{ specRows }}" as="r" hint-placeholder-count="4">
+<div style="padding:13px 14px 13px 16px;border-bottom:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:rgba(242,242,240,.36)">{{ r.k }}</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;line-height:1.1;margin-top:5px">{{ r.v }}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="padding:24px 16px 0">
+<div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(242,242,240,.34)">MODIFICATIONS</div>
+<div style="flex:1;height:1px;background:rgba(255,255,255,.1)"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.34)">{{ modCount }}</div>
+</div>
+</div>
+<sc-for list="{{ modCats }}" as="m" hint-placeholder-count="4">
+<div style="border-bottom:1px solid rgba(255,255,255,.08)">
+<div onClick="{{ m.on }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:14px 16px">
+<div style="width:3px;height:15px;background:{{ m.bar }}"></div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.03em;flex:1">{{ m.name }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(242,242,240,.45);width:12px;text-align:center">{{ m.sign }}</div>
+</div>
+<sc-if value="{{ m.open }}" hint-placeholder-val="{{ true }}">
+<div style="padding:0 16px 15px 32px">
+<sc-for list="{{ m.items }}" as="i" hint-placeholder-count="3">
+<div style="display:flex;gap:9px;padding:5px 0;font-size:13.5px;color:rgba(242,242,240,.78)"><span style="font-family:'IBM Plex Mono',monospace;color:rgba(242,242,240,.25)">—</span>{{ i.t }}</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+
+<div style="padding:24px 16px 0">
+<div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(242,242,240,.34)">THE BUILD</div>
+<div style="flex:1;height:1px;background:rgba(255,255,255,.1)"></div>
+</div>
+<div style="font-size:15px;line-height:1.52;color:rgba(242,242,240,.84);text-wrap:pretty;white-space:pre-line">{{ car.story }}</div>
+</div>
+
+<div style="margin:26px 16px 0;border-top:1px solid rgba(255,255,255,.1);padding-top:16px;display:flex;align-items:center;gap:11px">
+<div style="width:40px;height:40px;border-radius:50%;background:repeating-linear-gradient(135deg,#1D1E21 0 6px,#161719 6px 12px);border:1px solid rgba(255,255,255,.12)"></div>
+<div style="flex:1;min-width:0">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:18px;line-height:1">{{ car.owner }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:rgba(242,242,240,.4);margin-top:6px">{{ car.ownerMeta }}</div>
+</div>
+<div style="border:1px solid rgba(255,255,255,.18);padding:8px 11px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.7)">FOLLOW</div>
+</div>
+<sc-if value="{{ hasGarage }}" hint-placeholder-val="{{ false }}">
+<div style="margin:14px 16px 0">
+<sc-for list="{{ garage }}" as="g" hint-placeholder-count="1">
+<div onClick="{{ g.open }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)">
+<div style="width:26px;height:26px;background:repeating-linear-gradient(135deg,#1D1E21 0 6px,#161719 6px 12px)"></div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;flex:1">{{ g.model }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(242,242,240,.3)">→</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<div style="height:34px"></div>
+</sc-if>
+
+<sc-if value="{{ isScan }}" hint-placeholder-val="{{ false }}">
+<div style="height:100%;display:flex;flex-direction:column;background:#08080A">
+<div onClick="{{ doScan }}" style="cursor:pointer;position:relative;flex:1;min-height:0;background:radial-gradient(ellipse at 50% 42%,#1B1C1F 0%,#0A0A0B 72%);overflow:hidden">
+<div style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) rotate(-7deg);width:212px;height:132px;background:repeating-linear-gradient(135deg,#232427 0 8px,#1C1D20 8px 16px);border:1px solid rgba(255,255,255,.08);opacity:.85"></div>
+<div style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:228px;height:228px">
+<div style="position:absolute;top:0;left:0;width:28px;height:28px;border-top:2px solid #E01B22;border-left:2px solid #E01B22"></div>
+<div style="position:absolute;top:0;right:0;width:28px;height:28px;border-top:2px solid #E01B22;border-right:2px solid #E01B22"></div>
+<div style="position:absolute;bottom:0;left:0;width:28px;height:28px;border-bottom:2px solid #E01B22;border-left:2px solid #E01B22"></div>
+<div style="position:absolute;bottom:0;right:0;width:28px;height:28px;border-bottom:2px solid #E01B22;border-right:2px solid #E01B22"></div>
+<div style="position:absolute;left:6px;right:6px;top:50%;height:1px;background:linear-gradient(90deg,transparent,#E01B22,transparent);animation:xscan 2.4s ease-in-out infinite"></div>
+</div>
+<div style="position:absolute;top:58px;left:0;right:0;display:flex;align-items:center;gap:10px;padding:0 16px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(242,242,240,.5);flex:1">SCAN A WINDSHIELD CARD</div>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:26px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:{{ scanHintColor }}">{{ scanHint }}</div>
+</div>
+<sc-if value="{{ scanFound }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ openScanned }}" style="cursor:pointer;background:#0F1012;border-top:2px solid #E01B22;padding:16px;display:flex;align-items:center;gap:13px;animation:xrise .28s ease-out">
+<div style="width:58px;height:58px;background:repeating-linear-gradient(135deg,#1D1E21 0 7px,#161719 7px 14px);border:1px solid rgba(255,255,255,.12)"></div>
+<div style="flex:1">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:#E85159">MATCH · CARD 14</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;line-height:1;margin-top:6px">1998 NISSAN SILVIA S14</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.11em;color:rgba(242,242,240,.4);margin-top:6px">ANDREI MOROȘANU · STAND A-14</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#E01B22">→</div>
+</div>
+</sc-if>
+<sc-if value="{{ scanIdle }}" hint-placeholder-val="{{ false }}">
+<div style="background:#0F1012;border-top:1px solid rgba(255,255,255,.1);padding:16px 16px 24px">
+<div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(242,242,240,.32)">RECENTLY SCANNED</div>
+<div style="flex:1;height:1px;background:rgba(255,255,255,.09)"></div>
+</div>
+<sc-for list="{{ recents }}" as="r" hint-placeholder-count="3">
+<div onClick="{{ r.open }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 0">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.35);width:22px">{{ r.no }}</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;flex:1">{{ r.model }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:rgba(242,242,240,.3)">{{ r.ago }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAward }}" hint-placeholder-val="{{ false }}">
+<div style="position:sticky;top:0;z-index:6;background:rgba(11,11,12,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding-top:56px;border-bottom:1px solid rgba(255,255,255,.09)">
+<div style="padding:8px 16px 13px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:.85">CAR OF THE SHOW</div>
+<div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.42);flex:1">ONE AWARD · ONE VOTE EACH</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:#E85159">CLOSES 18:00</div>
+</div>
+</div>
+</div>
+<sc-if value="{{ voteGate }}" hint-placeholder-val="{{ false }}">
+<div style="margin:16px;border:1px solid rgba(255,255,255,.14);padding:16px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:20px;line-height:1.05">Sign in to vote.</div>
+<div style="font-size:14px;line-height:1.45;color:rgba(242,242,240,.5);margin-top:8px">Standings are open to everyone. One account, one vote — so nobody stuffs the box.</div>
+<div onClick="{{ goSignIn }}" style="cursor:pointer;margin-top:14px;text-align:center;padding:13px;background:#E01B22;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em">SIGN IN OR REGISTER</div>
+</div>
+</sc-if>
+<sc-if value="{{ hasVote }}" hint-placeholder-val="{{ false }}">
+<div style="margin:16px 16px 4px;display:flex;align-items:center;gap:10px;border:1px solid rgba(224,27,34,.45);padding:11px 13px">
+<div style="width:8px;height:8px;background:#E01B22"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.6);flex:1">{{ myVoteLine }}</div>
+</div>
+</sc-if>
+<div style="display:flex;gap:10px;padding:18px 16px 9px;font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.14em;color:rgba(242,242,240,.26);border-bottom:1px solid rgba(255,255,255,.08)">
+<div style="width:22px">POS</div><div style="width:26px">№</div><div style="flex:1">ENTRY</div><div style="width:38px;text-align:right">VOTES</div><div style="width:34px;text-align:right">SHARE</div>
+</div>
+<sc-for list="{{ tower }}" as="t" hint-placeholder-count="8">
+<div onClick="{{ t.vote }}" style="cursor:pointer;position:relative;border-bottom:1px solid rgba(255,255,255,.06);overflow:hidden;background:{{ t.rowBg }}">
+<div style="position:absolute;left:0;top:0;bottom:0;width:{{ t.pct }};background:{{ t.barBg }};transform-origin:left;animation:xgrow .5s ease-out"></div>
+<div style="position:relative;display:flex;align-items:center;gap:10px;padding:13px 16px">
+<div style="width:22px;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:17px;color:{{ t.posColor }}">{{ t.pos }}</div>
+<div style="width:26px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(242,242,240,.42)">{{ t.no }}</div>
+<div style="flex:1;min-width:0">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;line-height:1;letter-spacing:.02em">{{ t.model }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;color:rgba(242,242,240,.34);margin-top:5px">{{ t.owner }}</div>
+</div>
+<div style="width:38px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(242,242,240,.8)">{{ t.votes }}</div>
+<div style="width:34px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;color:{{ t.shareColor }}">{{ t.pct }}</div>
+</div>
+</div>
+</sc-for>
+<div style="padding:16px 16px 34px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:rgba(242,242,240,.3)">{{ towerFoot }}</div>
+</sc-if>
+
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ false }}">
+<div style="height:100%;display:flex;flex-direction:column">
+<div style="padding:56px 16px 0">
+<div style="display:flex;align-items:center;gap:10px">
+<div onClick="{{ back }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;color:rgba(242,242,240,.6)">×</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(242,242,240,.42);flex:1">{{ authLabel }}</div>
+</div>
+</div>
+<div style="flex:1;overflow-y:auto;padding:26px 16px 0">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:34px;line-height:.92;letter-spacing:.005em">{{ authTitle }}</div>
+<div style="font-size:14px;line-height:1.4;color:rgba(242,242,240,.5);margin-top:9px">{{ authSub }}</div>
+
+<sc-if value="{{ isAccount }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:24px;border-top:1px solid rgba(255,255,255,.1)">
+<sc-for list="{{ accountRows }}" as="a" hint-placeholder-count="2">
+<div style="display:flex;align-items:baseline;gap:12px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.08)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(242,242,240,.36);flex:1">{{ a.k }}</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:17px">{{ a.v }}</div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ canAddCar }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ goOnboard }}" style="cursor:pointer;margin-top:20px;border:1px solid rgba(255,255,255,.2);padding:14px;display:flex;align-items:center;gap:10px">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:17px;flex:1">Register a car too</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(242,242,240,.4)">→</div>
+</div>
+</sc-if>
+<div onClick="{{ signOut }}" style="cursor:pointer;margin-top:12px;padding:14px;text-align:center;border:1px solid rgba(255,255,255,.14);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:rgba(242,242,240,.55)">SIGN OUT</div>
+</sc-if>
+
+<sc-if value="{{ isRegister }}" hint-placeholder-val="{{ true }}">
+<div style="margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.34)">I'M HERE TO</div>
+<sc-for list="{{ roles }}" as="r" hint-placeholder-count="2">
+<div onClick="{{ r.on }}" style="cursor:pointer;display:flex;gap:12px;align-items:flex-start;border:1px solid {{ r.bc }};background:{{ r.bg }};padding:14px;margin-top:8px">
+<div style="width:10px;height:10px;margin-top:5px;background:{{ r.dot }};flex:none"></div>
+<div style="flex:1">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:19px;line-height:1;letter-spacing:.02em">{{ r.title }}</div>
+<div style="font-size:13.5px;line-height:1.4;color:rgba(242,242,240,.5);margin-top:7px">{{ r.sub }}</div>
+</div>
+</div>
+</sc-for>
+</sc-if>
+
+<sc-if value="{{ isForm }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ fields }}" as="f" hint-placeholder-count="3">
+<div style="margin-top:20px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.34)">{{ f.label }}</div>
+<input type="{{ f.type }}" ref="{{ f.ref }}" placeholder="{{ f.ph }}" style="width:100%;box-sizing:border-box;margin-top:7px;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.18);padding:9px 0;color:#F2F2F0;font-family:Barlow,system-ui,sans-serif;font-size:17px;outline:none">
+</div>
+</sc-for>
+<div onClick="{{ toggleMode }}" style="cursor:pointer;margin-top:26px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.45)">{{ switchLabel }}</div>
+</sc-if>
+<div style="height:26px"></div>
+</div>
+<sc-if value="{{ isForm }}" hint-placeholder-val="{{ true }}">
+<div style="border-top:1px solid rgba(255,255,255,.1);background:#0B0B0C;padding:12px 16px 30px">
+<div onClick="{{ submitAuth }}" style="cursor:pointer;text-align:center;padding:15px;background:#E01B22;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em">{{ authCta }}</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isOnboard }}" hint-placeholder-val="{{ false }}">
+<div style="height:100%;display:flex;flex-direction:column">
+<div style="padding:56px 16px 0">
+<div style="display:flex;align-items:center;gap:10px">
+<div onClick="{{ back }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;color:rgba(242,242,240,.6)">×</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(242,242,240,.42);flex:1">REGISTER A CAR</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(242,242,240,.3)">{{ stepLabel }}</div>
+</div>
+<div style="display:flex;gap:3px;margin-top:12px">
+<sc-for list="{{ stepSegs }}" as="s" hint-placeholder-count="4">
+<div style="flex:1;height:2px;background:{{ s.bg }}"></div>
+</sc-for>
+</div>
+</div>
+<div style="flex:1;overflow-y:auto;padding:26px 16px 0">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:34px;line-height:.92;letter-spacing:.005em">{{ stepTitle }}</div>
+<div style="font-size:14px;line-height:1.4;color:rgba(242,242,240,.5);margin-top:9px">{{ stepSub }}</div>
+
+<sc-if value="{{ step0 }}" hint-placeholder-val="{{ true }}">
+<div style="margin-top:22px;display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ makeOpts }}" as="m" hint-placeholder-count="8">
+<div onClick="{{ m.on }}" style="cursor:pointer;padding:9px 12px;border:1px solid {{ m.bc }};background:{{ m.bg }};color:{{ m.fg }};font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.03em">{{ m.label }}</div>
+</sc-for>
+</div>
+<div style="margin-top:26px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.34)">YEAR</div>
+<div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ yearOpts }}" as="y" hint-placeholder-count="6">
+<div onClick="{{ y.on }}" style="cursor:pointer;padding:8px 12px;border:1px solid {{ y.bc }};background:{{ y.bg }};color:{{ y.fg }};font-family:'IBM Plex Mono',monospace;font-size:11px">{{ y.label }}</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ step1 }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:26px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.34)">POWER AT THE WHEELS</div>
+<div style="margin-top:12px;display:flex;align-items:center;gap:14px">
+<div onClick="{{ powDown }}" style="cursor:pointer;width:46px;height:46px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:18px;color:rgba(242,242,240,.7)">−</div>
+<div style="flex:1;text-align:center">
+<div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:46px;line-height:.9;letter-spacing:-.03em">{{ obPower }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(242,242,240,.36);margin-top:7px">HP</div>
+</div>
+<div onClick="{{ powUp }}" style="cursor:pointer;width:46px;height:46px;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:18px;color:rgba(242,242,240,.7)">+</div>
+</div>
+<div style="margin-top:30px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:rgba(242,242,240,.34)">DRIVETRAIN</div>
+<div style="margin-top:9px;display:flex;gap:6px">
+<sc-for list="{{ driveOpts }}" as="d" hint-placeholder-count="3">
+<div onClick="{{ d.on }}" style="cursor:pointer;flex:1;text-align:center;padding:14px 0;border:1px solid {{ d.bc }};background:{{ d.bg }};color:{{ d.fg }};font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em">{{ d.label }}</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:22px;height:210px;background:#141517;border:1px solid rgba(255,255,255,.1);position:relative">
+<image-slot id="ob-hero" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="Hero shot — 3/4 front"></image-slot>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+<div style="height:112px;position:relative;background:#141517;border:1px solid rgba(255,255,255,.1)"><image-slot id="ob-2" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="Engine bay"></image-slot></div>
+<div style="height:112px;position:relative;background:#141517;border:1px solid rgba(255,255,255,.1)"><image-slot id="ob-3" shape="rect" fit="cover" style="position:absolute;inset:0;width:100%;height:100%" placeholder="Interior / detail"></image-slot></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:20px;border:1px solid rgba(255,255,255,.12);padding:14px;min-height:150px">
+<div style="font-size:15px;line-height:1.5;color:rgba(242,242,240,.4)">{{ storyPlaceholder }}</div>
+</div>
+<div style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:rgba(242,242,240,.3)">0 / 400</div>
+</sc-if>
+
+<sc-if value="{{ stepDone }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:22px;border:1px solid rgba(255,255,255,.14);overflow:hidden">
+<div style="background:#E01B22;padding:10px 12px;display:flex;justify-content:space-between;align-items:center">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.06em;color:#fff">X CAR SHOW 04</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(255,255,255,.85)">CAJVANA</div>
+</div>
+<div style="display:flex;gap:12px;padding:14px 12px">
+<div style="width:78px;height:78px;background:#fff;display:flex;align-items:center;justify-content:center">{{ obQr }}</div>
+<div style="flex:1">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.16em;color:rgba(242,242,240,.4)">STAND</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:.9;margin-top:4px">B-07</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:rgba(242,242,240,.45);margin-top:9px">{{ doneCarLine }}</div>
+</div>
+</div>
+</div>
+<div style="margin-top:16px;font-size:14.5px;line-height:1.5;color:rgba(242,242,240,.62)">We print this card and hand it to you at the gate. People scan it, your page opens, and you keep talking instead of repeating your spec list forty times.</div>
+</sc-if>
+<div style="height:26px"></div>
+</div>
+<div style="border-top:1px solid rgba(255,255,255,.1);background:#0B0B0C;padding:12px 16px 30px;display:flex;gap:9px;align-items:center">
+<sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ stepBack }}" style="cursor:pointer;padding:15px 16px;border:1px solid rgba(255,255,255,.18);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:rgba(242,242,240,.65)">BACK</div>
+</sc-if>
+<div onClick="{{ stepNext }}" style="cursor:pointer;flex:1;text-align:center;padding:15px;background:#E01B22;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em">{{ nextLabel }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPartners }}" hint-placeholder-val="{{ false }}">
+<div style="padding:56px 16px 0">
+<div style="display:flex;align-items:center;gap:10px">
+<div onClick="{{ back }}" style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:14px;color:rgba(242,242,240,.6)">←</div>
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:.85;flex:1">PARTNERS</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;line-height:1.7;color:rgba(242,242,240,.34);margin-top:14px">EVERY SHOP HERE HAS WORK ON AT LEAST<br>ONE CAR IN THE ROSTER. NO PAID PLACEMENT.</div>
+</div>
+<div style="margin-top:20px">
+<sc-for list="{{ partners }}" as="p" hint-placeholder-count="6">
+<div style="display:flex;gap:13px;padding:15px 16px;border-top:1px solid rgba(255,255,255,.08);align-items:center">
+<div style="width:44px;height:44px;background:repeating-linear-gradient(135deg,#1A1B1D 0 7px,#141517 7px 14px);border:1px solid rgba(255,255,255,.1);flex:none"></div>
+<div style="flex:1;min-width:0">
+<div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:18px;line-height:1">{{ p.name }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:rgba(242,242,240,.4);margin-top:6px">{{ p.meta }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="height:34px"></div>
+</sc-if>
+
+</div>
+
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="flex:none;display:flex;align-items:stretch;background:rgba(11,11,12,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.1);padding-bottom:26px">
+<div onClick="{{ tFeed.go }}" style="cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 0 9px;color:{{ tFeed.c }};border-top:2px solid {{ tFeed.bar }};margin-top:-1px">
+<div style="display:flex;flex-direction:column;gap:2.5px;align-items:flex-start;height:16px;justify-content:center">
+<div style="width:16px;height:2px;background:currentColor"></div><div style="width:11px;height:2px;background:currentColor"></div><div style="width:16px;height:2px;background:currentColor"></div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.14em">FEED</div>
+</div>
+<div onClick="{{ tRoster.go }}" style="cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 0 9px;color:{{ tRoster.c }};border-top:2px solid {{ tRoster.bar }};margin-top:-1px">
+<div style="display:grid;grid-template-columns:6px 6px;gap:3px;height:16px;align-content:center">
+<div style="width:6px;height:6px;background:currentColor"></div><div style="width:6px;height:6px;background:currentColor"></div><div style="width:6px;height:6px;background:currentColor"></div><div style="width:6px;height:6px;background:currentColor"></div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.14em">ROSTER</div>
+</div>
+<div onClick="{{ tScan.go }}" style="cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 0 9px;color:{{ tScan.c }};border-top:2px solid {{ tScan.bar }};margin-top:-1px">
+<div style="width:40px;height:16px;display:flex;align-items:center;justify-content:center">
+<div style="position:relative;width:19px;height:16px">
+<div style="position:absolute;top:0;left:0;width:6px;height:5px;border-top:2px solid currentColor;border-left:2px solid currentColor"></div>
+<div style="position:absolute;top:0;right:0;width:6px;height:5px;border-top:2px solid currentColor;border-right:2px solid currentColor"></div>
+<div style="position:absolute;bottom:0;left:0;width:6px;height:5px;border-bottom:2px solid currentColor;border-left:2px solid currentColor"></div>
+<div style="position:absolute;bottom:0;right:0;width:6px;height:5px;border-bottom:2px solid currentColor;border-right:2px solid currentColor"></div>
+<div style="position:absolute;top:7px;left:0;right:0;height:2px;background:#E01B22"></div>
+</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.14em">SCAN</div>
+</div>
+<div onClick="{{ tAward.go }}" style="cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 0 9px;color:{{ tAward.c }};border-top:2px solid {{ tAward.bar }};margin-top:-1px">
+<div style="height:16px;display:flex;align-items:flex-end;gap:2.5px">
+<div style="width:3px;height:8px;background:currentColor"></div><div style="width:3px;height:14px;background:currentColor"></div><div style="width:3px;height:11px;background:currentColor"></div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.14em">AWARD</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:402,&quot;height&quot;:874},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;feed&quot;,&quot;roster&quot;,&quot;car&quot;,&quot;scan&quot;,&quot;award&quot;,&quot;onboard&quot;,&quot;auth&quot;,&quot;partners&quot;],&quot;default&quot;:&quot;feed&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;carId&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;s14&quot;,&quot;sup&quot;,&quot;e30&quot;,&quot;g2&quot;,&quot;d13&quot;,&quot;aro&quot;,&quot;mus&quot;,&quot;pas&quot;,&quot;evo&quot;,&quot;s2&quot;,&quot;cam&quot;,&quot;ek4&quot;],&quot;default&quot;:&quot;s14&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;signedIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;authMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;register&quot;,&quot;signin&quot;],&quot;default&quot;:&quot;register&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;scanState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;idle&quot;,&quot;found&quot;],&quot;default&quot;:&quot;idle&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;step&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:4,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;scrollTop&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:2400,&quot;step&quot;:20,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const ACC = '#E01B22', ACC2 = '#E85159';
+
+const CARS = [
+  { id:'s14', no:'14', year:1998, make:'NISSAN', model:'SILVIA S14', cls:'JDM',
+    engine:'SR20DET 2.0 TURBO', power:'412', tq:'480', weight:'1240', drive:'RWD', gbox:'5MT · 1.5W LSD',
+    wheels:'WORK MEISTER S1 3P', paint:'BAYSIDE BLUE', stand:'A-14', owner:'ANDREI MOROȘANU', town:'SUCEAVA', handle:'andrei.s14', followers:'218', win:null,
+    mods:[['ENGINE',['GT2871R turbo, 1.06 A/R','Tomei Poncam 260°','Link G4X standalone','600×300 front-mount']],
+          ['SUSPENSION',['BC Racing ER coilovers','Wisefab lock kit','6-point bolt-in cage']],
+          ['WHEELS',['Work Meister S1 3P 18×9.5 / 18×10.5','Nankang NS-2R 235/265']],
+          ['EXTERIOR',['BN Sports front bar','Origin ducktail','Bayside Blue respray']]],
+    story:'Bought it off a guy in Iași in 2019. Blown SR, half a cage, and a boot full of somebody else\u2019s receipts.\n\nTwo winters in a garage with no heating to get it running right. The engine went together three times. My father still thinks I bought a wreck, and for eighteen months he was correct.\n\nIt is not a trailer queen. I drive it to Bucovina and back, and the paint is Bayside Blue because I could not afford the R34 the colour belongs on.' },
+  { id:'sup', no:'22', year:1994, make:'TOYOTA', model:'SUPRA MK4', cls:'JDM',
+    engine:'2JZ-GTE 3.0 TWIN TURBO', power:'620', tq:'760', weight:'1560', drive:'RWD', gbox:'6MT GETRAG',
+    wheels:'VOLK TE37 18"', paint:'RENAISSANCE RED', stand:'A-22', owner:'RĂZVAN P.', town:'BOTOȘANI', handle:'razvan2jz', followers:'640', win:'2022',
+    mods:[['ENGINE',['Precision 6466','Built bottom end','E85 conversion']],
+          ['SUSPENSION',['KW V3','Front strut brace']],
+          ['WHEELS',['Volk TE37 18×10','Michelin PS4S']],
+          ['EXTERIOR',['Ridox front lip','TRD ducktail']]],
+    story:'Imported from Japan in 2016 with 190,000 km and a stock exhaust. It has not been stock since the drive home from Constanța.' },
+  { id:'e30', no:'07', year:1989, make:'BMW', model:'E30 325i', cls:'GERMAN',
+    engine:'M50B25 SWAP 2.5', power:'240', tq:'285', weight:'1180', drive:'RWD', gbox:'5MT · 3.46 LSD',
+    wheels:'BBS RS 16"', paint:'ALPINWEISS II', stand:'B-07', owner:'TUDOR V.', town:'RĂDĂUȚI', handle:'tudor.e30', followers:'312', win:'2023',
+    mods:[['ENGINE',['M50B25 swap, OBD1','Individual throttle bodies','Custom manifold']],
+          ['SUSPENSION',['Bilstein B14','Front camber plates']],
+          ['WHEELS',['BBS RS 16×8 / 16×9','Refinished gold centres']],
+          ['EXTERIOR',['Mtech I kit','Euro bumpers, deleted trim']]],
+    story:'Sixteen years in the same family. My uncle drove it to Germany for work every summer; I put ITBs on it and ruined his fuel economy forever.' },
+  { id:'g2', no:'31', year:1991, make:'VOLKSWAGEN', model:'GOLF MK2 GTI', cls:'GERMAN',
+    engine:'1.8 16V TURBO', power:'285', tq:'340', weight:'980', drive:'FWD', gbox:'5MT · QUAIFE',
+    wheels:'BBS RM 15"', paint:'TORNADO RED', stand:'B-31', owner:'CIPRIAN L.', town:'FĂLTICENI', handle:'ciprian.16v', followers:'188', win:null,
+    mods:[['ENGINE',['GT3071R','Forged rods, 8.5:1','Water/meth injection']],
+          ['SUSPENSION',['Coilovers, 60mm drop','Rear beam bushings']],
+          ['WHEELS',['BBS RM 15×7','Federal 595 semis']],
+          ['INTERIOR',['Recaro Pole Position','Boost gauge in vent']]],
+    story:'Under a tonne, no traction, and the steering wheel tries to leave your hands in second gear. Best money I ever spent.' },
+  { id:'d13', no:'01', year:1978, make:'DACIA', model:'1300', cls:'CLASSIC',
+    engine:'1.4 8V CARBURETTOR', power:'96', tq:'128', weight:'900', drive:'RWD', gbox:'4MT',
+    wheels:'STEELIES 13"', paint:'ALB POLAR', stand:'C-01', owner:'MIHAI B.', town:'CAJVANA', handle:'mihai1300', followers:'890', win:'2024',
+    mods:[['ENGINE',['Twin Weber 40 DCOE','Ported head','Stainless manifold']],
+          ['SUSPENSION',['Lowered 40mm','Uprated dampers']],
+          ['EXTERIOR',['Original paint, preserved','Period-correct 1310 grille']],
+          ['INTERIOR',['Retrimmed in original vinyl','Period radio, works']]],
+    story:'My grandfather queued eleven months for this car in 1978 and never let anyone else drive it. Now I drive it. The Webers are the only lie on it.' },
+  { id:'aro', no:'44', year:1985, make:'ARO', model:'244', cls:'OFF-ROAD',
+    engine:'2.5 TURBODIESEL', power:'138', tq:'320', weight:'1820', drive:'4WD', gbox:'4MT + LOW RANGE',
+    wheels:'STEEL 16" BEADLOCK', paint:'VERDE MILITAR', stand:'D-44', owner:'GEORGE T.', town:'GURA HUMORULUI', handle:'aro.carpatin', followers:'274', win:null,
+    mods:[['ENGINE',['Toyota 2L-TE swap','Intercooled','Snorkel']],
+          ['SUSPENSION',['+3 inch leaf packs','Long-travel shocks']],
+          ['WHEELS',['33" mud terrains','Beadlocks front and rear']],
+          ['EXTERIOR',['Winch bumper','Roof rack, spare on the back']]],
+    story:'It goes anywhere and arrives late. New leaf packs put it 3cm taller and now it does not fit in my garage, which my wife considers a design flaw.' },
+  { id:'mus', no:'66', year:1968, make:'FORD', model:'MUSTANG FASTBACK', cls:'MUSCLE',
+    engine:'302 V8', power:'340', tq:'440', weight:'1420', drive:'RWD', gbox:'4MT TOPLOADER',
+    wheels:'TORQ THRUST 15"', paint:'HIGHLAND GREEN', stand:'C-66', owner:'FLORIN A.', town:'SUCEAVA', handle:'florin.fastback', followers:'520', win:null,
+    mods:[['ENGINE',['302 rebuild, 10:1','Edelbrock Performer','Long-tube headers']],
+          ['SUSPENSION',['Shelby drop','Front disc conversion']],
+          ['WHEELS',['American Racing Torq Thrust 15×7']],
+          ['EXTERIOR',['Bare-metal respray','GT stripes, hand-laid']]],
+    story:'Shipped from Ohio in a container in 2011. Everything under it is new; everything you can see is exactly as it left the factory.' },
+  { id:'pas', no:'19', year:2003, make:'VOLKSWAGEN', model:'PASSAT B5.5', cls:'STANCE',
+    engine:'1.8T AUM', power:'210', tq:'290', weight:'1420', drive:'FWD', gbox:'5MT',
+    wheels:'ROTIFORM 19"', paint:'DEEP BLACK', stand:'B-19', owner:'ALEX C.', town:'VATRA DORNEI', handle:'alex.bagged', followers:'160', win:null,
+    mods:[['SUSPENSION',['Air Lift Performance 3P','Notched subframe','Custom rear struts']],
+          ['WHEELS',['Rotiform 19×9.5 ET35','Stretched 215/35']],
+          ['EXTERIOR',['Smoothed bay','Deleted badges']],
+          ['INTERIOR',['Tank and management in boot, glassed in']]],
+    story:'People say bagged cars do not drive. Mine does 900 km to Poland and back at ride height 3, and parks flat on the floor when it gets there.' },
+  { id:'evo', no:'09', year:2005, make:'MITSUBISHI', model:'LANCER EVO VIII', cls:'JDM',
+    engine:'4G63T 2.0 TURBO', power:'465', tq:'560', weight:'1410', drive:'AWD', gbox:'5MT · ACD',
+    wheels:'ENKEI RPF1 17"', paint:'ROSSO CORSA WRAP', stand:'A-09', owner:'DANIEL S.', town:'SUCEAVA', handle:'dani.evo8', followers:'405', win:null,
+    mods:[['ENGINE',['FP Black turbo','Built 2.0','E85, flex fuel']],
+          ['SUSPENSION',['Ohlins Road & Track','Whiteline sway bars']],
+          ['WHEELS',['Enkei RPF1 17×9','Semi-slicks for tarmac stages']],
+          ['INTERIOR',['Hydraulic handbrake','Intercom, unused']]],
+    story:'Half rally car, half daily. It has been up Transfăgărășan more times than most tourists and it still has the original seats.' },
+  { id:'s2', no:'12', year:1994, make:'AUDI', model:'S2 COUPÉ', cls:'GERMAN',
+    engine:'3B 2.2 20V TURBO', power:'380', tq:'480', weight:'1470', drive:'AWD', gbox:'6MT 01E',
+    wheels:'SPEEDLINE 17"', paint:'RS GREEN', stand:'B-12', owner:'BOGDAN N.', town:'RĂDĂUȚI', handle:'bogdan.s2', followers:'233', win:null,
+    mods:[['ENGINE',['Hybrid K26/28','Big front-mount','Standalone ECU']],
+          ['SUSPENSION',['H&R coilovers','Refreshed bushings']],
+          ['WHEELS',['Speedline Mistral 17×8']],
+          ['EXTERIOR',['RS2 mirrors','Full respray in RS green']]],
+    story:'Five cylinders, one turbo the size of a fist, and the best noise at the whole meet.' },
+  { id:'cam', no:'55', year:1979, make:'CHEVROLET', model:'CAMARO Z28', cls:'MUSCLE',
+    engine:'5.7 V8 SMALL BLOCK', power:'355', tq:'500', weight:'1600', drive:'RWD', gbox:'3AT',
+    wheels:'CRAGAR 15"', paint:'HUGGER ORANGE', stand:'C-55', owner:'SORIN M.', town:'SUCEAVA', handle:'sorin.z28', followers:'198', win:null,
+    mods:[['ENGINE',['350 rebuild','Holley 750','Flowmaster 40s']],
+          ['SUSPENSION',['Rear lowering blocks','Poly bushings']],
+          ['WHEELS',['Cragar S/S 15×8']],
+          ['EXTERIOR',['Repainted in original Hugger Orange']]],
+    story:'It does eleven litres per hundred if I am gentle and I am never gentle.' },
+  { id:'ek4', no:'38', year:1996, make:'HONDA', model:'CIVIC EK4', cls:'JDM',
+    engine:'B18C SWAP 1.8', power:'210', tq:'190', weight:'1010', drive:'FWD', gbox:'5MT · LSD',
+    wheels:'MUGEN MF10 15"', paint:'MILANO RED', stand:'A-38', owner:'ANDREI MOROȘANU', town:'SUCEAVA', handle:'andrei.s14', followers:'96', win:null,
+    mods:[['ENGINE',['B18C swap, ITBs','Hondata K-Pro','4-1 header']],
+          ['SUSPENSION',['Spoon-spec dampers','Rear tie bar']],
+          ['WHEELS',['Mugen MF10 15×7','Yokohama A052']],
+          ['INTERIOR',['Bride Zieg','Half cage']]],
+    story:'The track car. No radio, no carpet, no reason to own it except that it is the fastest thing I own around Adâncata.' }
+];
+
+const AWARD_POOL = [['d13',612],['s14',430],['mus',388],['sup',301],['e30',256],['cam',204],['evo',188],['pas',151]];
+
+const PARTNERS = [
+  ['DRAGOMIR TUNING','SUCEAVA · DYNO + ENGINE MANAGEMENT'],
+  ['AUTOSTIL DETAILING','RĂDĂUȚI · PAINT CORRECTION + PPF'],
+  ['NORD EXHAUST','FĂLTICENI · CUSTOM STAINLESS'],
+  ['CAJVANA ANVELOPE','CAJVANA · TYRES + ALIGNMENT'],
+  ['PIESE NORD','SUCEAVA · PARTS, USED AND NEW'],
+  ['FOTO BUCOVINA','SUCEAVA · EVENT PHOTOGRAPHY']
+];
+
+const byId = id => CARS.find(c => c.id === id) || CARS[0];
+
+function seeded(seed) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return () => { h ^= h << 13; h >>>= 0; h ^= h >> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; };
+}
+
+function qrEl(seed, px, dark, light) {
+  const N = 25, r = seeded(seed), m = [];
+  for (let y = 0; y < N; y++) { const row = []; for (let x = 0; x < N; x++) row.push(r() > 0.5 ? 1 : 0); m.push(row); }
+  const clear = (ox, oy, w, h) => { for (let y = oy; y < oy + h; y++) for (let x = ox; x < ox + w; x++) if (y >= 0 && y < N && x >= 0 && x < N) m[y][x] = 0; };
+  const finder = (ox, oy) => {
+    clear(ox - 1, oy - 1, 9, 9);
+    for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++)
+      m[oy + y][ox + x] = ((x === 0 || x === 6 || y === 0 || y === 6) || (x > 1 && x < 5 && y > 1 && y < 5)) ? 1 : 0;
+  };
+  finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+  for (let i = 8; i < N - 8; i++) { m[6][i] = i % 2 ? 0 : 1; m[i][6] = i % 2 ? 0 : 1; }
+  for (let y = 0; y < 5; y++) for (let x = 0; x < 5; x++)
+    m[N - 7 + y][N - 7 + x] = ((x === 0 || x === 4 || y === 0 || y === 4) || (x === 2 && y === 2)) ? 1 : 0;
+  const cells = [];
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++)
+    cells.push(React.createElement('div', { key: y + '-' + x, style: { background: m[y][x] ? dark : light } }));
+  return React.createElement('div', {
+    style: { display: 'grid', gridTemplateColumns: 'repeat(25,' + px + 'px)', gridAutoRows: px + 'px', background: light, padding: px * 2, width: 'max-content', flex: 'none' }
+  }, cells);
+}
+
+const OB_QR = qrEl('x-show-onboard-card', 2, '#0B0B0C', '#fff');
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.sid = 'xsc' + Math.random().toString(36).slice(2, 8);
+    this._last = props.screen || 'feed';
+    this.nameRef = React.createRef();
+    this.emailRef = React.createRef();
+    this.passRef = React.createRef();
+    const signed = !!props.signedIn;
+    this.state = {
+      screen: props.screen || 'feed',
+      carId: props.carId || 's14',
+      prev: 'roster',
+      feedFilter: 'ALL',
+      fCls: 'ALL',
+      hero: 0, openMod: 'ENGINE', following: false,
+      scan: props.scanState || 'idle',
+      vote: signed ? 'd13' : null,
+      step: props.step === undefined ? 0 : props.step,
+      obMake: props.step > 0 ? 'NISSAN' : null, obYear: '1998', obPower: 412, obDrive: 'RWD',
+      joined: false,
+      auth: signed ? { name: 'ANDREI M.', email: 'andrei@show.x', role: 'car' } : null,
+      authMode: props.authMode || 'register',
+      authRole: 'car'
+    };
+  }
+
+  scroller() { return document.getElementById(this.sid); }
+
+  componentDidUpdate() {
+    if (this._last !== this.state.screen) {
+      this._last = this.state.screen;
+      const n = this.scroller(); if (n) n.scrollTop = 0;
+    }
+  }
+
+  componentDidMount() {
+    const t = this.props.scrollTop;
+    if (!t) return;
+    const apply = () => { const n = this.scroller(); if (n && Math.abs(n.scrollTop - t) > 2) n.scrollTop = t; };
+    this._apply = apply;
+    apply(); setTimeout(apply, 300); setTimeout(apply, 900);
+    const n = this.scroller();
+    if (n && window.ResizeObserver) {
+      this._ro = new ResizeObserver(() => { clearTimeout(this._rt); this._rt = setTimeout(apply, 90); });
+      this._ro.observe(n);
+    }
+    window.addEventListener('resize', apply);
+  }
+
+  componentWillUnmount() {
+    if (this._ro) this._ro.disconnect();
+    if (this._apply) window.removeEventListener('resize', this._apply);
+  }
+
+  go = s => this.setState(st => ({ screen: s, prev: st.screen === 'car' ? st.prev : st.screen }));
+  openCar = id => this.setState(st => ({ screen: 'car', carId: id, hero: 0, prev: st.screen === 'car' ? st.prev : st.screen }));
+  back = () => this.setState(st => ({ screen: st.screen === 'car' ? st.prev : 'feed', scan: 'idle' }));
+
+  chip(on) {
+    return on
+      ? { bc: ACC, bg: ACC, fg: '#fff' }
+      : { bc: 'rgba(255,255,255,.16)', bg: 'transparent', fg: 'rgba(242,242,240,.6)' };
+  }
+
+  submitAuth = () => {
+    const s = this.state;
+    const email = (this.emailRef.current && this.emailRef.current.value) || 'you@show.x';
+    const typed = (this.nameRef.current && this.nameRef.current.value) || '';
+    const name = (typed || email.split('@')[0] || 'MEMBER').toUpperCase();
+    if (s.authMode === 'signin') {
+      this.setState({ auth: { name, email, role: 'vote' }, screen: 'feed' });
+    } else {
+      this.setState({
+        auth: { name, email, role: s.authRole },
+        screen: s.authRole === 'car' ? 'onboard' : 'award',
+        step: 0
+      });
+    }
+  };
+
+  renderVals() {
+    const s = this.state;
+    const car = byId(s.carId);
+    const screen = s.screen;
+    const is = n => screen === n;
+    const signed = !!s.auth;
+
+    const tab = (key, target) => ({
+      c: screen === key ? '#F2F2F0' : 'rgba(242,242,240,.34)',
+      bar: screen === key ? ACC : 'transparent',
+      go: () => this.go(target)
+    });
+
+    // feed
+    const feedDefs = [
+      { kind:'BUILD UPDATE', kindColor: ACC2, id:'s14', title:'SILVIA S14 · #14', time:'2H', slot:'feed-1', slotHint:'Wheels back from powder coat',
+        body:'Meisters back from the powder coater. Bronze was supposed to be temporary and now I cannot imagine anything else on it.', img:true, tone:'#1A1B1D', cat:'BUILDS' },
+      { kind:'SPOTTED · DN2 PĂTRĂUȚI', kindColor:'rgba(242,242,240,.42)', id:null, title:'SPOTTED BY TUDOR V.', time:'5H', slot:'feed-2', slotHint:'E30 touring, roadside',
+        body:'E30 touring on the Suceava road, on BBS, sitting right. Owner — if you are on here, register it. We have space in Paddock B.', img:true, tone:'#17181A', cat:'SPOTTED' },
+      { kind:'LOCAL MEET · SUNDAY', kindColor: ACC2, id:null, title:'COFFEE RUN', time:'1D', meet:true, day:'02', month:'AUG',
+        meetTitle:'COFFEE RUN — GURA HUMORULUI', meetMeta:'07:30 · OMV PARKING · 34 GOING', cat:'MEETS' },
+      { kind:'BUILD UPDATE', kindColor: ACC2, id:'aro', title:'ARO 244 · #44', time:'1D', slot:'feed-3', slotHint:'ARO on new leaf packs',
+        body:'New leaf packs in. It is three centimetres taller and no longer fits in my own garage. Worth it.', img:true, tone:'#1A1B1D', cat:'BUILDS' },
+      { kind:'SPOTTED · CAJVANA CENTRU', kindColor:'rgba(242,242,240,.42)', id:'d13', title:'SPOTTED BY MIHAI B.', time:'2D', slot:'feed-4', slotHint:'Dacia 1300 outside the shop',
+        body:'Out for bread. Same as it has been since 1978.', img:true, tone:'#17181A', cat:'SPOTTED' }
+    ];
+    const feed = feedDefs
+      .filter(f => s.feedFilter === 'ALL' || f.cat === s.feedFilter)
+      .map(f => ({
+        ...f, no: f.id ? byId(f.id).no : '·',
+        hasImage: !!f.img, hasBody: !!f.body, isMeet: !!f.meet,
+        open: f.id ? () => this.openCar(f.id) : () => {},
+        joinLabel: s.joined ? 'GOING' : 'I’M IN',
+        joinBc: s.joined ? ACC : 'rgba(255,255,255,.2)',
+        joinBg: s.joined ? ACC : 'transparent',
+        joinFg: s.joined ? '#fff' : 'rgba(242,242,240,.7)',
+        join: () => this.setState(st => ({ joined: !st.joined }))
+      }));
+    const feedTabs = ['ALL','BUILDS','SPOTTED','MEETS'].map(l => ({
+      label: l, ...this.chip(s.feedFilter === l), on: () => this.setState({ feedFilter: l })
+    }));
+
+    // roster
+    const list = CARS.filter(c => s.fCls === 'ALL' || c.cls === s.fCls);
+    const feat = list[0] || CARS[0];
+    const roster = list.slice(1).map(c => ({
+      no: c.no, slot: 'car-' + c.id,
+      model: /^[0-9]/.test(c.model) ? c.make + ' ' + c.model : c.model,
+      slotHint: c.year + ' ' + c.model,
+      line: c.year + ' · ' + c.power + ' HP',
+      open: () => this.openCar(c.id)
+    }));
+    const classTabs = ['ALL','JDM','GERMAN','MUSCLE','CLASSIC','STANCE','OFF-ROAD'].map(l => ({
+      label: l, ...this.chip(s.fCls === l), on: () => this.setState({ fCls: l })
+    }));
+
+    // car
+    const modCats = car.mods.map(([name, items]) => ({
+      name, open: s.openMod === name,
+      sign: s.openMod === name ? '−' : '+',
+      bar: s.openMod === name ? ACC : 'rgba(255,255,255,.22)',
+      items: items.map(t => ({ t })),
+      on: () => this.setState(st => ({ openMod: st.openMod === name ? null : name }))
+    }));
+    const modTotal = car.mods.reduce((a, [, i]) => a + i.length, 0);
+    const heroSlots = [0,1,2].map(i => ({ id: 'hero-' + car.id + '-' + i, hint: i === 0 ? 'Drop hero photo' : (i === 1 ? 'Drop engine bay' : 'Drop detail shot') }));
+    const garage = CARS.filter(c => c.owner === car.owner && c.id !== car.id)
+      .map(c => ({ model: c.year + ' ' + c.model, open: () => this.openCar(c.id) }));
+
+    // award
+    const total = AWARD_POOL.reduce((a, p) => a + p[1], 0) + (s.vote ? 1 : 0);
+    const tower = AWARD_POOL
+      .map(p => ({ id: p[0], v: p[1] + (s.vote === p[0] ? 1 : 0) }))
+      .sort((a, b) => b.v - a.v)
+      .map((r, i) => {
+        const cc = byId(r.id);
+        const mine = s.vote === r.id;
+        return {
+          pos: String(i + 1), no: cc.no, model: cc.model, owner: cc.owner,
+          votes: String(r.v), pct: Math.round(r.v / total * 100) + '%',
+          posColor: i === 0 ? ACC2 : 'rgba(242,242,240,.45)',
+          shareColor: mine ? ACC2 : 'rgba(242,242,240,.55)',
+          rowBg: mine ? 'rgba(224,27,34,.06)' : 'transparent',
+          barBg: mine ? 'rgba(224,27,34,.22)' : 'rgba(255,255,255,.045)',
+          vote: () => signed
+            ? this.setState({ vote: r.id })
+            : this.setState({ screen: 'auth', authMode: 'register', authRole: 'vote' })
+        };
+      });
+
+    // auth
+    const mode = signed ? 'account' : s.authMode;
+    const authCopy = {
+      signin: ['SIGN IN', 'Welcome back.', 'Your vote, your cars and everyone you follow.', 'SIGN IN'],
+      register: ['CREATE ACCOUNT', 'Join the show.', 'Two minutes. No membership fee, no club politics.', 'CREATE ACCOUNT'],
+      account: ['ACCOUNT', 'You’re in.', 'Signed in on this phone.', '']
+    }[mode];
+    const roles = [
+      { key:'car', title:'SHOW A CAR', sub:'Register your build, get a stand and a printed windshield card. Voting included.' },
+      { key:'vote', title:'VOTE & FOLLOW', sub:'One vote for car of the show, plus every build in the roster.' }
+    ].map(r => ({
+      title: r.title, sub: r.sub,
+      bc: s.authRole === r.key ? ACC : 'rgba(255,255,255,.14)',
+      bg: s.authRole === r.key ? 'rgba(224,27,34,.07)' : 'transparent',
+      dot: s.authRole === r.key ? ACC : 'rgba(255,255,255,.2)',
+      on: () => this.setState({ authRole: r.key })
+    }));
+    const fields = (mode === 'register'
+      ? [['NAME', 'text', 'Andrei M.', this.nameRef], ['EMAIL', 'email', 'you@example.com', this.emailRef], ['PASSWORD', 'password', '••••••••', this.passRef]]
+      : [['EMAIL', 'email', 'you@example.com', this.emailRef], ['PASSWORD', 'password', '••••••••', this.passRef]]
+    ).map(f => ({ label: f[0], type: f[1], ph: f[2], ref: f[3] }));
+
+    // onboarding
+    const stepCopy = [
+      ['What is it?', 'Pick the badge and the year. We fill in the boring parts.'],
+      ['Numbers.', 'Rough is fine. Nobody is checking your dyno sheet.'],
+      ['Three photos.', 'One hero, two details. You can add more later.'],
+      ['Tell it like you would at the meet.', 'This is the bit people actually read.'],
+      ['You’re in.', 'Card printed. Stand assigned. See you on the 22nd.']
+    ][Math.min(s.step, 4)];
+    const makeOpts = ['NISSAN','TOYOTA','BMW','VOLKSWAGEN','DACIA','HONDA','FORD','AUDI','MITSUBISHI','ARO','OTHER'].map(m => ({
+      label: m, ...this.chip(s.obMake === m), on: () => this.setState({ obMake: m })
+    }));
+    const yearOpts = ['1978','1989','1994','1998','2003','2005','2016'].map(y => ({
+      label: y, ...this.chip(s.obYear === y), on: () => this.setState({ obYear: y })
+    }));
+    const driveOpts = ['FWD','RWD','AWD'].map(d => ({
+      label: d, ...this.chip(s.obDrive === d), on: () => this.setState({ obDrive: d })
+    }));
+
+    return {
+      scrollId: this.sid,
+      obQr: OB_QR,
+      isFeed: is('feed'), isRoster: is('roster'), isCar: is('car'), isScan: is('scan'),
+      isAward: is('award'), isOnboard: is('onboard'), isAuth: is('auth'), isPartners: is('partners'),
+      showTabs: !is('onboard') && !is('auth'),
+      tFeed: tab('feed','feed'), tRoster: tab('roster','roster'), tScan: tab('scan','scan'), tAward: tab('award','award'),
+      goPartners: () => this.go('partners'),
+      back: this.back,
+
+      acct: signed
+        ? { label: s.auth.name, bc: 'rgba(255,255,255,.22)', bg: 'transparent', fg: 'rgba(242,242,240,.75)',
+            on: () => this.go('auth') }
+        : { label: 'SIGN IN', bc: ACC, bg: ACC, fg: '#fff',
+            on: () => this.setState({ screen: 'auth', authMode: 'register', authRole: 'car' }) },
+
+      feed, feedTabs,
+
+      roster, classTabs,
+      rosterCount: list.length === CARS.length ? '142 ENTRIES' : list.length + ' OF 142',
+      rosterFoot: list.length === CARS.length ? 'END OF PAGE 1 · 130 MORE' : 'FILTERED VIEW',
+      feature: { slot: 'car-' + feat.id, slotHint: feat.year + ' ' + feat.model,
+        title: feat.year + ' ' + feat.make + ' ' + feat.model,
+        meta: feat.no + ' · ' + feat.cls + ' · ' + feat.power + ' HP', open: () => this.openCar(feat.id) },
+
+      car: {
+        cls: car.cls, standLabel: 'STAND ' + car.stand,
+        headline: car.year + ' ' + car.make + ' ' + car.model,
+        story: car.story, owner: car.owner, ownerMeta: '@' + car.handle + ' · ' + car.town,
+        hasWin: !!car.win, winYear: car.win || ''
+      },
+      heroSlots,
+      heroDots: [0,1,2].map(i => ({ bg: i === s.hero ? ACC : 'rgba(255,255,255,.3)' })),
+      onHeroScroll: e => { const i = Math.round(e.target.scrollLeft / 402); if (i !== s.hero) this.setState({ hero: i }); },
+      toggleFollow: () => this.setState(x => ({ following: !x.following })),
+      followLabel: s.following ? 'FOLLOWING' : 'FOLLOW',
+      followBg: s.following ? 'transparent' : ACC,
+      followBc: s.following ? 'rgba(255,255,255,.3)' : ACC,
+      followFg: s.following ? '#F2F2F0' : '#fff',
+      followersLine: (s.following ? Number(car.followers) + 1 : car.followers) + ' FOLLOWING',
+      bigStats: [{ k:'POWER', v: car.power, u:'HP' }, { k:'TORQUE', v: car.tq, u:'NM' }, { k:'WEIGHT', v: car.weight, u:'KG' }],
+      specRows: [['ENGINE', car.engine],['DRIVETRAIN', car.drive + ' · ' + car.gbox],['WHEELS', car.wheels],['PAINT', car.paint]].map(r => ({ k: r[0], v: r[1] })),
+      modCats, modCount: modTotal + ' ITEMS',
+      hasGarage: garage.length > 0, garage,
+
+      scanIdle: s.scan === 'idle', scanFound: s.scan === 'found',
+      scanHint: s.scan === 'found' ? 'CARD 14 · MATCHED' : 'TAP THE VIEWFINDER TO SIMULATE A SCAN',
+      scanHintColor: s.scan === 'found' ? ACC2 : 'rgba(242,242,240,.42)',
+      doScan: () => this.setState(x => ({ scan: x.scan === 'found' ? 'idle' : 'found' })),
+      openScanned: () => this.openCar('s14'),
+      recents: [['sup','4 MIN AGO'],['d13','12 MIN AGO'],['e30','36 MIN AGO']].map(r => {
+        const c = byId(r[0]);
+        return { no: c.no, model: c.model, ago: r[1], open: () => this.openCar(c.id) };
+      }),
+
+      tower,
+      voteGate: !signed,
+      hasVote: signed && !!s.vote,
+      myVoteLine: s.vote ? 'YOUR VOTE · ' + byId(s.vote).model + ' · CHANGE IT UNTIL 18:00' : '',
+      towerFoot: signed ? 'TAP A ROW TO CAST OR CHANGE YOUR VOTE. ENTRANTS CANNOT VOTE FOR THEIR OWN CAR.' : '2 530 VOTES CAST SO FAR · STANDINGS UPDATE LIVE',
+      goSignIn: () => this.setState({ screen: 'auth', authMode: 'register', authRole: 'vote' }),
+
+      isAccount: mode === 'account', isRegister: mode === 'register', isForm: mode !== 'account',
+      authLabel: authCopy[0], authTitle: authCopy[1], authSub: authCopy[2], authCta: authCopy[3],
+      roles, fields,
+      switchLabel: mode === 'register' ? 'ALREADY HAVE AN ACCOUNT? SIGN IN →' : 'NEW HERE? CREATE AN ACCOUNT →',
+      toggleMode: () => this.setState(x => ({ authMode: x.authMode === 'register' ? 'signin' : 'register' })),
+      submitAuth: this.submitAuth,
+      accountRows: signed ? [
+        { k: 'NAME', v: s.auth.name },
+        { k: 'EMAIL', v: s.auth.email },
+        { k: 'ROLE', v: s.auth.role === 'car' ? 'ENTRANT · 1 CAR' : 'VOTER' },
+        { k: 'VOTE', v: s.vote ? byId(s.vote).model : 'NOT CAST' }
+      ] : [],
+      canAddCar: signed && s.auth.role !== 'car',
+      goOnboard: () => this.setState({ screen: 'onboard', step: 0 }),
+      signOut: () => this.setState({ auth: null, vote: null, screen: 'feed', authMode: 'signin' }),
+
+      stepLabel: s.step >= 4 ? 'DONE' : 'STEP ' + (s.step + 1) + '/4',
+      stepSegs: [0,1,2,3].map(i => ({ bg: i <= s.step ? ACC : 'rgba(255,255,255,.14)' })),
+      stepTitle: stepCopy[0], stepSub: stepCopy[1],
+      step0: s.step === 0, step1: s.step === 1, step2: s.step === 2, step3: s.step === 3, stepDone: s.step >= 4,
+      makeOpts, yearOpts, driveOpts,
+      obPower: String(s.obPower),
+      powUp: () => this.setState(x => ({ obPower: x.obPower + 10 })),
+      powDown: () => this.setState(x => ({ obPower: Math.max(40, x.obPower - 10) })),
+      storyPlaceholder: 'Where you found it, what broke, who helped, why you kept it.',
+      doneCarLine: (s.obMake || 'NISSAN') + ' · ' + s.obYear + ' · ' + s.obPower + ' HP · ' + s.obDrive,
+      canBack: s.step > 0 && s.step < 4,
+      stepBack: () => this.setState(x => ({ step: Math.max(0, x.step - 1) })),
+      stepNext: () => this.setState(x => (x.step >= 4 ? { screen: 'roster', step: 0 } : { step: x.step + 1 })),
+      nextLabel: ['CONTINUE','CONTINUE','LOOKS GOOD','FINISH','SEE THE ROSTER'][Math.min(s.step, 4)],
+
+      partners: PARTNERS.map(p => ({ name: p[0], meta: p[1] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

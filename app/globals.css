@@ -1,0 +1,297 @@
+@import './tokens.css';
+
+/* ─────────────────────────────────────────────────────────────
+   Reset + base
+   ───────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* No cards, no corners — the chrome gets out of the
+     photograph's way. Radius is opt-in, never inherited. */
+  border-radius: 0;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Most links in the app are whole rows, tiles and photos rather than
+   words in a sentence, so they carry their own type colour. Red is
+   rationed — an inline text link opts into it with .link. */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link {
+  color: var(--arterial-lt);
+}
+
+.link:hover {
+  color: var(--paper);
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+input {
+  caret-color: var(--arterial);
+}
+
+input::placeholder {
+  color: var(--paper-26);
+}
+
+/* The design has no visible scrollbars anywhere — the rules
+   and the photo edges do the work of showing you where you are. */
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--arterial);
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Motion
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes xscan {
+  0% {
+    transform: translateY(-92px);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(92px);
+    opacity: 0;
+  }
+}
+
+@keyframes xpulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes xrise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes xgrow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Shared primitives — the component sheet, as CSS
+   ───────────────────────────────────────────────────────────── */
+
+/* Buttons ---------------------------------------------------- */
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  border: 1px solid transparent;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+/* The one action the screen wants. Never two on a screen. */
+.btn--primary {
+  background: var(--arterial);
+  border-color: var(--arterial);
+  color: #fff;
+}
+
+.btn--secondary {
+  border-color: var(--hairline-loud);
+  color: var(--paper);
+}
+
+.btn--secondary:hover {
+  border-color: var(--paper-55);
+}
+
+.btn--quiet {
+  padding: 14px;
+  border-color: var(--hairline-edge);
+  color: var(--paper-55);
+  letter-spacing: 0.16em;
+}
+
+.btn--quiet:hover {
+  color: var(--paper);
+  border-color: var(--hairline-strong);
+}
+
+/* 36 / 44px square controls — back arrows, share, close. */
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--paper);
+  flex: none;
+}
+
+/* Chips ------------------------------------------------------
+   Filled red = state you caused.
+   Outline red = a change on a car.
+   White outline = neutral fact. */
+
+.chip {
+  padding: 6px 11px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  border: 1px solid var(--hairline-edge);
+  background: transparent;
+  color: var(--paper-55);
+  transition: border-color 0.14s ease, color 0.14s ease;
+}
+
+.chip:hover {
+  border-color: var(--hairline-strong);
+  color: var(--paper);
+}
+
+.chip[aria-pressed='true'],
+.chip--on {
+  border-color: var(--arterial);
+  background: var(--arterial);
+  color: #fff;
+}
+
+/* Static class badge — JDM, GERMAN, MUSCLE… */
+.tag {
+  display: inline-block;
+  background: var(--arterial);
+  color: #fff;
+  padding: 3px 7px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+}
+
+.tag--neutral {
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  color: var(--paper-70);
+}
+
+/* Rules ------------------------------------------------------ */
+
+/* MODIFICATIONS ──────────────────── 21 ITEMS */
+.section-rule {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--paper-34);
+}
+
+.section-rule::after,
+.section-rule .rule {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--hairline-firm);
+}
+
+.section-rule--trailing::after {
+  content: none;
+}
+
+/* Utilities -------------------------------------------------- */
+
+.spacer {
+  flex: 1;
+}
+
+.hatch {
+  background: var(--hatch);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

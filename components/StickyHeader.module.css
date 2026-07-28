@@ -1,0 +1,39 @@
+/* Every top-level screen wears the same header: it sticks, it blurs
+   what passes under it, and it ends in a hairline. Nothing else. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: rgba(11, 11, 12, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding-top: var(--safe-top);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 8px var(--gutter) 12px;
+}
+
+.rowCenter {
+  align-items: center;
+  padding-top: 10px;
+}
+
+/* Fills the gap between a title and the count at the far right. */
+.rule {
+  flex: 1;
+  height: 1px;
+  background: var(--hairline-firm);
+  margin-bottom: 5px;
+}
+
+.filters {
+  display: flex;
+  gap: 6px;
+  padding: 0 var(--gutter) 11px;
+  overflow-x: auto;
+}

@@ -1,0 +1,137 @@
+/* ─────────────────────────────────────────────────────────────
+   X CAR SHOW — design tokens
+   Lifted from the COLOUR & TYPE SCALE section of the design
+   canvas (design/X Car Show.dc.html). This file is the source
+   of truth; nothing below should be hard-coded in a component.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Colour ────────────────────────────────────────────────
+     Red is rationed. On any given screen it appears at most
+     three times: the live/now marker, the vote you cast, and
+     the one action the screen wants. If a fourth appears,
+     something else has to give it up. */
+
+  --ink: #0b0b0c; /* app background */
+  --panel: #131315; /* raised blocks, owner card */
+  --panel-deep: #0e0e10; /* partner bands, canvas */
+  --panel-scan: #08080a; /* scan viewfinder ground */
+  --panel-sheet: #0f1012; /* scan result sheet */
+  --slot: #141517; /* empty photo slot */
+
+  --paper: #f2f2f0; /* primary text */
+  --paper-86: rgba(242, 242, 240, 0.86);
+  --paper-70: rgba(242, 242, 240, 0.7);
+  --paper-55: rgba(242, 242, 240, 0.55); /* secondary text */
+  --paper-45: rgba(242, 242, 240, 0.45);
+  --paper-40: rgba(242, 242, 240, 0.4);
+  --paper-34: rgba(242, 242, 240, 0.34); /* labels, meta */
+  --paper-30: rgba(242, 242, 240, 0.3);
+  --paper-26: rgba(242, 242, 240, 0.26); /* placeholder text */
+
+  --arterial: #e01b22; /* live · your vote · action */
+  --arterial-lt: #e85159; /* red text on black */
+  --arterial-wash: rgba(224, 27, 34, 0.14); /* result bars, now row */
+  --arterial-tint: rgba(224, 27, 34, 0.07); /* selected role card */
+  --arterial-edge: rgba(224, 27, 34, 0.45); /* red hairline */
+
+  /* Hairline ladder. `--hairline` is the canonical divider;
+     the rest exist so borders can recede or step forward
+     without inventing new values at the call site. */
+  --hairline-faint: rgba(255, 255, 255, 0.06);
+  --hairline-soft: rgba(255, 255, 255, 0.08);
+  --hairline: rgba(255, 255, 255, 0.09); /* every divider */
+  --hairline-firm: rgba(255, 255, 255, 0.12);
+  --hairline-edge: rgba(255, 255, 255, 0.16);
+  --hairline-strong: rgba(255, 255, 255, 0.2);
+  --hairline-loud: rgba(255, 255, 255, 0.3);
+
+  --hatch: repeating-linear-gradient(135deg, #1d1e21 0 6px, #161719 6px 12px);
+
+  /* ── Type ──────────────────────────────────────────────────
+     Barlow Condensed carries headlines, Barlow carries prose,
+     IBM Plex Mono carries every number and label. */
+
+  --font-display: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  --font-body: var(--font-barlow), Barlow, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* ── Layout ────────────────────────────────────────────────
+     The design is drawn at 402 x 874 (iPhone 16 Pro). */
+  --frame-w: 402px;
+  --frame-h: 874px;
+  --gutter: 16px;
+  --safe-top: 56px; /* status bar + notch */
+  --safe-bottom: 26px; /* home indicator */
+}
+
+/* ── Type scale ──────────────────────────────────────────────
+   Nine steps. Anything not on this list is a mistake. */
+
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 0.88;
+  letter-spacing: 0.005em;
+}
+
+.t-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 0.85;
+  letter-spacing: 0.01em;
+}
+
+.t-subhead {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.t-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.t-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.t-data-xl {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 25px;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.t-data {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.t-meta {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+
+.t-micro {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 7.5px;
+  letter-spacing: 0.14em;
+}
