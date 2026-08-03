@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { socialUrl } from '@/lib/cars';
 import { ImageSlot } from '@/components/ImageSlot';
-import { displayModel, garageOf, modCount, type Car } from '@/lib/cars';
+import { displayModel, modCount } from '@/lib/cars';
+import { useCar, useCars, useOwnsCar } from '@/lib/useCars';
 import { useCountUp } from '@/lib/useCountUp';
 import { useStore } from '@/lib/store';
 import styles from './car.module.css';
@@ -40,15 +42,37 @@ function Stat({
  * The car is the profile. Everything on this page belongs to the car;
  * the owner is a card at the foot of it, never the other way round.
  */
-export function CarProfile({ car }: { car: Car }) {
-  const { isFollowing, toggleFollow } = useStore();
+export function CarProfile({ id }: { id: string }) {
+  const { isFollowing, toggleFollow, hydrated } = useStore();
+  const car = useCar(id);
+  const owns = useOwnsCar(id);
+  const all = useCars();
   const [hero, setHero] = useState(0);
+  const [openMod, setOpenMod] = useState<string | null>(null);
+
+  if (!hydrated) return <div className={styles.screen} />;
+  if (!car) {
+    return (
+      <div className={styles.screen}>
+        <div className={styles.missing}>
+          <h1>Mașina nu există.</h1>
+          <p>Poate a fost ștearsă, sau linkul e greșit.</p>
+          <Link href="/roster" className="btn btn--glass">
+            Vezi înscrișii
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   // The first group is open on arrival — for most cars that is the engine,
   // but the bagged Passat leads with suspension, so take it from the data.
-  const [openMod, setOpenMod] = useState<string | null>(car.mods[0]?.name ?? null);
-
+  const openGroup = openMod ?? car.mods[0]?.name ?? null;
   const following = isFollowing(car.id);
-  const garage = garageOf(car);
+  // Everything else this person brought. One person, many cars.
+  const garage = car.handle
+    ? all.filter((o) => o.handle === car.handle && o.id !== car.id)
+    : [];
   const followers = following ? Number(car.followers) + 1 : Number(car.followers);
 
   return (
@@ -84,11 +108,15 @@ export function CarProfile({ car }: { car: Car }) {
       <div className={styles.masthead}>
         <div className={`${styles.tags} a-up delay-300`}>
           <span className="tag">{car.cls}</span>
-          <span className={styles.stand}>Stand {car.stand}</span>
+          <span className={styles.stand}>
+            {car.stand ? `Stand ${car.stand}` : 'Stand nealocat încă'}
+          </span>
         </div>
         <h1 className={`${styles.name} a-speed delay-400`}>{displayModel(car)}</h1>
         <div className={`${styles.year} a-up delay-500`}>
-          {car.year} · {car.make}
+          {[car.year || null, car.make || null, car.nickname && `„${car.nickname}”`]
+            .filter(Boolean)
+            .join(' · ')}
         </div>
       </div>
 
@@ -133,28 +161,34 @@ export function CarProfile({ car }: { car: Car }) {
       </div>
 
       <div className={styles.specs}>
-        {[
-          ['Motor', car.engine],
-          ['Tracțiune', `${car.drive} · ${car.gbox}`],
-          ['Jante', car.wheels],
-          ['Vopsea', car.paint],
-        ].map(([k, v]) => (
+        {(
+          [
+            ['Motor', car.engine],
+            ['Tracțiune', [car.drive, car.gbox].filter(Boolean).join(' · ')],
+            ['Jante', car.wheels],
+            ['Vopsea', car.paint],
+          ] as [string, string][]
+        )
+          .filter(([, v]) => v.trim())
+          .map(([k, v]) => (
           <div key={k} className={styles.spec}>
             <div className={styles.specKey}>{k}</div>
             <div className={styles.specValue}>{v}</div>
           </div>
-        ))}
+          ))}
       </div>
 
-      <div className={styles.sectionHead}>
-        <h2>Modificări</h2>
-        <div className="spacer" />
-        <span className={styles.sectionCount}>{modCount(car)} piese</span>
-      </div>
+      {car.mods.length > 0 && (
+        <div className={styles.sectionHead}>
+          <h2>Modificări</h2>
+          <div className="spacer" />
+          <span className={styles.sectionCount}>{modCount(car)} piese</span>
+        </div>
+      )}
 
       <div className={styles.mods}>
         {car.mods.map((g) => {
-          const open = openMod === g.name;
+          const open = openGroup === g.name;
           return (
             <div
               key={g.name}
@@ -181,23 +215,60 @@ export function CarProfile({ car }: { car: Car }) {
         })}
       </div>
 
-      <div className={styles.sectionHead}>
-        <h2>Povestea</h2>
-      </div>
-      <p className={styles.story}>{car.story}</p>
+      {car.story.trim() && (
+        <>
+          <div className={styles.sectionHead}>
+            <h2>Povestea</h2>
+          </div>
+          <p className={styles.story}>{car.story}</p>
+        </>
+      )}
 
       <div className={styles.owner}>
         <div className={styles.ownerAvatar} />
         <div className={styles.ownerBody}>
-          <b>{car.owner}</b>
-          <span>
-            @{car.handle} · {car.town}
-          </span>
+          <b>{car.owner || 'Fără nume'}</b>
+          <span>{[car.handle && `@${car.handle}`, car.town].filter(Boolean).join(' · ')}</span>
         </div>
-        <button type="button" className="chip">
-          Urmărește
-        </button>
+        {car.handle && (
+          <Link href={`/owner/${car.handle}`} className="chip">
+            Profil
+          </Link>
+        )}
       </div>
+
+      {(car.instagram || car.facebook) && (
+        <div className={styles.socials}>
+          {car.instagram && (
+            <a
+              className={styles.social}
+              href={socialUrl('instagram', car.instagram)}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Instagram
+              <em>@{car.instagram.replace(/^@+/, '')}</em>
+            </a>
+          )}
+          {car.facebook && (
+            <a
+              className={styles.social}
+              href={socialUrl('facebook', car.facebook)}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Facebook
+              <em>{car.facebook.replace(/^@+/, '')}</em>
+            </a>
+          )}
+        </div>
+      )}
+
+      {owns && (
+        <Link href={`/car/${car.id}/edit`} className={`btn btn--glass ${styles.editCta}`}>
+          Editează detaliile
+        </Link>
+      )}
 
       {garage.length > 0 && (
         <div className={styles.garage}>

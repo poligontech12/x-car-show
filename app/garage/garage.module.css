@@ -1,0 +1,106 @@
+.screen {
+  padding-top: var(--safe-top);
+  padding-bottom: 120px;
+}
+
+.empty {
+  margin: 30px var(--gutter) 0;
+  padding: 22px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
+}
+
+.emptyLead {
+  margin: 0;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.emptyNote {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--paper-45);
+}
+
+.empty .btn,
+.empty button {
+  margin-top: 18px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 26px;
+  padding: 0 var(--gutter);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
+  transition: border-color 0.16s ease;
+}
+
+.row:hover {
+  border-color: var(--rim-bright);
+}
+
+/* Small enough that an empty well reads as a placeholder rather than a
+   hole, big enough to recognise the car once there is a photo. */
+.thumb {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex: none;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--slot);
+}
+
+.rowBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowBody b {
+  display: block;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.rowBody span {
+  display: block;
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--paper-45);
+}
+
+.stand {
+  color: var(--paper-28) !important;
+}
+
+.edit {
+  flex: none;
+  font-size: 15px;
+  color: var(--red);
+}
+
+.add {
+  margin: 12px var(--gutter) 0;
+  width: calc(100% - var(--gutter) * 2);
+}

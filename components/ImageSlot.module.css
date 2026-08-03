@@ -101,7 +101,8 @@
    bottom-left over a hero photo. Browses while empty, clears once filled. */
 .corner {
   position: absolute;
-  top: 10px;
+  /* Full-bleed surfaces push this clear of the floating nav. */
+  top: var(--slot-corner-top, 10px);
   right: 10px;
   z-index: 3;
   padding: 6px 11px;

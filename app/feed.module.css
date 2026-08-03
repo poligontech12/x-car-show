@@ -1,44 +1,6 @@
 .screen {
-  padding-top: var(--safe-top);
+  padding-top: calc(var(--safe-top) + 12px);
   padding-bottom: 120px;
-}
-
-.flag {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.flag i {
-  flex: 1;
-  display: block;
-}
-
-.flag i:nth-child(1) {
-  background: #002b7f;
-}
-.flag i:nth-child(2) {
-  background: #fcd116;
-}
-.flag i:nth-child(3) {
-  background: #ce1126;
-}
-
-/* ── A post ──────────────────────────────────────────────────
-   The photograph is the card. Everything else sits on it or
-   under it, inside one rounded panel. */
-
-.post {
-  margin: 0 var(--gutter) 14px;
-  border-radius: var(--r-panel);
-  overflow: hidden;
-  background: var(--glass);
-  border: 1px solid var(--rim);
-  backdrop-filter: blur(28px) saturate(180%);
-  box-shadow: var(--sheen), var(--lift-sm);
 }
 
 .photo {
@@ -109,14 +71,6 @@
   color: var(--paper-28);
 }
 
-.body {
-  padding: 14px 16px 16px;
-  margin: 0;
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: var(--paper-70);
-  text-wrap: pretty;
-}
 
 /* A post with no photograph still needs its byline. */
 .headPlain {
@@ -154,11 +108,4 @@
 .partners em {
   font-style: normal;
   color: var(--red);
-}
-
-.empty {
-  padding: 60px var(--gutter);
-  text-align: center;
-  font-size: 14px;
-  color: var(--paper-28);
 }

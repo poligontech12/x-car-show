@@ -1,0 +1,148 @@
+.screen {
+  padding-top: calc(var(--safe-top) + 20px);
+  padding-bottom: 120px;
+}
+
+.head {
+  padding: 0 var(--gutter);
+}
+
+.avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 999px;
+  background: var(--hatch);
+  border: 1px solid var(--rim-bright);
+  box-shadow: var(--sheen-soft);
+}
+
+.name {
+  margin: 18px 0 0;
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.meta {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--paper-45);
+}
+
+/* Where the owner sends people. Two panels, never more. */
+.socials {
+  display: flex;
+  gap: 10px;
+  margin: 22px var(--gutter) 0;
+}
+
+.social {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  transition: border-color 0.16s ease;
+}
+
+.social:hover {
+  border-color: var(--rim-bright);
+}
+
+.social em {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12.5px;
+  color: var(--paper-45);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  padding: 34px var(--gutter) 14px;
+  font-size: 13px;
+  color: var(--paper-45);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 var(--gutter);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
+  transition: border-color 0.16s ease;
+}
+
+.row:hover {
+  border-color: var(--rim-bright);
+}
+
+.thumb {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex: none;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--slot);
+}
+
+.rowBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowBody b {
+  display: block;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.rowBody span {
+  display: block;
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--paper-45);
+}
+
+.arrow {
+  flex: none;
+  font-size: 15px;
+  color: var(--red);
+}
+
+.missing {
+  padding: 60px var(--gutter) 0;
+  text-align: center;
+}
+
+.missing h1 {
+  margin: 0 0 24px;
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+}

@@ -223,3 +223,26 @@
   padding: 14px var(--gutter) calc(var(--safe-bottom) + 14px);
   background: linear-gradient(to top, var(--ink) 70%, rgba(8, 8, 10, 0));
 }
+
+.viewPublic {
+  margin-top: 18px;
+}
+
+/* A sign-in that failed says why, right above the button that failed. */
+.error {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-panel);
+  background: color-mix(in oklab, var(--red) 14%, transparent);
+  border: 1px solid color-mix(in oklab, var(--red) 42%, transparent);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--paper);
+}
+
+.fieldNote {
+  margin: 8px 2px 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--paper-45);
+}

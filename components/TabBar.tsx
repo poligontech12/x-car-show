@@ -11,7 +11,7 @@ import styles from './TabBar.module.css';
 const TABS = [
   { href: '/', label: 'Flux', glyph: 'feed' },
   { href: '/roster', label: 'Înscriși', glyph: 'roster' },
-  { href: '/scan', label: 'Scanare', glyph: 'scan' },
+  { href: '/garage', label: 'Garaj', glyph: 'garage' },
   { href: '/award', label: 'Premiu', glyph: 'award' },
 ] as const;
 
@@ -34,16 +34,11 @@ function Glyph({ name }: { name: string }) {
           <i />
         </div>
       );
-    case 'scan':
+    case 'garage':
       return (
-        <div className={`${styles.glyph} ${styles.scan}`}>
-          <div className={styles.scanBox}>
-            <i />
-            <i />
-            <i />
-            <i />
-            <div className={styles.scanLine} />
-          </div>
+        <div className={`${styles.glyph} ${styles.garage}`}>
+          <i />
+          <i />
         </div>
       );
     default:

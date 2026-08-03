@@ -73,119 +73,87 @@
 }
 
 .spaced {
-  margin-top: 30px;
+  margin-top: 32px;
 }
 
-/* ── Step 1 · badge and year ─────────────────────────────────── */
+/* ── Step 1 · what it is ─────────────────────────────────────
+   Typed, not picked. The chips below are a shortcut for the
+   common cases, never a set of permitted answers. */
 
-.opts {
+.field {
+  margin-top: 24px;
+}
+
+.input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 15px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  outline: none;
+  transition: border-color 0.16s ease;
+}
+
+.input:focus {
+  border-color: var(--red-edge);
+}
+
+.suggestions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 22px;
-}
-
-.optsTight {
-  margin-top: 10px;
-}
-
-.make,
-.year,
-.drive {
-  border-radius: var(--r-chip);
-  border: 1px solid var(--rim);
-  background: var(--glass-faint);
-  backdrop-filter: blur(16px) saturate(160%);
-  box-shadow: var(--sheen), var(--lift-sm);
-  color: var(--paper-45);
-  font-family: var(--font-sans);
-  letter-spacing: -0.02em;
-  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
-}
-
-.make:hover,
-.year:hover,
-.drive:hover {
-  color: var(--paper);
-  border-color: var(--rim-bright);
-}
-
-.make[aria-pressed='true'],
-.year[aria-pressed='true'],
-.drive[aria-pressed='true'] {
-  border-color: var(--red);
-  background: var(--red);
-  color: #fff;
-}
-
-.make {
-  padding: 11px 16px;
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.year {
-  padding: 10px 16px;
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.drive {
-  flex: 1;
-  text-align: center;
-  padding: 16px 0;
-  font-weight: 600;
-  font-size: 15px;
-}
-
-/* ── Step 2 · numbers ────────────────────────────────────────
-   A stepper, not a text field. Rough is fine. */
-
-.stepper {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.pm {
-  width: 52px;
-  height: 52px;
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  border: 1px solid var(--rim);
-  background: var(--glass);
-  backdrop-filter: blur(28px) saturate(180%);
-  box-shadow: var(--sheen), var(--lift-sm);
-  font-size: 22px;
-  line-height: 1;
-  color: var(--paper-70);
-  transition: border-color 0.16s ease, color 0.16s ease;
-}
-
-.pm:hover {
-  border-color: var(--red-edge);
-  color: var(--red);
-}
-
-.power {
-  flex: 1;
-  text-align: center;
-}
-
-.powerUnit {
   margin-top: 12px;
-  font-size: 13px;
-  color: var(--paper-45);
+}
+
+/* ── Step 2 · the figure ─────────────────────────────────────
+   A row of dials rather than a stepper: every number is one
+   gesture away instead of forty. */
+
+.dials {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
 }
 
 .driveRow {
   display: flex;
   gap: 8px;
   margin-top: 10px;
+}
+
+.drive {
+  flex: 1;
+  text-align: center;
+  padding: 16px 0;
+  border-radius: var(--r-chip);
+  border: 1px solid var(--rim);
+  background: var(--glass-faint);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--sheen-soft);
+  color: var(--paper-45);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.drive:hover {
+  color: var(--paper);
+  border-color: var(--rim-bright);
+}
+
+.drive[aria-pressed='true'] {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff;
 }
 
 /* ── Step 3 · photos ─────────────────────────────────────────── */
@@ -216,7 +184,7 @@
   border: 1px solid var(--rim);
 }
 
-/* ── Step 4 · the story ──────────────────────────────────────── */
+/* ── Step 4 · the description ────────────────────────────────── */
 
 .story {
   display: block;
@@ -252,7 +220,9 @@
   color: var(--red);
 }
 
-/* ── Done · the card they will be handed at the gate ─────────── */
+/* ── Done · the card they will be handed at the gate ─────────
+   No stand: a marshal assigns that when you arrive, and putting
+   an invented one here would be a promise the app cannot keep. */
 
 .card {
   margin-top: 26px;
@@ -292,8 +262,8 @@
 }
 
 .cardQr {
-  width: 84px;
-  height: 84px;
+  width: 92px;
+  height: 92px;
   flex: none;
   display: flex;
   align-items: center;
@@ -303,14 +273,22 @@
   background: #fff;
 }
 
-.cardStandLabel {
-  font-size: 12px;
-  color: var(--paper-45);
+.cardDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardName {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
 }
 
 .cardLine {
-  margin-top: 10px;
-  font-size: 12.5px;
+  margin-top: 8px;
+  font-size: 13px;
   color: var(--paper-45);
 }
 
@@ -339,4 +317,15 @@
   flex: none;
   width: auto;
   padding: 17px 20px;
+}
+
+/* A registration that did not go through says so, next to the button. */
+.failed {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-panel);
+  background: color-mix(in oklab, var(--red) 14%, transparent);
+  border: 1px solid color-mix(in oklab, var(--red) 42%, transparent);
+  font-size: 14px;
+  line-height: 1.4;
 }

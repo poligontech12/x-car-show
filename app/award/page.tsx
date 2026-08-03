@@ -2,9 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { ScreenTitle, TitleAside } from '@/components/StickyHeader';
-import { VOTES_CAST_LABEL, byId, displayModel, standings } from '@/lib/cars';
+import { displayModel, standings, votesCastLabel } from '@/lib/cars';
 import { EVENT } from '@/lib/event';
-import { useCountUp } from '@/lib/useCountUp';
 import { useStore } from '@/lib/store';
 import styles from './award.module.css';
 
@@ -19,15 +18,16 @@ function Trophy() {
 
 export default function AwardScreen() {
   const router = useRouter();
-  const { signedIn, hydrated, vote, castVote } = useStore();
+  const { signedIn, hydrated, vote, castVote, cars, tally, myCars } = useStore();
 
-  const rows = standings(vote);
-  const leader = rows[0];
-  const leaderVotes = useCountUp(leader.votes, { delay: 400 });
+  const rows = standings(cars, tally, vote);
+  const mine = new Set(myCars.map((c) => c.id));
 
   const onRowClick = (carId: string) => {
-    if (signedIn) castVote(carId);
-    else router.push('/auth?mode=register&role=vote');
+    if (!signedIn) return router.push('/auth?mode=register&role=vote');
+    // The server refuses it anyway; better not to offer it.
+    if (mine.has(carId)) return;
+    castVote(carId);
   };
 
   return (
@@ -45,20 +45,8 @@ export default function AwardScreen() {
         }
       />
 
-      <div className={`${styles.leader} a-up delay-400`}>
-        <div className={styles.leaderLabel}>Pe primul loc</div>
-        <div className={styles.leaderValue}>
-          <span className="n-xl n-accent">{leaderVotes.toLocaleString('ro-RO')}</span>
-          <span className={styles.leaderUnit}>voturi</span>
-        </div>
-        <div className={styles.leaderName}>{displayModel(leader.car)}</div>
-        <div className={styles.leaderOwner}>
-          {leader.car.owner} · {leader.pct}% din total
-        </div>
-      </div>
-
       {hydrated && !signedIn && (
-        <div className={`${styles.gate} a-up delay-500`}>
+        <div className={`${styles.gate} a-up delay-400`}>
           <div className={styles.gateTitle}>Conectează-te ca să votezi.</div>
           <p className={styles.gateBody}>
             Clasamentul e public. Un cont, un vot — ca să nu umple nimeni urna.
@@ -74,10 +62,11 @@ export default function AwardScreen() {
       )}
 
       {hydrated && signedIn && vote && (
-        <div className={`${styles.mine} a-up delay-500`}>
+        <div className={`${styles.mine} a-up delay-400`}>
           <span className={styles.mineDot} />
           <span>
-            Votul tău · <b>{displayModel(byId(vote))}</b> · îl poți schimba până la {EVENT.votingCloses}
+            Votul tău · <b>{displayModel(cars.find((c) => c.id === vote)!)}</b> · îl poți
+            schimba până la {EVENT.votingCloses}
           </span>
         </div>
       )}
@@ -89,13 +78,14 @@ export default function AwardScreen() {
             type="button"
             className={`${styles.row} ${r.mine ? styles.rowMine : ''} a-up`}
             data-spot
-            style={{ animationDelay: `${0.6 + i * 0.06}s` }}
+            style={{ animationDelay: `${0.45 + i * 0.06}s` }}
             aria-pressed={r.mine}
+            disabled={mine.has(r.id)}
             onClick={() => onRowClick(r.id)}
           >
             <span
               className={`${styles.bar} ${r.mine ? styles.barMine : ''}`}
-              style={{ width: `${r.pct}%`, animationDelay: `${0.6 + i * 0.06}s` }}
+              style={{ width: `${r.pct}%`, animationDelay: `${0.45 + i * 0.06}s` }}
             />
             <span className={styles.rowInner}>
               <span className={`${styles.pos} ${r.pos === 1 ? styles.posLead : ''}`}>{r.pos}</span>
@@ -117,7 +107,7 @@ export default function AwardScreen() {
       <p className={styles.foot}>
         {signedIn
           ? 'Atinge un rând ca să votezi sau să îți schimbi votul. Participanții nu pot vota propria mașină.'
-          : VOTES_CAST_LABEL}
+          : votesCastLabel(tally)}
       </p>
     </div>
   );

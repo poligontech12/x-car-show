@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { byId, displayModel } from '@/lib/cars';
@@ -45,7 +46,7 @@ const ROLES: { key: Role; title: string; sub: string }[] = [
 function AuthScreen() {
   const router = useRouter();
   const params = useSearchParams();
-  const { account, hydrated, vote, signIn, register, signOut } = useStore();
+  const { account, hydrated, vote, signIn, register, signOut, updateAccount } = useStore();
 
   const [authMode, setAuthMode] = useState<'register' | 'signin'>(
     params.get('mode') === 'signin' ? 'signin' : 'register',
@@ -53,6 +54,9 @@ function AuthScreen() {
   const [role, setRole] = useState<Role>(params.get('role') === 'vote' ? 'vote' : 'car');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   // Signing out from the account screen should land you back in the feed,
   // not on a form you did not ask for.
@@ -65,17 +69,25 @@ function AuthScreen() {
   const copy = COPY[mode];
   const isForm = mode !== 'account';
 
-  const submit = () => {
-    const address = email.trim() || 'you@show.x';
-    if (authMode === 'signin') {
-      signIn(address, name);
-      router.push('/');
-    } else {
-      register(address, name, role);
-      // Entrants go straight into registering the car they came here for;
-      // voters go to the thing they came here to do.
-      router.push(role === 'car' ? '/onboard' : '/award');
-    }
+  const submit = async () => {
+    if (busy) return;
+    const address = email.trim();
+    if (!address) return setError('Scrie-ți e-mailul.');
+    if (password.length < 8) return setError('Parola are minim 8 caractere.');
+
+    setBusy(true);
+    setError(null);
+    const failed =
+      authMode === 'signin'
+        ? await signIn(address, password)
+        : await register(address, password, name, role);
+    setBusy(false);
+
+    if (failed) return setError(failed);
+    if (authMode === 'signin') return router.push('/');
+    // Entrants go straight into registering the car they came here for;
+    // voters go to the thing they came here to do.
+    router.push(role === 'car' ? '/onboard' : '/award');
   };
 
   // Hold the frame until we know whether there is an account, so the
@@ -106,9 +118,7 @@ function AuthScreen() {
           <>
             <div className={styles.rows}>
               {[
-                ['Nume', account.name],
                 ['Email', account.email],
-                ['Rol', account.role === 'car' ? 'Participant · 1 mașină' : 'Votant'],
                 ['Vot', vote ? displayModel(byId(vote)) : 'Nevotat'],
               ].map(([k, v]) => (
                 <div key={k} className={styles.row}>
@@ -118,18 +128,95 @@ function AuthScreen() {
               ))}
             </div>
 
-            {account.role !== 'car' && (
-              <button type="button" className={styles.addCar} onClick={() => router.push('/onboard')}>
-                <b>Înscrie și o mașină</b>
-                <em>→</em>
-              </button>
+            {/* Everything below is what other people see on your cars and
+                on your profile, so it is edited here and nowhere else. */}
+            <div className={`${styles.fieldLabel} ${styles.roleHead}`}>Profilul public</div>
+
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="acc-name">
+                Nume
+              </label>
+              <input
+                id="acc-name"
+                className={styles.input}
+                value={account.name}
+                placeholder="Andrei M."
+                onChange={(e) => updateAccount({ name: e.target.value })}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="acc-handle">
+                Nume de utilizator
+              </label>
+              <input
+                id="acc-handle"
+                className={styles.input}
+                value={account.handle ?? ''}
+                readOnly
+                aria-describedby="acc-handle-note"
+              />
+              <p id="acc-handle-note" className={styles.fieldNote}>
+                Ți l-am ales la înscriere. Ajunge pe cartonașul tipărit, așa că rămâne
+                așa.
+              </p>
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="acc-town">
+                Localitate
+              </label>
+              <input
+                id="acc-town"
+                className={styles.input}
+                value={account.town ?? ''}
+                placeholder="Suceava"
+                onChange={(e) => updateAccount({ town: e.target.value })}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="acc-ig">
+                Instagram
+              </label>
+              <input
+                id="acc-ig"
+                className={styles.input}
+                value={account.instagram ?? ''}
+                placeholder="@andrei.s14"
+                onChange={(e) => updateAccount({ instagram: e.target.value })}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="acc-fb">
+                Facebook
+              </label>
+              <input
+                id="acc-fb"
+                className={styles.input}
+                value={account.facebook ?? ''}
+                placeholder="andrei.morosanu"
+                onChange={(e) => updateAccount({ facebook: e.target.value })}
+              />
+            </div>
+
+            {account.handle && (
+              <Link href={`/owner/${account.handle}`} className={`btn btn--glass ${styles.viewPublic}`}>
+                Vezi cum arată profilul tău
+              </Link>
             )}
+
+            <button type="button" className={styles.addCar} onClick={() => router.push('/garage')}>
+              <b>Garajul meu</b>
+              <em>→</em>
+            </button>
 
             <button
               type="button"
               className={`btn btn--quiet ${styles.signOut}`}
               onClick={() => {
-                signOut();
+                void signOut();
                 setAuthMode('signin');
                 setJustSignedOut(true);
               }}
@@ -195,8 +282,6 @@ function AuthScreen() {
               />
             </div>
 
-            {/* There is no backend yet, so this field is never read and
-                never stored — it is here so the flow reads true. */}
             <div className={styles.field}>
               <label className={styles.fieldLabel} htmlFor="password">
                 Parolă
@@ -207,6 +292,9 @@ function AuthScreen() {
                 type="password"
                 placeholder="••••••••"
                 autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && void submit()}
               />
             </div>
 
@@ -227,8 +315,14 @@ function AuthScreen() {
 
       {isForm && (
         <div className={styles.footer}>
-          <button type="button" className="btn btn--primary" onClick={submit}>
-            {copy.cta}
+          {error && <p className={styles.error}>{error}</p>}
+          <button
+            type="button"
+            className="btn btn--primary"
+            disabled={busy}
+            onClick={() => void submit()}
+          >
+            {busy ? 'O secundă…' : copy.cta}
           </button>
         </div>
       )}

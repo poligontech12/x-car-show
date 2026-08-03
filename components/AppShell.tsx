@@ -7,13 +7,16 @@ import { TabBar } from './TabBar';
 import styles from './AppShell.module.css';
 
 /** Screens that take the whole height and do their own scrolling. */
-const FILL = ['/scan', '/auth', '/onboard'];
+const FILL = ['/roster', '/auth', '/onboard'];
 
 /**
  * Register-a-car and the account screens are flows, not destinations:
  * they replace both the nav and the tab bar and carry their own close.
  */
 const FLOW = ['/auth', '/onboard'];
+
+/** Editing a car is a flow too, but it lives under a car's own route. */
+const isEdit = (p: string) => /^\/car\/[^/]+\/edit\/?$/.test(p);
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -40,8 +43,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // The print sheet is not the app — it gets the bare page.
   if (pathname.startsWith('/cards')) return <>{children}</>;
 
-  const fill = FILL.some((p) => pathname.startsWith(p));
-  const flow = FLOW.some((p) => pathname.startsWith(p));
+  const fill = FILL.some((p) => pathname.startsWith(p)) || isEdit(pathname);
+  const flow = FLOW.some((p) => pathname.startsWith(p)) || isEdit(pathname);
 
   return (
     <div className={styles.stage}>

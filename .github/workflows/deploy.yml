@@ -1,0 +1,70 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  # Runs against a throwaway Postgres so a broken build or a migration
+  # that does not apply never reaches the show server.
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: xcs
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: xcarshow
+        options: >-
+          --health-cmd "pg_isready -U xcs" --health-interval 5s
+          --health-timeout 5s --health-retries 10
+        ports: ['5432:5432']
+    env:
+      DATABASE_URL: postgres://xcs:test@localhost:5432/xcarshow
+      BETTER_AUTH_SECRET: test-secret-not-used-for-anything-real
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run db:deploy
+      - run: npm run typecheck
+      - run: npm run build
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ship it
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd ${{ secrets.DEPLOY_PATH }}
+            git pull --ff-only
+
+            # A copy of the database before anything changes. Cheap at this
+            # size, and the only thing standing between a bad deploy and a
+            # lost entry list on show weekend.
+            docker compose exec -T db pg_dump -U xcs xcarshow \
+              > "backups/pre-deploy-$(date -u +%Y%m%dT%H%M%SZ).sql"
+
+            docker compose build app
+            docker compose --profile tools run --rm migrate
+            docker compose up -d app caddy
+            docker image prune -f

@@ -39,6 +39,11 @@ export interface Car {
   followers: string;
   /** What the owner calls it. Printed on the card under the headline. */
   nickname?: string;
+  /** Where the owner sends people. Handles, not URLs — we build the link. */
+  instagram?: string;
+  facebook?: string;
+  /** True for an entry a member registered themselves, rather than seed data. */
+  mine?: boolean;
   /** Year this car took car of the show, if it ever has. */
   win: string | null;
   mods: ModGroup[];
@@ -421,15 +426,6 @@ export const CARS: Car[] = [
   },
 ];
 
-export const CLASSES: readonly ('Toate' | CarClass)[] = [
-  'Toate',
-  'JDM',
-  'Germane',
-  'Muscle',
-  'Clasice',
-  'Stance',
-  'Off-road',
-] as const;
 
 /** Full entry list size. Only the first page is modelled. */
 export const ROSTER_TOTAL = 142;
@@ -450,30 +446,20 @@ export const modCount = (c: Car): number => c.mods.reduce((a, g) => a + g.items.
 /** Stand A-14 is in paddock A. The letter is the paddock. */
 export const paddockOf = (c: Car): string => c.stand.split('-')[0];
 
-/** Where a scanned card lands. Printed as a QR on every windshield card. */
-export const carUrl = (c: Car, origin = 'https://show.x'): string => `${origin}/car/${c.id}`;
-
-/** Other cars in the same owner's garage. One person, many cars. */
-export const garageOf = (c: Car): Car[] =>
-  CARS.filter((o) => o.owner === c.owner && o.id !== c.id);
-
 /**
- * Car of the show, as it stands. Votes seeded from the running tally;
- * the viewer's own vote is added on top at read time.
+ * The public origin, inlined at build time. Every printed QR code encodes
+ * a URL built from this, so changing it after cards are printed kills
+ * every card already out there — see DEPLOY.md.
  */
-export const AWARD_POOL: readonly [string, number][] = [
-  ['d13', 612],
-  ['s14', 430],
-  ['mus', 388],
-  ['sup', 301],
-  ['e30', 256],
-  ['cam', 204],
-  ['evo', 188],
-  ['pas', 151],
-] as const;
+export const SITE_ORIGIN = (
+  process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+).replace(/\/+$/, '');
 
-export const VOTES_CAST_LABEL =
-  '2 530 de voturi până acum. Clasamentul se actualizează live.';
+/** How the origin reads on a printed card: no scheme, no trailing slash. */
+export const SITE_HOST = SITE_ORIGIN.replace(/^https?:\/\//, '');
+
+/** Where a scanned card lands. Printed as a QR on every windshield card. */
+export const carUrl = (c: Car, origin = SITE_ORIGIN): string => `${origin}/car/${c.id}`;
 
 export interface Standing {
   id: string;
@@ -481,19 +467,95 @@ export interface Standing {
   pos: number;
   votes: number;
   pct: number;
+  /** The viewer's own vote. */
   mine: boolean;
 }
 
-export function standings(myVote: string | null): Standing[] {
-  const total = AWARD_POOL.reduce((a, p) => a + p[1], 0) + (myVote ? 1 : 0);
-  return AWARD_POOL.map(([id, v]) => ({ id, votes: v + (myVote === id ? 1 : 0) }))
-    .sort((a, b) => b.votes - a.votes)
+/**
+ * Car of the show, as it stands. Every entry is on the board, because the
+ * board is also the ballot — a car with no votes yet still has to be
+ * tappable, or nobody could ever cast the first one.
+ */
+export function standings(
+  cars: Car[],
+  tally: Record<string, number>,
+  myVote: string | null,
+): Standing[] {
+  const total = Object.values(tally).reduce((a, n) => a + n, 0);
+
+  return cars
+    .map((car) => ({ id: car.id, car, votes: tally[car.id] ?? 0 }))
+    .sort(
+      (a, b) =>
+        b.votes - a.votes ||
+        displayModel(a.car).localeCompare(displayModel(b.car), 'ro'),
+    )
     .map((r, i) => ({
-      id: r.id,
-      car: byId(r.id),
+      ...r,
       pos: i + 1,
-      votes: r.votes,
-      pct: Math.round((r.votes / total) * 100),
+      pct: total ? Math.round((r.votes / total) * 100) : 0,
       mine: myVote === r.id,
     }));
 }
+
+/** How many ballots are in, said plainly. */
+export const votesCastLabel = (tally: Record<string, number>): string => {
+  const n = Object.values(tally).reduce((a, v) => a + v, 0);
+  if (!n) return 'Niciun vot încă. Fii primul.';
+  return n === 1 ? 'Un vot până acum.' : `${n} de voturi până acum.`;
+};
+
+/**
+ * An entry a member registered. The number and the stand are assigned by
+ * marshals on the day, so a fresh registration carries neither — the UI
+ * says "pending" rather than inventing one.
+ */
+export const BLANK_CAR: Omit<Car, 'id' | 'model' | 'make' | 'year'> = {
+  no: '',
+  cls: 'JDM',
+  engine: '',
+  power: '',
+  tq: '',
+  weight: '',
+  drive: 'RWD',
+  gbox: '',
+  wheels: '',
+  paint: '',
+  stand: '',
+  owner: '',
+  town: '',
+  handle: '',
+  followers: '0',
+  win: null,
+  mods: [],
+  story: '',
+  mine: true,
+};
+
+/** Everyone who shows a car, derived from the entries themselves. */
+export interface OwnerProfile {
+  handle: string;
+  name: string;
+  town: string;
+  instagram?: string;
+  facebook?: string;
+  cars: Car[];
+}
+
+export function ownerOf(handle: string, all: Car[]): OwnerProfile | null {
+  const cars = all.filter((c) => c.handle && c.handle === handle);
+  if (!cars.length) return null;
+  const [first] = cars;
+  return {
+    handle,
+    name: first.owner,
+    town: first.town,
+    instagram: first.instagram,
+    facebook: first.facebook,
+    cars,
+  };
+}
+
+/** A handle typed with or without the @, turned into a real link. */
+export const socialUrl = (network: 'instagram' | 'facebook', handle: string) =>
+  `https://${network}.com/${handle.replace(/^@+/, '').trim()}`;

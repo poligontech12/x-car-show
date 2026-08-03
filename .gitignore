@@ -6,3 +6,14 @@ build/
 next-env.d.ts
 .DS_Store
 .env*.local
+.env
+
+# Runtime state from the impeccable live tool, not part of the project.
+.impeccable/live/
+
+# Database dumps. The directory is tracked; what lands in it is not.
+/backups/*
+!/backups/.gitkeep
+
+# Uploaded photos live on a volume, never in the repo.
+/uploads/

@@ -1,46 +1,53 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { DigitDial } from '@/components/DigitDial';
 import { ImageSlot } from '@/components/ImageSlot';
 import { QrCodeClient } from '@/components/QrCodeClient';
 import { EVENT } from '@/lib/event';
-import { useStore, type Drive } from '@/lib/store';
+import { BLANK_CAR, SITE_ORIGIN } from '@/lib/cars';
+import { errorMessage, useStore, type Drive } from '@/lib/store';
 import styles from './onboard.module.css';
 
 const STEPS = [
-  ['Ce e?', 'Alege sigla și anul. Restul completăm noi.'],
-  ['Cifrele.', 'Aproximativ e în regulă. Nu verifică nimeni fișa de dyno.'],
+  ['Ce mașină e?', 'Marca și modelul. Dacă nu e în listă, scrie-o oricum — lista doar ajută.'],
+  ['Câți cai are?', 'Aproximativ e în regulă. Nu verifică nimeni fișa de dyno.'],
   ['Trei poze.', 'Una principală, două detalii. Poți adăuga mai multe mai târziu.'],
-  ['Spune-o cum ai spune-o la întâlnire.', 'Asta e partea pe care o citește lumea.'],
-  ['Ești înscris.', 'Cartonaș tipărit. Stand alocat. Ne vedem pe 22.'],
+  ['Descriere', 'Ce ar trebui să știe lumea despre mașină.'],
+  ['Ești înscris.', 'Cartonaș pregătit. Ne vedem pe 8 august.'],
 ] as const;
 
-const NEXT_LABELS = ['Continuă', 'Continuă', 'Arată bine', 'Gata', 'Vezi grila'];
+const NEXT_LABELS = ['Continuă', 'Continuă', 'Arată bine', 'Gata', 'Vezi înscrișii'];
 
+/** Suggestions, not options. Anything can be typed over them. */
 const MAKES = [
-  'NISSAN',
-  'TOYOTA',
+  'Nissan',
+  'Toyota',
   'BMW',
-  'VOLKSWAGEN',
-  'DACIA',
-  'HONDA',
-  'FORD',
-  'AUDI',
-  'MITSUBISHI',
+  'Volkswagen',
+  'Dacia',
+  'Honda',
+  'Ford',
+  'Audi',
+  'Mitsubishi',
+  'Mercedes',
+  'Opel',
+  'Renault',
+  'Subaru',
+  'Mazda',
   'ARO',
-  'ALTA',
 ];
-const YEARS = ['1978', '1989', '1994', '1998', '2003', '2005', '2016'];
-const DRIVES: Drive[] = ['FWD', 'RWD', 'AWD'];
 
-/** Marshals hand out stands on arrival; this is the one they have kept for you. */
-const STAND = 'B-07';
+const DRIVES: Drive[] = ['FWD', 'RWD', 'AWD'];
 const STORY_LIMIT = 400;
+
+/** Four dials — no ceiling worth imposing on a horsepower figure. */
+const DIALS = [1000, 100, 10, 1] as const;
 
 export default function OnboardScreen() {
   const router = useRouter();
-  const { onboarding, patchOnboarding, resetOnboarding, completeOnboarding } = useStore();
+  const { onboarding, patchOnboarding, resetOnboarding, completeOnboarding, addCar } = useStore();
 
   const [step, setStep] = useState(0);
   const [story, setStory] = useState('');
@@ -48,13 +55,45 @@ export default function OnboardScreen() {
   const [title, sub] = STEPS[Math.min(step, 4)];
   const done = step >= 4;
 
-  const next = () => {
+  // Only offer what the typing so far could still become.
+  const suggestions = useMemo(() => {
+    const typed = onboarding.name.trim().toLowerCase();
+    if (!typed) return MAKES;
+    const first = typed.split(/\s+/)[0];
+    return MAKES.filter((m) => m.toLowerCase().startsWith(first) && m.toLowerCase() !== typed);
+  }, [onboarding.name]);
+
+  const digitAt = (place: number) => Math.floor(onboarding.power / place) % 10;
+  const setDigit = (place: number, digit: number) =>
+    patchOnboarding({ power: onboarding.power - digitAt(place) * place + digit * place });
+
+  const [saving, setSaving] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
+
+  const next = async () => {
     if (done) {
+      if (saving) return;
+      setSaving(true);
+      // The draft carries what the four steps could ask for without
+      // becoming a chore; everything else is filled in on the car itself.
+      const [make, ...rest] = onboarding.name.trim().split(/\s+/);
+      try {
+      const id = await addCar({
+        ...BLANK_CAR,
+        make: make ?? '',
+        model: rest.join(' ') || (make ?? 'Mașina mea'),
+        year: Number(onboarding.year) || 0,
+        power: onboarding.power ? String(onboarding.power) : '',
+        drive: onboarding.drive,
+      });
       resetOnboarding();
-      router.push('/roster');
+      router.push(`/car/${id}`);
+      } catch (e) {
+        setSaving(false);
+        setFailed(errorMessage(e));
+      }
       return;
     }
-    // Finishing step 4 issues the stand — the account becomes an entrant.
     if (step === 3) completeOnboarding();
     setStep(step + 1);
   };
@@ -87,33 +126,53 @@ export default function OnboardScreen() {
 
         {step === 0 && (
           <>
-            <div className={styles.opts} role="group" aria-label="Marcă">
-              {MAKES.map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  className={styles.make}
-                  aria-pressed={onboarding.make === m}
-                  onClick={() => patchOnboarding({ make: m })}
-                >
-                  {m}
-                </button>
-              ))}
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="car-name">
+                Mașina
+              </label>
+              <input
+                id="car-name"
+                className={styles.input}
+                type="text"
+                placeholder="Nissan Silvia S14"
+                autoComplete="off"
+                value={onboarding.name}
+                onChange={(e) => patchOnboarding({ name: e.target.value })}
+              />
             </div>
 
-            <div className={`${styles.fieldLabel} ${styles.spaced}`}>An</div>
-            <div className={`${styles.opts} ${styles.optsTight}`} role="group" aria-label="An">
-              {YEARS.map((y) => (
-                <button
-                  key={y}
-                  type="button"
-                  className={styles.year}
-                  aria-pressed={onboarding.year === y}
-                  onClick={() => patchOnboarding({ year: y })}
-                >
-                  {y}
-                </button>
-              ))}
+            {suggestions.length > 0 && (
+              <div className={styles.suggestions} role="group" aria-label="Sugestii de marcă">
+                {suggestions.slice(0, 8).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    className="chip"
+                    onClick={() => patchOnboarding({ name: `${m} ` })}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="car-year">
+                An
+              </label>
+              <input
+                id="car-year"
+                className={styles.input}
+                type="text"
+                inputMode="numeric"
+                placeholder="1998"
+                maxLength={4}
+                autoComplete="off"
+                value={onboarding.year}
+                onChange={(e) =>
+                  patchOnboarding({ year: e.target.value.replace(/\D/g, '').slice(0, 4) })
+                }
+              />
             </div>
           </>
         )}
@@ -121,27 +180,15 @@ export default function OnboardScreen() {
         {step === 1 && (
           <>
             <div className={`${styles.fieldLabel} ${styles.spaced}`}>Putere la roți</div>
-            <div className={styles.stepper}>
-              <button
-                type="button"
-                className={styles.pm}
-                aria-label="Mai puțină putere"
-                onClick={() => patchOnboarding({ power: Math.max(40, onboarding.power - 10) })}
-              >
-                −
-              </button>
-              <div className={styles.power}>
-                <div className="n-lg n-accent">{onboarding.power}</div>
-                <div className={styles.powerUnit}>cai putere</div>
-              </div>
-              <button
-                type="button"
-                className={styles.pm}
-                aria-label="Mai multă putere"
-                onClick={() => patchOnboarding({ power: onboarding.power + 10 })}
-              >
-                +
-              </button>
+            <div className={styles.dials}>
+              {DIALS.map((place) => (
+                <DigitDial
+                  key={place}
+                  label={place === 1 ? 'CP' : `×${place}`}
+                  value={digitAt(place)}
+                  onChange={(d) => setDigit(place, d)}
+                />
+              ))}
             </div>
 
             <div className={`${styles.fieldLabel} ${styles.spaced}`}>Tracțiune</div>
@@ -198,6 +245,9 @@ export default function OnboardScreen() {
 
         {done && (
           <>
+            {/* The stand is assigned at the gate, not here — the card
+                carries the car and the code that opens it, nothing we
+                would have to invent. */}
             <div className={styles.card}>
               <div className={styles.cardHead}>
                 <b>{EVENT.edition}</b>
@@ -205,13 +255,18 @@ export default function OnboardScreen() {
               </div>
               <div className={styles.cardBody}>
                 <div className={styles.cardQr}>
-                  <QrCodeClient value={`https://show.x/stand/${STAND}`} size={78} />
+                  <QrCodeClient value={SITE_ORIGIN} size={92} />
                 </div>
-                <div>
-                  <div className={styles.cardStandLabel}>Stand</div>
-                  <div className="n-md">{STAND}</div>
+                <div className={styles.cardDetails}>
+                  <div className={styles.cardName}>{onboarding.name.trim() || 'Mașina ta'}</div>
                   <div className={styles.cardLine}>
-                    {`${onboarding.make ?? 'NISSAN'} · ${onboarding.year} · ${onboarding.power} CP · ${onboarding.drive}`}
+                    {[
+                      onboarding.year,
+                      onboarding.power ? `${onboarding.power} CP` : null,
+                      onboarding.drive,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
                   </div>
                 </div>
               </div>
@@ -237,7 +292,13 @@ export default function OnboardScreen() {
             Înapoi
           </button>
         )}
-        <button type="button" className="btn btn--primary" onClick={next}>
+        {failed && <p className={styles.failed}>{failed}</p>}
+        <button
+          type="button"
+          className="btn btn--primary"
+          disabled={saving}
+          onClick={() => void next()}
+        >
           {NEXT_LABELS[Math.min(step, 4)]}
         </button>
       </div>

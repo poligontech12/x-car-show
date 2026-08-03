@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Albert_Sans } from 'next/font/google';
 import { AppShell } from '@/components/AppShell';
-import { StoreProvider } from '@/lib/store';
+import { DevToolbar } from '@/components/DevToolbar';
+import { followsOf, listCars, voteOf, voteTally } from '@/lib/db/queries';
+import { sessionUser } from '@/lib/session';
+import { type Account, StoreProvider } from '@/lib/store';
 import './globals.css';
 
 const albert = Albert_Sans({
@@ -25,16 +28,42 @@ export const viewport: Viewport = {
   colorScheme: 'dark',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/**
+ * The roster is small enough that fetching it once here beats a request
+ * per screen, and it means every page renders with real data on the first
+ * paint — no hydration flash, and no deck that opens on the wrong card.
+ */
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const user = await sessionUser();
+  const [cars, tally, vote, following] = await Promise.all([
+    listCars(),
+    voteTally(),
+    user ? voteOf(user.id) : null,
+    user ? followsOf(user.id) : {},
+  ]);
+
+  const account: Account | null = user
+    ? {
+        name: user.name,
+        email: user.email,
+        role: user.role === 'car' ? 'car' : 'vote',
+        handle: user.handle ?? '',
+        town: user.town ?? undefined,
+        instagram: user.instagram ?? undefined,
+        facebook: user.facebook ?? undefined,
+      }
+    : null;
+
   return (
     <html
       lang="ro"
       className={albert.variable}
     >
       <body>
-        <StoreProvider>
+        <StoreProvider initial={{ account, vote, following, cars, tally }}>
           <AppShell>{children}</AppShell>
         </StoreProvider>
+        <DevToolbar />
       </body>
     </html>
   );

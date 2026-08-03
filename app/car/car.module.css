@@ -427,3 +427,68 @@
   font-style: normal;
   color: var(--red);
 }
+
+/* ── Owner reach ─────────────────────────────────────────────
+   Where the owner sends people. Two panels, never more — this is a
+   promotion slot, not a link tree. */
+
+.socials {
+  display: flex;
+  gap: 10px;
+  margin: 10px var(--gutter) 0;
+}
+
+.social {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass-faint);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen-soft), var(--lift-sm);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  transition: border-color 0.16s ease;
+}
+
+.social:hover {
+  border-color: var(--rim-bright);
+}
+
+.social em {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12.5px;
+  color: var(--paper-45);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editCta {
+  width: calc(100% - var(--gutter) * 2);
+  margin: 20px var(--gutter) 0;
+}
+
+/* An entry that was deleted, or a link someone mistyped. */
+.missing {
+  padding: calc(var(--safe-top) + 60px) var(--gutter) 0;
+  text-align: center;
+}
+
+.missing h1 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+}
+
+.missing p {
+  margin: 12px 0 24px;
+  font-size: 15px;
+  color: var(--paper-45);
+}

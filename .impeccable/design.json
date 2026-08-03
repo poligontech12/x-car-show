@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-03T00:00:00.000Z",
+  "title": "Design System: X Car Show",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#08080a",
+        "tonalRamp": ["#050506", "#08080a", "#101012", "#1a1a1d", "#2b2b2f", "#4a4a50", "#8a8a92", "#f2f2f4"]
+      },
+      "ink-deep": {
+        "role": "neutral",
+        "displayName": "Ink Deep",
+        "canonical": "#050506",
+        "tonalRamp": ["#000000", "#050506", "#0d0d0f", "#161618", "#242427", "#3f3f45", "#7d7d85", "#ededf0"]
+      },
+      "slot": {
+        "role": "neutral",
+        "displayName": "Empty Well",
+        "canonical": "#101012",
+        "tonalRamp": ["#08080a", "#101012", "#191a1d", "#242427", "#33333a", "#55555e", "#93939c", "#f4f4f6"]
+      },
+      "marque-red": {
+        "role": "primary",
+        "displayName": "Marque Red",
+        "canonical": "#e10600",
+        "tonalRamp": ["#2b0100", "#4d0200", "#780300", "#a50400", "#e10600", "#ff2019", "#ff6a63", "#ffc9c6"]
+      },
+      "marque-red-lift": {
+        "role": "primary",
+        "displayName": "Marque Red Lift",
+        "canonical": "#ff2019",
+        "tonalRamp": ["#360200", "#5c0400", "#8a0600", "#b90800", "#ea1109", "#ff2019", "#ff7973", "#ffd2d0"]
+      },
+      "marque-red-deep": {
+        "role": "primary",
+        "displayName": "Marque Red Deep",
+        "canonical": "#8b0000",
+        "tonalRamp": ["#1c0000", "#340000", "#520000", "#6f0000", "#8b0000", "#bd0300", "#ef2a24", "#ff9d99"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#141416", "#26262a", "#3c3c42", "#5a5a62", "#7e7e88", "#a8a8b0", "#d4d4d9", "#ffffff"]
+      }
+    },
+    "typographyMeta": {
+      "number-xl": {
+        "displayName": "Number XL",
+        "purpose": "The figure a screen is about. Power on a car, votes on the leader. Counts in on arrival; tabular so it never reflows mid-count."
+      },
+      "number-lg": {
+        "displayName": "Number LG",
+        "purpose": "A figure inside a flow — the power stepper during registration."
+      },
+      "number-md": {
+        "displayName": "Number MD",
+        "purpose": "The stand number on an issued card."
+      },
+      "display": {
+        "displayName": "Display",
+        "purpose": "The two-line name every destination opens with."
+      },
+      "title": { "displayName": "Title", "purpose": "A car's name on its own page." },
+      "subhead": { "displayName": "Subhead", "purpose": "Panel headings and button labels." },
+      "body": { "displayName": "Body", "purpose": "Prose — build stories, explanatory copy." },
+      "label": { "displayName": "Label", "purpose": "Every label in the system, at 45% white." },
+      "micro": { "displayName": "Micro", "purpose": "Tab labels and badges only." }
+    },
+    "shadows": [
+      {
+        "name": "sheen",
+        "value": "inset 0 1px 0 0 rgba(255,255,255,0.2)",
+        "purpose": "The top bevel. Not decoration — this is what makes a panel read as glass rather than a grey box. Every glass surface carries it."
+      },
+      {
+        "name": "sheen-soft",
+        "value": "inset 0 1px 0 0 rgba(255,255,255,0.12)",
+        "purpose": "The same bevel on small controls, where the full strength looks plastic."
+      },
+      {
+        "name": "lift",
+        "value": "0 10px 34px rgba(0,0,0,0.55)",
+        "purpose": "Floats the tab bar and full-width panels off the black floor."
+      },
+      {
+        "name": "lift-sm",
+        "value": "0 4px 16px rgba(0,0,0,0.4)",
+        "purpose": "Floats an in-flow panel."
+      },
+      {
+        "name": "accent-bloom",
+        "value": "0 6px 26px rgba(225,6,0,0.35)",
+        "purpose": "Under the primary action only. Never on a panel."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Every entrance in the system. Fast out of the gate, long settle."
+      },
+      {
+        "name": "enter-up",
+        "value": "fadeSlideUp 0.9s cubic-bezier(0.16,1,0.3,1) both",
+        "purpose": "The default arrival: 26px up and in. Staggered 60-100ms apart down a list."
+      },
+      {
+        "name": "speed-reveal",
+        "value": "speedReveal 0.8s cubic-bezier(0.16,1,0.3,1) both",
+        "purpose": "A car's name arriving at speed — skewed and blurred on the way in, square by the time it stops. One per screen, on the headline only."
+      },
+      {
+        "name": "count-up",
+        "value": "2200ms, ease 1-(1-t)^3",
+        "purpose": "Display figures count from zero. Display sizes only; on anything smaller it reads as fidgeting."
+      },
+      {
+        "name": "border-sweep",
+        "value": "borderSweep 4s linear infinite",
+        "purpose": "A light running the rim of the primary action, masked to a 1.5px ring."
+      },
+      {
+        "name": "aurora-drift",
+        "value": "26s / 32s ease-in-out alternate",
+        "purpose": "Two slow blooms behind everything so the black floor has something for the glass to refract."
+      }
+    ],
+    "breakpoints": [
+      { "name": "frame", "value": "640px and 880px tall — below either, the frame becomes the viewport" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action a screen wants. A light runs its rim every four seconds.",
+      "html": "<button class=\"ds-btn-primary\">Conectare sau cont nou</button>",
+      "css": ".ds-btn-primary { position: relative; display: block; width: 100%; padding: 17px; border: 1px solid transparent; border-radius: 999px; background: #e10600; color: #fff; font-family: 'Albert Sans', system-ui, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: -0.015em; text-align: center; box-shadow: 0 6px 26px rgba(225,6,0,0.35); cursor: pointer; transition: background 0.18s ease; } .ds-btn-primary::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1.5px; pointer-events: none; background: conic-gradient(from var(--ds-angle, 0deg), transparent 0%, rgba(255,255,255,0.9) 5%, transparent 16%, transparent 100%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; } .ds-btn-primary:hover { background: #ff2019; } .ds-btn-primary:focus-visible { outline: 2px solid #e10600; outline-offset: 3px; }"
+    },
+    {
+      "name": "Glass Button",
+      "kind": "button",
+      "refersTo": "button-glass",
+      "description": "The secondary of a pair, and the toggled-on state of a follow.",
+      "html": "<button class=\"ds-btn-glass\">Urmărești</button>",
+      "css": ".ds-btn-glass { display: block; width: 100%; padding: 17px; border: 1px solid rgba(255,255,255,0.09); border-radius: 999px; background: rgba(255,255,255,0.055); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%); box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.12); color: #fff; font-family: 'Albert Sans', system-ui, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: -0.015em; text-align: center; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease; } .ds-btn-glass:hover { background: rgba(255,255,255,0.085); border-color: rgba(255,255,255,0.16); }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Glass when off, marque red when on. One filter row per screen.",
+      "html": "<div style=\"display:flex;gap:8px\"><button class=\"ds-chip\" aria-pressed=\"true\">Toate</button><button class=\"ds-chip\" aria-pressed=\"false\">JDM</button><button class=\"ds-chip\" aria-pressed=\"false\">Germane</button></div>",
+      "css": ".ds-chip { padding: 9px 16px; white-space: nowrap; border: 1px solid rgba(255,255,255,0.09); border-radius: 999px; background: rgba(255,255,255,0.055); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.12); color: rgba(255,255,255,0.45); font-family: 'Albert Sans', system-ui, sans-serif; font-weight: 500; font-size: 13px; letter-spacing: -0.015em; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease; } .ds-chip:hover { color: #fff; border-color: rgba(255,255,255,0.16); } .ds-chip[aria-pressed=\"true\"] { background: #e10600; border-color: transparent; color: #fff; box-shadow: 0 4px 18px rgba(225,6,0,0.35); }"
+    },
+    {
+      "name": "Glass Card",
+      "kind": "card",
+      "refersTo": "card-glass",
+      "description": "The panel recipe every readable surface uses. Blur, saturation lift, top bevel, float.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-key\">Motor</div><div class=\"ds-card-val\">SR20DET 2.0 turbo</div></div>",
+      "css": ".ds-card { padding: 16px; border: 1px solid rgba(255,255,255,0.09); border-radius: 22px; background: rgba(255,255,255,0.055); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%); box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2), 0 4px 16px rgba(0,0,0,0.4); font-family: 'Albert Sans', system-ui, sans-serif; } .ds-card-key { font-size: 12px; color: rgba(255,255,255,0.45); } .ds-card-val { margin-top: 7px; font-weight: 600; font-size: 17px; line-height: 1.15; letter-spacing: -0.03em; color: #fff; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A glass panel, never an underline. Focus swaps the hairline for red.",
+      "html": "<input class=\"ds-input\" type=\"email\" placeholder=\"you@example.com\" />",
+      "css": ".ds-input { width: 100%; padding: 15px 16px; border: 1px solid rgba(255,255,255,0.09); border-radius: 22px; background: rgba(255,255,255,0.055); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%); color: #fff; font-family: 'Albert Sans', system-ui, sans-serif; font-size: 16px; letter-spacing: -0.01em; caret-color: #e10600; outline: none; transition: border-color 0.16s ease; } .ds-input::placeholder { color: rgba(255,255,255,0.16); } .ds-input:focus { border-color: rgba(225,6,0,0.5); }"
+    },
+    {
+      "name": "Tab Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Four tabs in one floating glass pill. Dark tint because it floats over scrolling photography.",
+      "html": "<nav class=\"ds-tabs\"><a class=\"ds-tab\" aria-current=\"page\"><span class=\"ds-tab-glyph\"><i></i><i></i><i></i><i></i></span>Înscriși</a><a class=\"ds-tab\"><span class=\"ds-tab-glyph\"><i></i><i></i><i></i><i></i></span>Scanare</a><a class=\"ds-tab\"><span class=\"ds-tab-glyph\"><i></i><i></i><i></i><i></i></span>Premiu</a></nav>",
+      "css": ".ds-tabs { display: flex; gap: 2px; padding: 6px; border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; background: rgba(18,18,21,0.72); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%); box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2), 0 10px 34px rgba(0,0,0,0.55); font-family: 'Albert Sans', system-ui, sans-serif; } .ds-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 9px 0 8px; border-radius: 999px; color: rgba(255,255,255,0.45); font-weight: 500; font-size: 10.5px; letter-spacing: -0.01em; cursor: pointer; transition: color 0.16s ease, background 0.16s ease; } .ds-tab[aria-current=\"page\"] { color: #e10600; background: rgba(225,6,0,0.12); } .ds-tab-glyph { display: grid; grid-template-columns: 6px 6px; gap: 3px; height: 18px; align-content: center; } .ds-tab-glyph i { width: 6px; height: 6px; border-radius: 2px; background: currentColor; }"
+    },
+    {
+      "name": "Display Figure",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The figure a screen is about — 96px, tabular, either white-fading or marque red.",
+      "html": "<div class=\"ds-fig\"><div class=\"ds-fig-label\">Putere</div><div class=\"ds-fig-row\"><span class=\"ds-fig-num ds-fig-accent\">412</span><span class=\"ds-fig-unit\">CP</span></div><div class=\"ds-fig-row\"><span class=\"ds-fig-num ds-fig-fade\">480</span><span class=\"ds-fig-unit\">NM</span></div></div>",
+      "css": ".ds-fig { font-family: 'Albert Sans', system-ui, sans-serif; } .ds-fig-label { margin-bottom: 10px; font-size: 14px; color: rgba(255,255,255,0.45); } .ds-fig-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; } .ds-fig-num { font-weight: 600; font-size: 96px; line-height: 0.76; letter-spacing: -0.055em; font-variant-numeric: tabular-nums; } .ds-fig-accent { color: #e10600; } .ds-fig-fade { background: linear-gradient(to bottom, #fff 0%, rgba(255,255,255,0.42) 52%, rgba(255,255,255,0) 88%); -webkit-background-clip: text; background-clip: text; color: transparent; } .ds-fig-unit { font-weight: 500; font-size: 16px; letter-spacing: -0.02em; color: rgba(255,255,255,0.28); }"
+    },
+    {
+      "name": "Photo Well",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Every image area is a drop target. Empty, it names the photo that belongs there — never 'drop an image'.",
+      "html": "<div class=\"ds-well\"><div class=\"ds-well-empty\"><svg width=\"22\" height=\"18\" viewBox=\"0 0 22 18\" fill=\"none\"><rect x=\"0.75\" y=\"0.75\" width=\"20.5\" height=\"16.5\" stroke=\"currentColor\"/><path d=\"M1 13l5.5-5.5L11 12l3.5-3.5L21 15\" stroke=\"currentColor\"/><circle cx=\"15.5\" cy=\"5\" r=\"1.75\" stroke=\"currentColor\"/></svg><span>Pune poza principală</span></div><div class=\"ds-well-ring\"></div></div>",
+      "css": ".ds-well { position: relative; height: 180px; border-radius: 22px; overflow: hidden; background: #101012; color: rgba(255,255,255,0.28); font-family: 'Albert Sans', system-ui, sans-serif; cursor: pointer; } .ds-well:hover { color: rgba(255,255,255,0.45); } .ds-well-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; text-align: center; font-size: 13px; letter-spacing: -0.01em; } .ds-well-empty svg { opacity: 0.6; } .ds-well-ring { position: absolute; inset: 0; border: 1.5px dashed currentColor; border-radius: inherit; opacity: 0.16; pointer-events: none; transition: opacity 0.14s ease; } .ds-well:hover .ds-well-ring { opacity: 0.34; }"
+    },
+    {
+      "name": "Standings Row",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "A timing-board row: the share is drawn behind the numbers, not beside them. The accented variant is the vote you cast.",
+      "html": "<div style=\"display:flex;flex-direction:column;gap:8px\"><button class=\"ds-row\"><span class=\"ds-row-bar\" style=\"width:24%\"></span><span class=\"ds-row-in\"><span class=\"ds-row-pos ds-row-lead\">1</span><span class=\"ds-row-entry\"><b>Dacia 1300</b><span>Nr. 01 · Mihai B.</span></span><span class=\"ds-row-votes\"><b>612</b><span>24%</span></span></span></button><button class=\"ds-row ds-row-mine\"><span class=\"ds-row-bar ds-row-bar-mine\" style=\"width:17%\"></span><span class=\"ds-row-in\"><span class=\"ds-row-pos\">2</span><span class=\"ds-row-entry\"><b>Silvia S14</b><span>Nr. 14 · Andrei Moroșanu</span></span><span class=\"ds-row-votes\"><b style=\"color:#e10600\">431</b><span>17%</span></span></span></button></div>",
+      "css": ".ds-row { position: relative; display: block; width: 100%; border: 1px solid rgba(255,255,255,0.09); border-radius: 22px; overflow: hidden; background: rgba(255,255,255,0.055); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%); box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2), 0 4px 16px rgba(0,0,0,0.4); font-family: 'Albert Sans', system-ui, sans-serif; cursor: pointer; transition: border-color 0.16s ease; } .ds-row:hover { border-color: rgba(255,255,255,0.16); } .ds-row-mine { border-color: rgba(225,6,0,0.5); background: rgba(225,6,0,0.12); } .ds-row-bar { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(255,255,255,0.05); } .ds-row-bar-mine { background: rgba(225,6,0,0.18); } .ds-row-in { position: relative; display: flex; align-items: center; gap: 14px; padding: 15px 16px; } .ds-row-pos { width: 26px; font-weight: 600; font-size: 20px; letter-spacing: -0.05em; color: rgba(255,255,255,0.28); } .ds-row-lead { color: #e10600; } .ds-row-entry { flex: 1; min-width: 0; text-align: left; } .ds-row-entry b { display: block; font-weight: 600; font-size: 16px; line-height: 1.1; letter-spacing: -0.03em; color: #fff; } .ds-row-entry span { display: block; margin-top: 4px; font-size: 12px; color: rgba(255,255,255,0.45); } .ds-row-votes { text-align: right; } .ds-row-votes b { display: block; font-weight: 600; font-size: 18px; letter-spacing: -0.04em; color: #fff; } .ds-row-votes span { display: block; margin-top: 3px; font-size: 12px; color: rgba(255,255,255,0.28); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Night Paddock",
+    "overview": "A car show after dark. The ground is a black field; the panels are lit windows onto a machine; one red marker tells you where to look. Everything in the system follows from standing outside at night in front of a car with a phone in one hand — the screen is the only light source, so it behaves like one: it pools, it catches an edge, it never floods.\n\nThe system is material before it is graphic. Depth comes from glass and light, never from a second background colour or a drawn border doing the work of a shadow. A panel is almost entirely transparent; what makes it a surface is the blur behind it, the saturation lift that lets colour bloom through, and the specular light caught on its top bevel. Take the bevel away and it stops being glass and becomes a grey box — that failure mode is the single most common way this system breaks.\n\nThe register is motorsport, not consumer software. Numbers are the composition rather than values inside one; type is tight on both axes; nothing is set in caps and nothing is exclaimed. It is emphatically not a dark-mode dashboard, not a gamer aesthetic, and not a social feed — those three are the adjacent traps and each one has pulled at this build already.",
+    "keyCharacteristics": [
+      "Neutral black ground with no hue in it (#08080a), never a blue-black",
+      "Exactly one accent, the marque red, rationed to three jobs per screen",
+      "Liquid glass: near-transparent, blurred, saturation-lifted, top-bevelled",
+      "Display figures at 96px with tabular numerals, counting in on arrival",
+      "One typeface doing every job through weight and tracking",
+      "Photography leads; chrome gets out of its way via masked blur, not scrims"
+    ],
+    "rules": [
+      {
+        "name": "The Three Jobs Rule",
+        "body": "Red appears at most three times on a screen: the figure the screen is about, the state you caused, the one action. A fourth occurrence means one of them is not actually the point — take it away rather than adding a fourth.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Second Hue Rule",
+        "body": "There is no third colour. Success is not green, warning is not amber, a chart series is not blue. If a state needs to be distinguished, it is distinguished by opacity, weight, or position.",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral Black Rule",
+        "body": "The ground carries no hue. A blue-black reads as a product with a brand colour; this has to read as a black floor with a light on it. Any surface value drifting toward navy is a regression.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sentence Case Rule",
+        "body": "Nothing is set in caps. Not labels, not tabs, not buttons. Emphasis comes from weight and size. The one exception is content that is a code rather than a word — SR20DET, RWD, JDM, A-14 — which is written the way the trade writes it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Any figure that animates or ranks uses tabular numerals. A count-up that reflows its own width is a broken count-up.",
+        "section": "typography"
+      },
+      {
+        "name": "The Bevel Rule",
+        "body": "Every glass surface carries --sheen. A panel with a background and a border but no top bevel is the system's most common failure — it reads as a grey box and the whole material argument collapses.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Literal Blur Rule",
+        "body": "Write backdrop-filter with a literal value, never var(--x). The CSS minifier silently drops the declaration when it cannot resolve a custom property against its browser targets: the rule ships with no blur and nothing warns you. blur(28px) saturate(180%) for panels, blur(16px) saturate(160%) for small controls.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Dark Tint Over Motion Rule",
+        "body": "Glass floating over scrolling content — the tab bar, the nav controls, a chip on a photograph — uses glass-dark (a dark tint), not the white one. A white tint over a moving photograph goes muddy and the text on it stops being readable.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do write backdrop-filter literally: blur(28px) saturate(180%) for panels, blur(16px) saturate(160%) for small controls.",
+      "Do give every glass surface --sheen. Background + border alone is a grey box, not glass.",
+      "Do use glass-dark for anything floating over scrolling content.",
+      "Do keep red to three appearances per screen, maximum.",
+      "Do use tabular numerals on any figure that animates or ranks.",
+      "Do reach for opacity, weight and position to separate states.",
+      "Do let the photograph run edge to edge and put type on it with the veil."
+    ],
+    "donts": [
+      "Don't introduce a second hue. No green success, no amber warning, no blue.",
+      "Don't let any surface value drift toward navy. The ground is neutral.",
+      "Don't set anything in caps except trade codes (SR20DET, RWD, A-14).",
+      "Don't add a square corner anywhere.",
+      "Don't put a border where a bevel and a blur should be doing the work.",
+      "Don't stack two primary actions on one screen.",
+      "Don't add avatars, like counts or comment affordances — the product is deliberately thin and the design must not imply otherwise."
+    ]
+  }
+}

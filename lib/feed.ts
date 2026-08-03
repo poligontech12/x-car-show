@@ -69,10 +69,3 @@ export const FEED: FeedPost[] = [
 ];
 
 export const FEED_FILTERS: readonly FeedFilter[] = ['Toate', 'Proiecte', 'Văzute'] as const;
-
-/** Cards scanned recently on show day. Most recent first. */
-export const RECENT_SCANS: readonly [string, string][] = [
-  ['sup', 'acum 4 min'],
-  ['d13', 'acum 12 min'],
-  ['e30', 'acum 36 min'],
-] as const;

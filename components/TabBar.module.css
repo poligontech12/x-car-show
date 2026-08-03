@@ -83,64 +83,30 @@
   background: currentColor;
 }
 
-.scan {
-  width: 40px;
+/* GARAGE — a roller door over a car. Two bars, the lower one shorter,
+   read as a shutter half open. */
+.garage {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
 }
 
-.scanBox {
-  position: relative;
-  width: 19px;
-  height: 16px;
-}
-
-.scanBox i {
-  position: absolute;
-  width: 6px;
-  height: 5px;
-}
-
-.scanBox i:nth-child(1) {
-  top: 0;
-  left: 0;
-  border-top: 2px solid currentColor;
-  border-left: 2px solid currentColor;
-  border-top-left-radius: 3px;
-}
-
-.scanBox i:nth-child(2) {
-  top: 0;
-  right: 0;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  border-top-right-radius: 3px;
-}
-
-.scanBox i:nth-child(3) {
-  bottom: 0;
-  left: 0;
-  border-bottom: 2px solid currentColor;
-  border-left: 2px solid currentColor;
-  border-bottom-left-radius: 3px;
-}
-
-.scanBox i:nth-child(4) {
-  bottom: 0;
-  right: 0;
-  border-bottom: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  border-bottom-right-radius: 3px;
-}
-
-/* The one live thing in the bar keeps its gold whether the tab
-   is active or not. */
-.scanLine {
-  position: absolute;
-  top: 7px;
-  left: 0;
-  right: 0;
+.garage i {
+  display: block;
   height: 2px;
   border-radius: 999px;
-  background: var(--red);
+  background: currentColor;
+}
+
+.garage i:first-child {
+  width: 16px;
+}
+
+.garage i:last-child {
+  width: 16px;
+  height: 7px;
+  border-radius: 2px 2px 999px 999px;
 }
 
 .award {

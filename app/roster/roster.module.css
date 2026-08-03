@@ -1,141 +1,171 @@
-.screen {
-  padding-top: var(--safe-top);
-  padding-bottom: 120px;
+/* ─────────────────────────────────────────────────────────────
+   The deck
+
+   One car per screen, snapped. You swipe until something catches
+   your eye, then tap in — the profile carries the depth, this
+   surface only has to make you want to look.
+   ───────────────────────────────────────────────────────────── */
+
+.deck {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* ── The lead entry ──────────────────────────────────────────
-   One car gets the full width and a headline over the photo. */
-
-.feature {
-  display: block;
+.panel {
   position: relative;
-  height: 300px;
-  margin: 0 var(--gutter) 10px;
-  border-radius: var(--r-panel);
-  overflow: hidden;
+  display: block;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  /* Without this a fast flick sails past three cars at once, which is
+     the difference between browsing and losing your place. */
+  scroll-snap-stop: always;
   background: var(--slot);
-  border: 1px solid var(--rim);
-}
-
-.featureCaption {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 16px;
-  z-index: 2;
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  pointer-events: none;
-}
-
-.featureName {
-  flex: 1;
-  min-width: 0;
-}
-
-.featureName b {
-  display: block;
-  font-weight: 600;
-  font-size: 30px;
-  line-height: 0.9;
-  letter-spacing: -0.045em;
-}
-
-.featureName span {
-  display: block;
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--paper-45);
-}
-
-/* The entry number, at the size the number deserves. */
-.featureNo {
-  flex: none;
-  color: var(--red);
-  font-weight: 600;
-  font-size: 56px;
-  line-height: 0.75;
-  letter-spacing: -0.06em;
-}
-
-.badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* ── The grid ────────────────────────────────────────────────── */
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 0 var(--gutter);
-}
-
-.tile {
-  display: block;
-  position: relative;
-  aspect-ratio: 3 / 4;
-  border-radius: var(--r-panel);
   overflow: hidden;
-  background: var(--slot);
-  border: 1px solid var(--rim);
-  transition: border-color 0.16s ease;
+  /* The panel runs under the nav, so the photo control drops below it. */
+  --slot-corner-top: calc(var(--safe-top) + 10px);
 }
 
-.tile:hover {
-  border-color: var(--rim-bright);
-}
+/* ── The entry number ────────────────────────────────────────
+   Top-left, clear of the nav. The one piece of identity you can
+   read before the photograph has loaded. */
 
 .no {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  padding: 4px 9px;
-  border-radius: 999px;
+  top: calc(var(--safe-top) + 8px);
+  left: var(--gutter);
+  z-index: 3;
+  padding: 7px 14px;
+  border-radius: var(--r-chip);
   background: var(--glass-dark);
   border: 1px solid var(--rim-bright);
   backdrop-filter: blur(16px) saturate(160%);
   box-shadow: var(--sheen), var(--lift-sm);
   font-weight: 600;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: -0.01em;
-  color: var(--paper-70);
+  color: var(--paper);
   pointer-events: none;
 }
 
-.tileCaption {
+/* ── The caption ─────────────────────────────────────────────
+   Sits on the photograph via the veil, clear of the tab bar. */
+
+.caption {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  z-index: 2;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 124px;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
   pointer-events: none;
 }
 
-.tileCaption b {
-  display: block;
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+.name {
+  flex: 1;
+  min-width: 0;
 }
 
-.tileCaption span {
+.name h2 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.spec {
   display: block;
-  margin-top: 6px;
-  font-size: 12px;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--paper-70);
+}
+
+.owner {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
   color: var(--paper-45);
 }
 
-.foot {
-  padding: 26px var(--gutter) 0;
+/* The figure the card is about. Four tabular digits need no unit under
+   them — a year in this position reads as a year. Sized a step under the
+   old three-digit figure so the name keeps its room. */
+.year {
+  flex: none;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: var(--red);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Progress ────────────────────────────────────────────────
+   A rail on the right edge: how far into the roster you are,
+   without a number to read. */
+
+.rail {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.rail i {
+  display: block;
+  width: 3px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  transition: background 0.25s ease, height 0.25s ease;
+}
+
+.rail i[data-on='true'] {
+  height: 22px;
+  background: var(--red);
+}
+
+/* ── End of the modelled page ────────────────────────────────── */
+
+.tail {
+  position: relative;
+  height: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 var(--gutter) 120px;
   text-align: center;
-  font-size: 13px;
-  color: var(--paper-28);
+}
+
+.tailCount {
+  font-weight: 600;
+  font-size: 60px;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  background: var(--number-fade);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.tailLabel {
+  font-size: 14px;
+  color: var(--paper-45);
+  text-wrap: balance;
 }

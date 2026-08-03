@@ -1,15 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { ImageSlot } from '@/components/ImageSlot';
 import { QrCode } from '@/components/QrCode';
-import {
-  CARS,
-  byId,
-  carUrl,
-  headline,
-  modCount,
-  paddockOf,
-} from '@/lib/cars';
+import { SITE_HOST, carUrl, headline, modCount, paddockOf } from '@/lib/cars';
+import { getCar } from '@/lib/db/queries';
 import { EVENT } from '@/lib/event';
 import { PrintButton } from '../PrintButton';
 import styles from '../cards.module.css';
@@ -17,21 +12,18 @@ import styles from '../cards.module.css';
 /** 87 design units square — the size the codes are drawn at on all three cards. */
 const QR_SIZE = 'calc(87 * var(--u))';
 
-export function generateStaticParams() {
-  return CARS.map((c) => ({ id: c.id }));
-}
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const car = byId((await params).id);
-  return { title: `${headline(car)} — cartonașe de parbriz` };
+  const car = await getCar((await params).id);
+  return { title: car ? `${headline(car)} — cartonașe de parbriz` : 'Cartonașe de parbriz' };
 }
 
 export default async function CardsScreen({ params }: { params: Promise<{ id: string }> }) {
-  const car = byId((await params).id);
+  const car = await getCar((await params).id);
+  if (!car) notFound();
   const url = carUrl(car);
 
   return (
@@ -179,7 +171,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
           </div>
 
           <div className={styles.slipFoot}>
-            <b>SHOW.X / {car.no}</b>
+            <b>{SITE_HOST.toUpperCase()} / {car.no || '—'}</b>
             <span>VOTUL SE ÎNCHIDE LA {EVENT.votingCloses}</span>
           </div>
         </div>

@@ -1,58 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { Chip } from '@/components/Chip';
 import { ImageSlot } from '@/components/ImageSlot';
-import { FilterRow, ScreenTitle, TitleAside } from '@/components/StickyHeader';
-import { ROSTER_TOTAL, byId } from '@/lib/cars';
-import { EVENT } from '@/lib/event';
-import { FEED, FEED_FILTERS, type FeedPost } from '@/lib/feed';
-import { useStore } from '@/lib/store';
+import { byId } from '@/lib/cars';
+import { FEED, type FeedPost } from '@/lib/feed';
 import styles from './feed.module.css';
 
-function Flag() {
-  return (
-    <span className={styles.flag} aria-hidden="true">
-      <i />
-      <i />
-      <i />
-    </span>
-  );
-}
-
+/**
+ * A plain newsfeed. No title, no filters, no counts — just what happened
+ * to the cars lately, newest first. Everything that framed the show
+ * belongs to the show, not to this screen.
+ */
 export default function FeedScreen() {
-  const { feedFilter, setFeedFilter } = useStore();
-
-  const posts = FEED.filter((p) => feedFilter === 'Toate' || p.cat === feedFilter);
-
   return (
     <div className={styles.screen}>
-      <ScreenTitle
-        className="a-up delay-300"
-        label="România"
-        icon={<Flag />}
-        lines={['Cajvana', 'Bucovina']}
-        aside={
-          <>
-            <TitleAside>
-              {EVENT.edition} · {EVENT.dateNumeric.split(' · ')[1]}
-            </TitleAside>
-            <TitleAside gold>{ROSTER_TOTAL} de înscrieri</TitleAside>
-          </>
-        }
-      />
-
-      <FilterRow label="Filtrează fluxul">
-        {FEED_FILTERS.map((f) => (
-          <Chip key={f} label={f} on={feedFilter === f} onClick={() => setFeedFilter(f)} />
-        ))}
-      </FilterRow>
-
-      {posts.length === 0 && <div className={styles.empty}>Nimic aici încă.</div>}
-
-      {posts.map((p: FeedPost, i) => {
+      {FEED.map((p: FeedPost, i) => {
         const car = p.carId ? byId(p.carId) : null;
-        const delay = ['delay-400', 'delay-500', 'delay-600', 'delay-700'][Math.min(i, 3)];
+        const delay = ['delay-100', 'delay-200', 'delay-300', 'delay-400'][Math.min(i, 3)];
 
         const byline = (
           <>
@@ -68,8 +32,7 @@ export default function FeedScreen() {
         );
 
         return (
-          <article key={`${p.title}-${i}`} className={`${styles.post} a-up ${delay}`}
-            data-spot>
+          <article key={`${p.title}-${i}`} className={`${styles.post} a-up ${delay}`} data-spot>
             {p.slot ? (
               <>
                 {car ? (
@@ -91,13 +54,11 @@ export default function FeedScreen() {
             ) : (
               <div className={styles.headPlain}>{byline}</div>
             )}
-
-            {p.body && <p className={styles.body}>{p.body}</p>}
           </article>
         );
       })}
 
-      <Link href="/partners" className={`${styles.partners} a-up delay-800`}>
+      <Link href="/partners" className={`${styles.partners} a-up delay-500`}>
         <span>Parteneri &amp; ateliere</span>
         <em>→</em>
       </Link>

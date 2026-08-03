@@ -1,101 +1,83 @@
 'use client';
 
 import Link from 'next/link';
-import { Chip } from '@/components/Chip';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { ImageSlot } from '@/components/ImageSlot';
-import { FilterRow, ScreenTitle, TitleAside } from '@/components/StickyHeader';
-import { CARS, CLASSES, ROSTER_TOTAL, displayModel, headline } from '@/lib/cars';
-import { EVENT } from '@/lib/event';
+import { ROSTER_TOTAL, displayModel } from '@/lib/cars';
 import { useStore } from '@/lib/store';
+import { useCars } from '@/lib/useCars';
 import styles from './roster.module.css';
 
-function GridIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-      <rect x="1" y="1" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="10" y="1" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="1" y="10" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="10" y="10" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
+/**
+ * The roster as a deck: one car per screen, snapped, swiped through.
+ * No filters and no class — you are looking at cars, not querying a
+ * database. Tap a card and the profile carries the rest.
+ */
 export default function RosterScreen() {
-  const { classFilter, setClassFilter } = useStore();
+  const [index, setIndex] = useState(0);
+  // Whatever the member registered rides at the front of the deck.
+  const cars = useCars();
+  const { hydrated } = useStore();
+  const deck = useRef<HTMLDivElement>(null);
 
-  const list = CARS.filter((c) => classFilter === 'Toate' || c.cls === classFilter);
-  const [feature, ...rest] = list;
-  const unfiltered = list.length === CARS.length;
+  /**
+   * Those cars arrive a tick after the first paint, and the browser keeps
+   * the pixel offset rather than the card — so the deck would open on the
+   * second car. Pin it back to the first.
+   */
+  useLayoutEffect(() => {
+    if (!hydrated) return;
+    deck.current?.scrollTo({ top: 0 });
+    setIndex(0);
+  }, [hydrated]);
 
   return (
-    <div className={styles.screen}>
-      <ScreenTitle
-        className="a-up delay-300"
-        label={EVENT.edition}
-        icon={<GridIcon />}
-        lines={['Grila', 'de start']}
-        aside={
-          <>
-            <TitleAside>{ROSTER_TOTAL} de înscrieri</TitleAside>
-            {!unfiltered && <TitleAside gold>{list.length} în filtru</TitleAside>}
-          </>
-        }
-      />
-
-      <FilterRow label="Filtrează după clasă">
-        {CLASSES.map((c) => (
-          <Chip key={c} label={c} on={classFilter === c} onClick={() => setClassFilter(c)} />
-        ))}
-      </FilterRow>
-
-      {feature && (
-        <Link href={`/car/${feature.id}`} className={`${styles.feature} a-scale delay-400`}>
-          <ImageSlot
-            id={`car-${feature.id}`}
-            hint={`${feature.year} ${feature.model}`}
-            mode="inline"
-          />
+    <div
+      ref={deck}
+      className={styles.deck}
+      onScroll={(e) => {
+        const el = e.currentTarget;
+        const i = Math.round(el.scrollTop / el.clientHeight);
+        if (i !== index) setIndex(i);
+      }}
+    >
+      {cars.map((c) => (
+        <Link key={c.id} href={`/car/${c.id}`} className={styles.panel}>
+          <ImageSlot id={`car-${c.id}`} hint={`${c.year} ${c.model}`} mode="inline" />
           <span className="photo-scrim" />
           <span className="photo-veil" />
-          <span className={`tag ${styles.badge}`}>{feature.cls}</span>
-          <span className={styles.featureCaption}>
-            <span className={styles.featureName}>
-              <b>{headline(feature)}</b>
-              <span>
-                {feature.power} CP · {feature.owner}
-              </span>
-            </span>
-            <span className={styles.featureNo}>{feature.no}</span>
-          </span>
-        </Link>
-      )}
 
-      <div className={styles.grid}>
-        {rest.map((c, i) => (
-          <Link
-            key={c.id}
-            href={`/car/${c.id}`}
-            className={`${styles.tile} a-up`}
-            data-spot
-            style={{ animationDelay: `${0.5 + i * 0.06}s` }}
-          >
-            <span className={styles.no}>{c.no}</span>
-            <ImageSlot id={`car-${c.id}`} hint={`${c.year} ${c.model}`} mode="inline" />
-            <span className="photo-scrim" />
-            <span className={styles.tileCaption}>
-              <b>{displayModel(c)}</b>
-              <span>
-                {c.year} · {c.power} CP
+          {/* Entry numbers are handed out at the gate — no chip until then. */}
+          {c.no && <span className={styles.no}>Nr. {c.no}</span>}
+
+          <span className={styles.caption}>
+            <span className={styles.name}>
+              <h2>{displayModel(c)}</h2>
+              <span className={styles.spec}>
+                {c.make} · {c.power} CP
+              </span>
+              <span className={styles.owner}>
+                {c.owner} · {c.town}
               </span>
             </span>
-          </Link>
-        ))}
+            <span className={styles.year}>{c.year}</span>
+          </span>
+
+        </Link>
+      ))}
+
+      {/* Only the first page is modelled; say so rather than just stopping. */}
+      <div className={styles.tail}>
+        <div className={styles.tailCount}>{Math.max(ROSTER_TOTAL - cars.length, 0)}</div>
+        <p className={styles.tailLabel}>
+          de mașini încă nu sunt în aplicație. Le adăugăm până pe 8 august.
+        </p>
       </div>
 
-      <div className={styles.foot}>
-        {unfiltered
-          ? `Sfârșitul paginii 1 · încă ${ROSTER_TOTAL - CARS.length}`
-          : 'Vizualizare filtrată'}
+      <div className={styles.rail} aria-hidden="true">
+        {cars.map((c, i) => (
+          <i key={c.id} data-on={i === index} />
+        ))}
       </div>
     </div>
   );

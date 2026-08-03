@@ -15,8 +15,8 @@ import styles from './PhoneNav.module.css';
 const LINKS = [
   { href: '/', label: 'Flux' },
   { href: '/roster', label: 'Înscriși' },
+  { href: '/garage', label: 'Garajul meu' },
   { href: '/award', label: 'Mașina show-ului' },
-  { href: '/scan', label: 'Scanare' },
   { href: '/partners', label: 'Parteneri' },
   { href: '/cards', label: 'Cartonașe' },
 ] as const;
@@ -54,8 +54,14 @@ export function PhoneNav() {
             ←
           </button>
         ) : (
-          <Link href="/" className={styles.mark} aria-label="Acasă">
-            X
+          <Link href="/" className={styles.mark} aria-label="X Car Show — acasă">
+            <span className={styles.markX} aria-hidden="true">
+              X
+            </span>
+            <span className={styles.markWord} aria-hidden="true">
+              <b>CAR</b>
+              <b>SHOW</b>
+            </span>
           </Link>
         )}
 

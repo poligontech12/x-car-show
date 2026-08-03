@@ -1,0 +1,72 @@
+/* One column of a combination lock. Three rows visible, the middle one
+   is the value; the neighbours sit behind glass so you can see what you
+   are turning towards. */
+
+.wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+/* The selected row, drawn over the scroller so it never moves. */
+.band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 46px;
+  height: 46px;
+  border-radius: var(--r-card);
+  background: var(--glass);
+  border: 1px solid var(--red-edge);
+  box-shadow: var(--sheen-soft);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dial {
+  height: 138px;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  /* One blank row top and bottom, so 0 and 9 can both reach the middle. */
+  padding-block: 46px;
+  border-radius: var(--r-panel);
+  background: var(--glass-faint);
+  border: 1px solid var(--rim);
+  box-shadow: var(--sheen-soft);
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dial:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+.digit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--paper-28);
+  transition: color 0.16s ease, transform 0.16s ease;
+}
+
+/* The digit under the band reads as chosen; its neighbours recede. */
+.digitOn {
+  color: var(--red);
+  transform: scale(1.08);
+}
+
+.label {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--paper-28);
+}

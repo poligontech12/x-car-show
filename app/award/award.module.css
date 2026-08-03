@@ -3,48 +3,6 @@
   padding-bottom: 120px;
 }
 
-/* ── The leader ──────────────────────────────────────────────
-   One number, counted up, at the size the award deserves. */
-
-.leader {
-  padding: 26px var(--gutter) 4px;
-}
-
-.leaderLabel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: var(--paper-45);
-}
-
-.leaderValue {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.leaderUnit {
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: -0.02em;
-  color: var(--paper-28);
-}
-
-.leaderName {
-  margin-top: 10px;
-  font-weight: 600;
-  font-size: 22px;
-  letter-spacing: -0.04em;
-}
-
-.leaderOwner {
-  margin-top: 5px;
-  font-size: 13px;
-  color: var(--paper-45);
-}
-
 /* ── Gate ────────────────────────────────────────────────────
    Standings are public; the vote is the thing behind the door. */
 
