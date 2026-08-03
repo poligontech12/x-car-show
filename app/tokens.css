@@ -1,9 +1,9 @@
 /* ─────────────────────────────────────────────────────────────
    X CAR SHOW — design tokens
 
-   Adapted from the F1 / Silverstone hero language: a near-black
-   navy ground, gold as the one accent that carries every number,
-   glass panels over photography, and very tight display type.
+   True black, one red, and glass. No second hue anywhere: the
+   ground is neutral (never navy), the accent is the marque red,
+   and everything between them is white at some opacity.
 
    This file is the source of truth. Nothing below should be
    hard-coded in a component.
@@ -11,112 +11,112 @@
 
 :root {
   /* ── Ground ────────────────────────────────────────────────
-     Everything sits on the same near-black navy. Depth comes
-     from glass and blur, not from a second background colour. */
+     Neutral to the last digit. A blue-black reads as a product
+     with a brand colour; this has to read as a black floor with
+     a light on it. */
 
-  --ink: #0a0e1c;
-  --ink-deep: #06080f; /* behind the phone frame, print index */
-  --slot: #11162a; /* an empty photo well */
+  --ink: #08080a;
+  --ink-deep: #050506;
+  --slot: #101012; /* an empty photo well */
 
-  /* ── Glass ────────────────────────────────────────────────
-     One recipe, three weights. Always a 1px white hairline on
-     top, or the panel has no edge against a dark photo. */
+  /* ── Liquid glass ─────────────────────────────────────────
+     Not frosted plastic. The panel is almost entirely
+     transparent; what makes it a surface is the blur, the
+     saturation lift, and the light caught on its top bevel.
 
-  --glass: rgba(20, 20, 30, 0.8);
-  --glass-soft: rgba(20, 20, 30, 0.55);
-  --glass-nav: rgba(255, 255, 255, 0.15);
-  --glass-blur: blur(16px);
-  --glass-blur-nav: blur(12px);
+     `--sheen` is that bevel. Without it a dark panel on a dark
+     ground has no shape at all. */
 
-  --hairline: rgba(255, 255, 255, 0.1); /* the panel edge */
-  --hairline-soft: rgba(255, 255, 255, 0.06);
-  --hairline-firm: rgba(255, 255, 255, 0.15);
-  --hairline-strong: rgba(255, 255, 255, 0.25);
+  --glass: rgba(255, 255, 255, 0.055);
+  /* For surfaces that float over moving content rather than over the
+     floor: the tab bar, the nav controls, chips laid on a photograph. */
+  --glass-dark: rgba(18, 18, 21, 0.72);
+  --glass-strong: rgba(255, 255, 255, 0.085);
+  --glass-faint: rgba(255, 255, 255, 0.03);
+  /* NOTE: the blur is written literally at every call site, not held
+     here. Lightning CSS drops `backdrop-filter: var(--x)` — it cannot
+     resolve a custom property against its browser targets, so the
+     declaration silently never ships. The values are:
+       panels  blur(28px) saturate(180%)
+       small   blur(16px) saturate(160%)   */
 
-  /* ── Ink on glass ─────────────────────────────────────────
-     White and three steps down. Labels live at 60%. */
+  --rim: rgba(255, 255, 255, 0.09);
+  --rim-bright: rgba(255, 255, 255, 0.16);
+  --sheen: inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  --sheen-soft: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  --lift: 0 10px 34px rgba(0, 0, 0, 0.55);
+  --lift-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  /* ── Ink on glass ─────────────────────────────────────────── */
 
   --paper: #ffffff;
-  --paper-80: rgba(255, 255, 255, 0.8);
-  --paper-60: rgba(255, 255, 255, 0.6); /* every label */
-  --paper-40: rgba(255, 255, 255, 0.4);
-  --paper-25: rgba(255, 255, 255, 0.25); /* placeholders */
+  --paper-70: rgba(255, 255, 255, 0.7);
+  --paper-45: rgba(255, 255, 255, 0.45); /* every label */
+  --paper-28: rgba(255, 255, 255, 0.28);
+  --paper-16: rgba(255, 255, 255, 0.16); /* placeholders */
 
-  /* ── Accent ───────────────────────────────────────────────
-     Gold is the accent and it belongs to numbers: the figure
-     the screen is about, the state you caused, the one action.
-     Red is the marque — the mark and the menu, nothing else. */
-
-  --gold: #edb40b;
-  --gold-dim: rgba(237, 180, 11, 0.55);
-  --gold-wash: rgba(237, 180, 11, 0.12);
-  --gold-edge: rgba(237, 180, 11, 0.45);
+  /* ── The one accent ───────────────────────────────────────
+     The marque red, and nothing else. It marks the figure the
+     screen is about, the state you caused, and the one action.
+     A screen showing red four times is a screen with no point. */
 
   --red: #e10600;
+  --red-lift: #ff2019;
   --red-deep: #8b0000;
-  --red-black: #1a0000;
+  --red-black: #120000;
+  --red-wash: rgba(225, 6, 0, 0.12);
+  --red-edge: rgba(225, 6, 0, 0.5);
+  --red-glow: rgba(225, 6, 0, 0.35);
 
   /* A display number that fades as it falls, rather than sitting
-     flat on the panel. Used at 110px and up. */
+     flat on the panel. Used at 96px and up. */
   --number-fade: linear-gradient(
     to bottom,
     #fff 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    rgba(255, 255, 255, 0) 85%
+    rgba(255, 255, 255, 0.42) 52%,
+    rgba(255, 255, 255, 0) 88%
   );
 
-  --hatch: repeating-linear-gradient(135deg, #1a1f33 0 6px, #12172a 6px 12px);
+  --hatch: repeating-linear-gradient(135deg, #161618 0 6px, #101012 6px 12px);
 
   /* ── Type ──────────────────────────────────────────────────
-     One family. Weight and tracking do the work that a second
-     family would otherwise do. */
+     One family. Weight and tracking do the work a second family
+     would otherwise do. */
 
   --font-sans: var(--font-albert), 'Albert Sans', system-ui, sans-serif;
 
   /* ── Radius ────────────────────────────────────────────────
-     Nothing is square. The frame is the loosest, panels sit in
-     the middle, chips are fully round. */
+     Glass is moulded, not cut. Generous everywhere. */
 
-  --r-frame: clamp(30px, 4vw, 54px);
-  --r-screen: clamp(24px, 3.2vw, 44px);
-  --r-panel: 16px;
-  --r-card: 12px;
+  --r-screen: clamp(26px, 3.4vw, 44px);
+  --r-panel: 22px;
+  --r-card: 14px;
   --r-chip: 999px;
 
-  /* ── Layout ────────────────────────────────────────────────
-     The app is drawn at 390 x 844. */
+  /* ── Layout ──────────────────────────────────────────────── */
   --frame-w: 390px;
   --frame-h: 844px;
   --gutter: 20px;
-  --safe-top: 76px; /* status bar + the fixed nav */
+  --safe-top: 78px; /* status bar + the floating nav */
   --safe-bottom: 24px;
 }
 
 /* ── Type scale ──────────────────────────────────────────────
-   Seven steps. Display type is tight on both axes — tracking
-   down to -0.08em, leading down to 0.72. */
-
-.t-hero {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 64px;
-  line-height: 0.82;
-  letter-spacing: -0.05em;
-}
+   Six steps. Display type is tight on both axes. */
 
 .t-display {
   font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 48px;
-  line-height: 0.95;
-  letter-spacing: -0.05em;
+  font-weight: 500;
+  font-size: 46px;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
 }
 
 .t-title {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 34px;
-  line-height: 0.92;
+  font-size: 32px;
+  line-height: 0.95;
   letter-spacing: -0.04em;
 }
 
@@ -124,7 +124,7 @@
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 20px;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -0.03em;
 }
 
@@ -132,57 +132,59 @@
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 15px;
-  line-height: 1.5;
-  color: var(--paper-80);
+  line-height: 1.55;
+  color: var(--paper-70);
   text-wrap: pretty;
 }
 
-/* The label voice: small, quiet, never shouty caps. */
+/* The label voice: small, quiet, never caps. */
 .t-label {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 14px;
-  line-height: 1.2;
-  color: var(--paper-60);
+  font-size: 13.5px;
+  line-height: 1.3;
+  color: var(--paper-45);
 }
 
 .t-micro {
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
 }
 
 /* ── Display numbers ─────────────────────────────────────────
-   The thing the screen is about. Big enough that it is the
+   The thing the screen is about. Big enough to be the
    composition rather than a value inside one. */
 
 .n-xl {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 110px;
-  line-height: 0.72;
-  letter-spacing: -0.06em;
+  font-size: 96px;
+  line-height: 0.76;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
 }
 
 .n-lg {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 64px;
-  line-height: 0.79;
-  letter-spacing: -0.06em;
+  font-size: 60px;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
 }
 
 .n-md {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 40px;
-  line-height: 0.8;
-  letter-spacing: -0.05em;
+  font-size: 36px;
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
 }
 
-/* White at the top, gone by the bottom. */
+/* White at the top, gone by the bottom — the default for a figure. */
 .n-fade {
   background: var(--number-fade);
   -webkit-background-clip: text;
@@ -190,6 +192,7 @@
   color: transparent;
 }
 
-.n-gold {
-  color: var(--gold);
+/* Reserved for the single figure a screen is actually about. */
+.n-accent {
+  color: var(--red);
 }

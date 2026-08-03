@@ -147,6 +147,7 @@ function AuthScreen() {
                 key={r.key}
                 type="button"
                 className={`${styles.role} ${role === r.key ? styles.roleOn : ''}`}
+            data-spot
                 aria-pressed={role === r.key}
                 onClick={() => setRole(r.key)}
               >

@@ -33,7 +33,7 @@ export function ScreenTitle({
 }
 
 export function TitleAside({ children, gold }: { children: React.ReactNode; gold?: boolean }) {
-  return <span className={gold ? styles.asideGold : undefined}>{children}</span>;
+  return <span className={gold ? styles.asideAccent : undefined}>{children}</span>;
 }
 
 /** One filter row. No trays, no second level. */

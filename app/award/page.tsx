@@ -48,7 +48,7 @@ export default function AwardScreen() {
       <div className={`${styles.leader} a-up delay-400`}>
         <div className={styles.leaderLabel}>Pe primul loc</div>
         <div className={styles.leaderValue}>
-          <span className="n-xl n-gold">{leaderVotes.toLocaleString('ro-RO')}</span>
+          <span className="n-xl n-accent">{leaderVotes.toLocaleString('ro-RO')}</span>
           <span className={styles.leaderUnit}>voturi</span>
         </div>
         <div className={styles.leaderName}>{displayModel(leader.car)}</div>
@@ -88,6 +88,7 @@ export default function AwardScreen() {
             key={r.id}
             type="button"
             className={`${styles.row} ${r.mine ? styles.rowMine : ''} a-up`}
+            data-spot
             style={{ animationDelay: `${0.6 + i * 0.06}s` }}
             aria-pressed={r.mine}
             onClick={() => onRowClick(r.id)}

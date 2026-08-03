@@ -11,11 +11,10 @@
   gap: 2px;
   padding: 6px;
   border-radius: var(--r-chip);
-  background: rgba(12, 16, 32, 0.88);
-  border: 1px solid var(--hairline-firm);
-  backdrop-filter: blur(24px) saturate(140%);
-  -webkit-backdrop-filter: blur(24px) saturate(140%);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  background: var(--glass-dark);
+  border: 1px solid var(--rim-bright);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift);
 }
 
 .tab {
@@ -26,7 +25,7 @@
   gap: 5px;
   padding: 9px 0 8px;
   border-radius: var(--r-chip);
-  color: var(--paper-40);
+  color: var(--paper-28);
   font-weight: 500;
   font-size: 10.5px;
   letter-spacing: -0.01em;
@@ -34,14 +33,14 @@
 }
 
 .tab:hover {
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 /* The tab you are on carries the gold, like every other number
    and state on the screen. */
 .tab[aria-current='page'] {
-  color: var(--gold);
-  background: var(--gold-wash);
+  color: var(--red);
+  background: var(--red-wash);
 }
 
 .glyph {
@@ -141,7 +140,7 @@
   right: 0;
   height: 2px;
   border-radius: 999px;
-  background: var(--gold);
+  background: var(--red);
 }
 
 .award {

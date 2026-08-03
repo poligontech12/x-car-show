@@ -10,7 +10,7 @@
   gap: 8px;
   font-weight: 400;
   font-size: 15px;
-  color: var(--paper-60);
+  color: var(--paper-45);
   margin-bottom: 6px;
 }
 
@@ -40,21 +40,22 @@
   gap: 10px;
   margin-top: 12px;
   font-size: 13px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
-.asideGold {
-  color: var(--gold);
+.asideAccent {
+  color: var(--red);
 }
 
-/* Chips scroll horizontally under the title and stick there. */
+/* Chips scroll horizontally under the title and stick just below the
+   floating nav — sticking at 0 would slide them behind the mark. */
 .filters {
   position: sticky;
-  top: 0;
+  top: 76px;
   z-index: 20;
   display: flex;
   gap: 8px;
   padding: 16px var(--gutter);
   overflow-x: auto;
-  background: linear-gradient(to bottom, var(--ink) 55%, rgba(10, 14, 28, 0) 100%);
+  background: linear-gradient(to bottom, var(--ink) 52%, rgba(8, 8, 10, 0) 100%);
 }

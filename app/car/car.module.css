@@ -31,7 +31,7 @@
   left: 0;
   right: 0;
   height: 130px;
-  background: linear-gradient(to bottom, rgba(6, 8, 15, 0.8), rgba(6, 8, 15, 0));
+  background: linear-gradient(to bottom, rgba(5, 5, 6, 0.85), rgba(5, 5, 6, 0));
   pointer-events: none;
   z-index: 2;
 }
@@ -42,7 +42,7 @@
   right: 0;
   bottom: 0;
   height: 200px;
-  background: linear-gradient(to top, var(--ink) 6%, rgba(10, 14, 28, 0));
+  background: linear-gradient(to top, var(--ink) 6%, rgba(8, 8, 10, 0));
   pointer-events: none;
   z-index: 2;
 }
@@ -74,7 +74,7 @@
 }
 
 .dots i[data-on='true'] {
-  background: var(--gold);
+  background: var(--red);
 }
 
 /* ── Identity ────────────────────────────────────────────────
@@ -96,7 +96,7 @@
 
 .stand {
   font-size: 13px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .name {
@@ -111,7 +111,7 @@
 .year {
   margin-top: 12px;
   font-size: 14px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 /* Winning it once is a fact about the car, so it sits with the car. */
@@ -122,13 +122,13 @@
   margin: 18px var(--gutter) 0;
   padding: 14px 16px;
   border-radius: var(--r-panel);
-  background: var(--gold-wash);
-  border: 1px solid var(--gold-edge);
+  background: var(--red-wash);
+  border: 1px solid var(--red-edge);
 }
 
 .trophy {
   flex: none;
-  color: var(--gold);
+  color: var(--red);
 }
 
 .winLabel {
@@ -141,7 +141,7 @@
 .winYear {
   font-weight: 600;
   font-size: 15px;
-  color: var(--gold);
+  color: var(--red);
 }
 
 .followRow {
@@ -160,7 +160,7 @@
   width: 92px;
   font-size: 13px;
   line-height: 1.35;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 /* ── The numbers ─────────────────────────────────────────────
@@ -181,7 +181,7 @@
   gap: 8px;
   margin-bottom: 10px;
   font-size: 14px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .statValue {
@@ -194,7 +194,7 @@
   font-weight: 500;
   font-size: 16px;
   letter-spacing: -0.02em;
-  color: var(--paper-40);
+  color: var(--paper-28);
 }
 
 /* ── Specification ───────────────────────────────────────────── */
@@ -210,14 +210,14 @@
   padding: 15px 16px;
   border-radius: var(--r-panel);
   background: var(--glass);
-  border: 1px solid var(--hairline);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
 }
 
 .specKey {
   font-size: 12px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .specValue {
@@ -246,7 +246,7 @@
 
 .sectionCount {
   font-size: 13px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .mods {
@@ -260,14 +260,14 @@
   border-radius: var(--r-panel);
   overflow: hidden;
   background: var(--glass);
-  border: 1px solid var(--hairline);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
   transition: border-color 0.16s ease;
 }
 
 .modGroupOpen {
-  border-color: var(--gold-edge);
+  border-color: var(--red-edge);
 }
 
 .modHead {
@@ -297,12 +297,12 @@
   background: rgba(255, 255, 255, 0.08);
   font-size: 15px;
   line-height: 1;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .modGroupOpen .modSign {
-  background: var(--gold);
-  color: #14100a;
+  background: var(--red);
+  color: #fff;
 }
 
 .modItems {
@@ -317,7 +317,7 @@
   padding: 6px 0;
   font-size: 14.5px;
   line-height: 1.4;
-  color: var(--paper-80);
+  color: var(--paper-70);
 }
 
 .modItems li::before {
@@ -327,7 +327,7 @@
   height: 5px;
   margin-top: 8px;
   border-radius: 999px;
-  background: var(--gold-dim);
+  background: var(--red-edge);
 }
 
 .story {
@@ -335,7 +335,7 @@
   margin: 0;
   font-size: 15.5px;
   line-height: 1.55;
-  color: var(--paper-80);
+  color: var(--paper-70);
   white-space: pre-line;
   text-wrap: pretty;
 }
@@ -351,9 +351,9 @@
   padding: 16px;
   border-radius: var(--r-panel);
   background: var(--glass);
-  border: 1px solid var(--hairline);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
 }
 
 .ownerAvatar {
@@ -362,7 +362,7 @@
   flex: none;
   border-radius: 999px;
   background: var(--hatch);
-  border: 1px solid var(--hairline-firm);
+  border: 1px solid var(--rim-bright);
 }
 
 .ownerBody {
@@ -381,7 +381,7 @@
   display: block;
   margin-top: 5px;
   font-size: 12.5px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .garage {
@@ -397,15 +397,15 @@
   gap: 12px;
   padding: 13px 16px;
   border-radius: var(--r-panel);
-  background: var(--glass-soft);
-  border: 1px solid var(--hairline-soft);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background: var(--glass-faint);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
   transition: border-color 0.16s ease;
 }
 
 .garageRow:hover {
-  border-color: var(--hairline-firm);
+  border-color: var(--rim-bright);
 }
 
 .garageThumb {
@@ -425,5 +425,5 @@
 
 .garageRow em {
   font-style: normal;
-  color: var(--gold);
+  color: var(--red);
 }

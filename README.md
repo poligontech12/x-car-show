@@ -8,9 +8,9 @@ Built from the design canvas in
 which supersedes the first: **four tabs not five, one award, accounts added.**
 
 The canvas defined the product; the **visual language was later replaced**
-with the one described under *The rules the design runs on* below. The canvas
-argued for the opposite case — "no cards, no corners", mono numerals, one red —
-so read it for what the app is, not for how it looks.
+twice, and now reads as F1 does: black, marque red, liquid glass. The canvas
+argued a different case — "no cards, no corners", condensed caps, mono
+numerals — so read it for what the app is, not for how it looks.
 
 ```bash
 npm install
@@ -63,26 +63,39 @@ design/             the original canvas and the app it embeds, for reference
 
 ## The rules the design runs on
 
-The interface was rebuilt on the visual language of the F1 / Silverstone
-hero: a near-black navy ground, glass panels over photography, gold as the
-one accent, and very tight display type. Four rules carry it:
+Black, one red, and glass. Four rules carry it:
 
-**Gold belongs to numbers.** `--gold` marks the figure the screen is about,
-the state you caused, and the one action. Red is the marque — the mark in
-the nav and the menu behind it — and appears nowhere else. If a screen wants
-a second gold thing, one of them is not the point of the screen.
+**Neutral ground, never a tinted one.** `--ink` is `#08080a` — black with no
+hue in it. A blue-black reads as a product with a brand colour; this has to
+read as a black floor with a light on it.
 
-**Depth comes from glass, not from a second background.** Everything sits on
-the same `--ink`. Panels are `--glass` with a 1px white hairline on top,
-because without that edge a dark panel has no shape against a dark photo.
+**Red is the only accent, and it belongs to numbers.** `--red` marks the
+figure the screen is about, the state you caused, and the one action. Nothing
+else is coloured — everything between black and red is white at some opacity.
+A screen showing red four times is a screen with no point.
 
-**Type is one family doing several jobs.** Albert Sans, with weight and
-tracking carrying the difference. Display numbers run 110px at `-0.06em` and
-`0.72` leading; labels sit at 13–15px in `--paper-60`; nothing is set in caps.
+**Glass is blur, saturation and a bevel — all three.** A panel is almost
+entirely transparent (`--glass` is 5.5% white). What makes it a surface is the
+backdrop blur, the saturation lift that lets colour bloom through it, and
+`--sheen`, the light caught on its top edge. Take away the bevel and it stops
+being glass and becomes a grey box. Surfaces that float over *moving* content —
+the tab bar, the nav controls — use `--glass-dark` instead, because a white
+tint over a scrolling photograph just goes muddy.
 
-**Photography wins, and the veil is how.** `.photo-veil` blurs the bottom
-half of an image behind a mask gradient, so a headline can sit on a photograph
-without a box, a scrim edge, or a drop shadow.
+**Photography wins, and the veil is how.** `.photo-veil` blurs the bottom of
+an image behind a mask gradient, so a headline sits on a photograph without a
+box, a scrim edge or a drop shadow.
+
+Three borrowed flourishes, kept to a hint: a slow two-blob **aurora** behind
+everything so the black floor has depth, a **pointer spotlight** on panels
+(delegated from the shell — `data-spot` opts an element in), and a light that
+runs the **rim of the one primary action** every four seconds.
+
+> **Editing the glass?** Write `backdrop-filter` with a literal value, never
+> `var(--x)`. Next's CSS minifier silently drops the declaration when it cannot
+> resolve the custom property against its browser targets — the rule ships with
+> no blur at all and nothing warns you. The values are `blur(28px)
+> saturate(180%)` for panels and `blur(16px) saturate(160%)` for small controls.
 
 ## Prototype boundaries
 

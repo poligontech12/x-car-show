@@ -131,7 +131,7 @@ export default function OnboardScreen() {
                 −
               </button>
               <div className={styles.power}>
-                <div className="n-lg n-gold">{onboarding.power}</div>
+                <div className="n-lg n-accent">{onboarding.power}</div>
                 <div className={styles.powerUnit}>cai putere</div>
               </div>
               <button

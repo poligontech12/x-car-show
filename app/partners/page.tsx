@@ -36,6 +36,7 @@ export default function PartnersScreen() {
           <div
             key={p.name}
             className={`${styles.partner} a-up`}
+            data-spot
             style={{ animationDelay: `${0.35 + i * 0.07}s` }}
           >
             <div className={styles.logo} />

@@ -52,7 +52,7 @@
   justify-content: center;
   border-radius: var(--r-card);
   background: #fff;
-  color: #14100a;
+  color: #0a0a0a;
   font-weight: 600;
   font-size: 13px;
   letter-spacing: -0.02em;
@@ -110,8 +110,8 @@
   justify-content: center;
   border-radius: var(--r-card);
   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: var(--glass-blur-nav);
-  -webkit-backdrop-filter: var(--glass-blur-nav);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--sheen), var(--lift-sm);
   font-size: 22px;
   line-height: 1;
   color: #fff;
@@ -146,11 +146,11 @@
 }
 
 .link:hover {
-  color: var(--gold);
+  color: var(--red);
 }
 
 .linkOn {
-  color: var(--gold);
+  color: var(--red);
 }
 
 .meta {

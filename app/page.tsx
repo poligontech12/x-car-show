@@ -68,7 +68,8 @@ export default function FeedScreen() {
         );
 
         return (
-          <article key={`${p.title}-${i}`} className={`${styles.post} a-up ${delay}`}>
+          <article key={`${p.title}-${i}`} className={`${styles.post} a-up ${delay}`}
+            data-spot>
             {p.slot ? (
               <>
                 {car ? (

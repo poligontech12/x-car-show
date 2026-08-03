@@ -76,6 +76,7 @@ export default function RosterScreen() {
             key={c.id}
             href={`/car/${c.id}`}
             className={`${styles.tile} a-up`}
+            data-spot
             style={{ animationDelay: `${0.5 + i * 0.06}s` }}
           >
             <span className={styles.no}>{c.no}</span>

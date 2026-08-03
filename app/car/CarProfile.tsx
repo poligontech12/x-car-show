@@ -29,7 +29,7 @@ function Stat({
     <div className={`${styles.stat} a-up`} style={{ animationDelay: `${delay}ms` }}>
       <div className={styles.statLabel}>{label}</div>
       <div className={styles.statValue}>
-        <span className={`n-xl ${gold ? 'n-gold' : 'n-fade'}`}>{n.toLocaleString('ro-RO')}</span>
+        <span className={`n-xl ${gold ? 'n-accent' : 'n-fade'}`}>{n.toLocaleString('ro-RO')}</span>
         <span className={styles.unit}>{unit}</span>
       </div>
     </div>

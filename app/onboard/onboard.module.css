@@ -18,12 +18,12 @@
 .label {
   flex: 1;
   font-size: 14px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .stepLabel {
   font-size: 13px;
-  color: var(--paper-40);
+  color: var(--paper-28);
 }
 
 /* Four segments, not a percentage — you can see how much is left. */
@@ -42,7 +42,7 @@
 }
 
 .progress i[data-done='true'] {
-  background: var(--gold);
+  background: var(--red);
 }
 
 .body {
@@ -64,12 +64,12 @@
   margin: 12px 0 0;
   font-size: 15px;
   line-height: 1.45;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .fieldLabel {
   font-size: 13px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .spaced {
@@ -93,11 +93,11 @@
 .year,
 .drive {
   border-radius: var(--r-chip);
-  border: 1px solid var(--hairline);
-  background: var(--glass-soft);
-  backdrop-filter: var(--glass-blur-nav);
-  -webkit-backdrop-filter: var(--glass-blur-nav);
-  color: var(--paper-60);
+  border: 1px solid var(--rim);
+  background: var(--glass-faint);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: var(--sheen), var(--lift-sm);
+  color: var(--paper-45);
   font-family: var(--font-sans);
   letter-spacing: -0.02em;
   transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
@@ -107,15 +107,15 @@
 .year:hover,
 .drive:hover {
   color: var(--paper);
-  border-color: var(--hairline-firm);
+  border-color: var(--rim-bright);
 }
 
 .make[aria-pressed='true'],
 .year[aria-pressed='true'],
 .drive[aria-pressed='true'] {
-  border-color: var(--gold);
-  background: var(--gold);
-  color: #14100a;
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff;
 }
 
 .make {
@@ -156,19 +156,19 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  border: 1px solid var(--hairline);
+  border: 1px solid var(--rim);
   background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
   font-size: 22px;
   line-height: 1;
-  color: var(--paper-80);
+  color: var(--paper-70);
   transition: border-color 0.16s ease, color 0.16s ease;
 }
 
 .pm:hover {
-  border-color: var(--gold-edge);
-  color: var(--gold);
+  border-color: var(--red-edge);
+  color: var(--red);
 }
 
 .power {
@@ -179,7 +179,7 @@
 .powerUnit {
   margin-top: 12px;
   font-size: 13px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .driveRow {
@@ -197,7 +197,7 @@
   border-radius: var(--r-panel);
   overflow: hidden;
   background: var(--slot);
-  border: 1px solid var(--hairline);
+  border: 1px solid var(--rim);
 }
 
 .pair {
@@ -213,7 +213,7 @@
   border-radius: var(--r-panel);
   overflow: hidden;
   background: var(--slot);
-  border: 1px solid var(--hairline);
+  border: 1px solid var(--rim);
 }
 
 /* ── Step 4 · the story ──────────────────────────────────────── */
@@ -226,10 +226,10 @@
   min-height: 170px;
   border-radius: var(--r-panel);
   background: var(--glass);
-  border: 1px solid var(--hairline);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  color: var(--paper-80);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
+  color: var(--paper-70);
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.5;
@@ -239,17 +239,17 @@
 }
 
 .story:focus {
-  border-color: var(--gold-edge);
+  border-color: var(--red-edge);
 }
 
 .counter {
   margin-top: 10px;
   font-size: 12.5px;
-  color: var(--paper-40);
+  color: var(--paper-28);
 }
 
 .counterFull {
-  color: var(--gold);
+  color: var(--red);
 }
 
 /* ── Done · the card they will be handed at the gate ─────────── */
@@ -259,9 +259,9 @@
   border-radius: var(--r-panel);
   overflow: hidden;
   background: var(--glass);
-  border: 1px solid var(--hairline);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
 }
 
 .cardHead {
@@ -305,20 +305,20 @@
 
 .cardStandLabel {
   font-size: 12px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .cardLine {
   margin-top: 10px;
   font-size: 12.5px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .doneNote {
   margin-top: 20px;
   font-size: 14.5px;
   line-height: 1.55;
-  color: var(--paper-60);
+  color: var(--paper-45);
   text-wrap: pretty;
 }
 
@@ -332,7 +332,7 @@
   gap: 10px;
   align-items: center;
   padding: 14px var(--gutter) calc(var(--safe-bottom) + 14px);
-  background: linear-gradient(to top, var(--ink) 70%, rgba(10, 14, 28, 0));
+  background: linear-gradient(to top, var(--ink) 70%, rgba(8, 8, 10, 0));
 }
 
 .back {

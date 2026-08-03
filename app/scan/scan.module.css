@@ -17,8 +17,8 @@
   margin-top: var(--safe-top);
   border-radius: var(--r-panel);
   overflow: hidden;
-  background: radial-gradient(ellipse at 50% 42%, #1b2136 0%, #070a14 72%);
-  border: 1px solid var(--hairline);
+  background: radial-gradient(ellipse at 50% 42%, #1a1a1d 0%, #060607 72%);
+  border: 1px solid var(--rim);
   cursor: pointer;
 }
 
@@ -32,8 +32,8 @@
   width: 208px;
   height: 130px;
   border-radius: var(--r-card);
-  background: repeating-linear-gradient(135deg, #232a42 0 8px, #1b2136 8px 16px);
-  border: 1px solid var(--hairline);
+  background: repeating-linear-gradient(135deg, #242427 0 8px, #1a1a1d 8px 16px);
+  border: 1px solid var(--rim);
   opacity: 0.85;
 }
 
@@ -55,32 +55,32 @@
 .reticle i:nth-child(1) {
   top: 0;
   left: 0;
-  border-top: 2.5px solid var(--gold);
-  border-left: 2.5px solid var(--gold);
+  border-top: 2.5px solid var(--red);
+  border-left: 2.5px solid var(--red);
   border-top-left-radius: 14px;
 }
 
 .reticle i:nth-child(2) {
   top: 0;
   right: 0;
-  border-top: 2.5px solid var(--gold);
-  border-right: 2.5px solid var(--gold);
+  border-top: 2.5px solid var(--red);
+  border-right: 2.5px solid var(--red);
   border-top-right-radius: 14px;
 }
 
 .reticle i:nth-child(3) {
   bottom: 0;
   left: 0;
-  border-bottom: 2.5px solid var(--gold);
-  border-left: 2.5px solid var(--gold);
+  border-bottom: 2.5px solid var(--red);
+  border-left: 2.5px solid var(--red);
   border-bottom-left-radius: 14px;
 }
 
 .reticle i:nth-child(4) {
   bottom: 0;
   right: 0;
-  border-bottom: 2.5px solid var(--gold);
-  border-right: 2.5px solid var(--gold);
+  border-bottom: 2.5px solid var(--red);
+  border-right: 2.5px solid var(--red);
   border-bottom-right-radius: 14px;
 }
 
@@ -91,7 +91,7 @@
   top: 50%;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
   animation: scanSweep 2.4s ease-in-out infinite;
 }
 
@@ -102,11 +102,11 @@
   bottom: 22px;
   text-align: center;
   font-size: 13.5px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .hintFound {
-  color: var(--gold);
+  color: var(--red);
   font-weight: 500;
 }
 
@@ -122,10 +122,10 @@
   flex: none;
   padding: 16px;
   border-radius: var(--r-panel);
-  background: var(--gold-wash);
-  border: 1px solid var(--gold-edge);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background: var(--red-wash);
+  border: 1px solid var(--red-edge);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
   animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -135,7 +135,7 @@
   flex: none;
   border-radius: var(--r-card);
   background: var(--hatch);
-  border: 1px solid var(--hairline-firm);
+  border: 1px solid var(--rim-bright);
 }
 
 .matchBody {
@@ -147,7 +147,7 @@
 .matchKind {
   display: block;
   font-size: 12px;
-  color: var(--gold);
+  color: var(--red);
 }
 
 .matchName {
@@ -163,13 +163,13 @@
   display: block;
   margin-top: 5px;
   font-size: 12px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .matchArrow {
   flex: none;
   font-size: 18px;
-  color: var(--gold);
+  color: var(--red);
 }
 
 /* ── Recents ─────────────────────────────────────────────────── */
@@ -179,15 +179,15 @@
   padding: 16px;
   border-radius: var(--r-panel);
   background: var(--glass);
-  border: 1px solid var(--hairline);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--rim);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--sheen), var(--lift-sm);
 }
 
 .recentsHead {
   margin-bottom: 6px;
   font-size: 13px;
-  color: var(--paper-60);
+  color: var(--paper-45);
 }
 
 .recent {
@@ -204,7 +204,7 @@
   font-weight: 600;
   font-size: 13px;
   letter-spacing: -0.02em;
-  color: var(--gold);
+  color: var(--red);
 }
 
 .recent b {
@@ -217,5 +217,5 @@
 
 .recent span {
   font-size: 12px;
-  color: var(--paper-40);
+  color: var(--paper-28);
 }
