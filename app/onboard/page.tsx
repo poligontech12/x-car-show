@@ -16,7 +16,7 @@ const STEPS = [
   ['Ești înscris.', 'Cartonaș tipărit. Stand alocat. Ne vedem pe 22.'],
 ] as const;
 
-const NEXT_LABELS = ['CONTINUĂ', 'CONTINUĂ', 'ARATĂ BINE', 'GATA', 'VEZI LISTA'];
+const NEXT_LABELS = ['Continuă', 'Continuă', 'Arată bine', 'Gata', 'Vezi grila'];
 
 const MAKES = [
   'NISSAN',
@@ -65,14 +65,14 @@ export default function OnboardScreen() {
         <div className={styles.topRow}>
           <button
             type="button"
-            className={styles.close}
+            className="icon-btn"
             aria-label="Închide"
             onClick={() => router.back()}
           >
             ×
           </button>
-          <div className={styles.label}>ÎNSCRIE O MAȘINĂ</div>
-          <div className={styles.stepLabel}>{done ? 'GATA' : `PASUL ${step + 1}/4`}</div>
+          <div className={styles.label}>Înscrie o mașină</div>
+          <div className={styles.stepLabel}>{done ? 'Gata' : `Pasul ${step + 1}/4`}</div>
         </div>
         <div className={styles.progress} aria-hidden="true">
           {[0, 1, 2, 3].map((i) => (
@@ -82,8 +82,8 @@ export default function OnboardScreen() {
       </div>
 
       <div className={styles.body}>
-        <h1 className={styles.title}>{title}</h1>
-        <p className={styles.sub}>{sub}</p>
+        <h1 className={`${styles.title} a-up delay-100`}>{title}</h1>
+        <p className={`${styles.sub} a-up delay-200`}>{sub}</p>
 
         {step === 0 && (
           <>
@@ -101,7 +101,7 @@ export default function OnboardScreen() {
               ))}
             </div>
 
-            <div className={`${styles.fieldLabel} ${styles.spaced}`}>AN</div>
+            <div className={`${styles.fieldLabel} ${styles.spaced}`}>An</div>
             <div className={`${styles.opts} ${styles.optsTight}`} role="group" aria-label="An">
               {YEARS.map((y) => (
                 <button
@@ -120,7 +120,7 @@ export default function OnboardScreen() {
 
         {step === 1 && (
           <>
-            <div className={`${styles.fieldLabel} ${styles.spaced}`}>PUTERE LA ROȚI</div>
+            <div className={`${styles.fieldLabel} ${styles.spaced}`}>Putere la roți</div>
             <div className={styles.stepper}>
               <button
                 type="button"
@@ -131,8 +131,8 @@ export default function OnboardScreen() {
                 −
               </button>
               <div className={styles.power}>
-                <div className={styles.powerValue}>{onboarding.power}</div>
-                <div className={styles.powerUnit}>CP</div>
+                <div className="n-lg n-gold">{onboarding.power}</div>
+                <div className={styles.powerUnit}>cai putere</div>
               </div>
               <button
                 type="button"
@@ -144,7 +144,7 @@ export default function OnboardScreen() {
               </button>
             </div>
 
-            <div className={`${styles.fieldLabel} ${styles.spaced}`}>TRACȚIUNE</div>
+            <div className={`${styles.fieldLabel} ${styles.spaced}`}>Tracțiune</div>
             <div className={styles.driveRow} role="group" aria-label="Tracțiune">
               {DRIVES.map((d) => (
                 <button
@@ -208,8 +208,8 @@ export default function OnboardScreen() {
                   <QrCodeClient value={`https://show.x/stand/${STAND}`} size={78} />
                 </div>
                 <div>
-                  <div className={styles.cardStandLabel}>STAND</div>
-                  <div className={styles.cardStand}>{STAND}</div>
+                  <div className={styles.cardStandLabel}>Stand</div>
+                  <div className="n-md">{STAND}</div>
                   <div className={styles.cardLine}>
                     {`${onboarding.make ?? 'NISSAN'} · ${onboarding.year} · ${onboarding.power} CP · ${onboarding.drive}`}
                   </div>
@@ -229,8 +229,12 @@ export default function OnboardScreen() {
 
       <div className={styles.footer}>
         {step > 0 && step < 4 && (
-          <button type="button" className={styles.back} onClick={() => setStep(step - 1)}>
-            ÎNAPOI
+          <button
+            type="button"
+            className={`btn btn--glass ${styles.back}`}
+            onClick={() => setStep(step - 1)}
+          >
+            Înapoi
           </button>
         )}
         <button type="button" className="btn btn--primary" onClick={next}>

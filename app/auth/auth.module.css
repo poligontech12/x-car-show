@@ -5,115 +5,115 @@
 }
 
 .top {
-  padding: var(--safe-top) var(--gutter) 0;
   flex: none;
+  padding: 20px var(--gutter) 0;
 }
 
 .topRow {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.close {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: rgba(242, 242, 240, 0.6);
-  width: 18px;
+  gap: 12px;
 }
 
 .label {
   flex: 1;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  color: var(--paper-40);
+  font-size: 14px;
+  color: var(--paper-60);
 }
 
 .body {
   flex: 1;
   overflow-y: auto;
-  padding: 26px var(--gutter) 0;
+  padding: 32px var(--gutter) 0;
 }
 
 .title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 34px;
+  margin: 0;
+  font-weight: 600;
+  font-size: 40px;
   line-height: 0.92;
-  letter-spacing: 0.005em;
+  letter-spacing: -0.045em;
 }
 
 .sub {
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--paper-55);
-  margin-top: 9px;
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--paper-60);
 }
 
 .fieldLabel {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.16em;
-  color: var(--paper-34);
+  font-size: 13px;
+  color: var(--paper-60);
 }
 
 /* ── Account ─────────────────────────────────────────────────── */
 
 .rows {
-  margin-top: 24px;
-  border-top: 1px solid var(--hairline-firm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 28px;
 }
 
 .row {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  padding: 13px 0;
-  border-bottom: 1px solid var(--hairline-soft);
+  padding: 15px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .rowKey {
   flex: 1;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  color: rgba(242, 242, 240, 0.36);
+  font-size: 13px;
+  color: var(--paper-60);
 }
 
 .rowValue {
-  font-family: var(--font-display);
   font-weight: 600;
-  font-size: 17px;
+  font-size: 16px;
+  letter-spacing: -0.03em;
 }
 
 .addCar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   margin-top: 20px;
-  border: 1px solid var(--hairline-strong);
-  padding: 14px;
+  padding: 17px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass-soft);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transition: border-color 0.16s ease;
+}
+
+.addCar:hover {
+  border-color: var(--hairline-firm);
 }
 
 .addCar b {
   flex: 1;
   text-align: left;
-  font-family: var(--font-display);
   font-weight: 600;
-  font-size: 17px;
+  font-size: 16px;
+  letter-spacing: -0.03em;
 }
 
 .addCar em {
   font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--paper-40);
+  color: var(--gold);
 }
 
 .signOut {
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 /* ── Role picker ─────────────────────────────────────────────
@@ -121,52 +121,60 @@
    you land after registering. */
 
 .roleHead {
-  margin-top: 24px;
+  margin-top: 30px;
 }
 
 .role {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: flex-start;
   width: 100%;
-  border: 1px solid var(--hairline-firm);
-  padding: 14px;
-  margin-top: 8px;
+  margin-top: 10px;
+  padding: 17px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   text-align: left;
+  transition: border-color 0.16s ease, background 0.16s ease;
 }
 
 .roleOn {
-  border-color: var(--arterial);
-  background: var(--arterial-tint);
+  border-color: var(--gold-edge);
+  background: var(--gold-wash);
 }
 
 .roleDot {
-  width: 10px;
-  height: 10px;
-  margin-top: 5px;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
   flex: none;
-  background: var(--hairline-strong);
+  border-radius: 999px;
+  border: 2px solid var(--hairline-strong);
+  transition: border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
 }
 
 .roleOn .roleDot {
-  background: var(--arterial);
+  border-color: var(--gold);
+  background: var(--gold);
+  box-shadow: inset 0 0 0 3px rgba(10, 14, 28, 1);
 }
 
 .roleBody b {
   display: block;
-  font-family: var(--font-display);
   font-weight: 600;
-  font-size: 19px;
-  line-height: 1;
-  letter-spacing: 0.02em;
+  font-size: 18px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
 }
 
 .roleBody span {
   display: block;
-  font-size: 13.5px;
-  line-height: 1.4;
-  color: var(--paper-55);
   margin-top: 7px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--paper-60);
 }
 
 /* ── Form ────────────────────────────────────────────────────── */
@@ -175,44 +183,43 @@
   margin-top: 20px;
 }
 
-/* Underline, not a box — the form is a sheet you fill in. */
 .input {
   width: 100%;
-  margin-top: 7px;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--hairline-edge);
-  padding: 9px 0;
+  margin-top: 8px;
+  padding: 15px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   color: var(--paper);
-  font-family: var(--font-body);
-  font-size: 17px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  letter-spacing: -0.01em;
   outline: none;
-  transition: border-color 0.14s ease;
+  transition: border-color 0.16s ease;
 }
 
 .input:focus {
-  border-bottom-color: var(--arterial);
+  border-color: var(--gold-edge);
 }
 
 .switch {
   margin-top: 26px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  color: var(--paper-45);
+  font-size: 13.5px;
+  color: var(--paper-60);
 }
 
 .switch:hover {
-  color: var(--paper);
+  color: var(--gold);
 }
 
 .tail {
-  height: 26px;
+  height: 28px;
 }
 
 .footer {
   flex: none;
-  border-top: 1px solid var(--hairline-firm);
-  background: var(--ink);
-  padding: 12px var(--gutter) 30px;
+  padding: 14px var(--gutter) calc(var(--safe-bottom) + 14px);
+  background: linear-gradient(to top, var(--ink) 70%, rgba(10, 14, 28, 0));
 }

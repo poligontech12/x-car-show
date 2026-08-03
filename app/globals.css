@@ -8,9 +8,6 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  /* No cards, no corners — the chrome gets out of the
-     photograph's way. Radius is opt-in, never inherited. */
-  border-radius: 0;
 }
 
 html,
@@ -23,26 +20,16 @@ body {
 body {
   background: var(--ink);
   color: var(--paper);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
 }
 
-/* Most links in the app are whole rows, tiles and photos rather than
-   words in a sentence, so they carry their own type colour. Red is
-   rationed — an inline text link opts into it with .link. */
 a {
   color: inherit;
   text-decoration: none;
-}
-
-.link {
-  color: var(--arterial-lt);
-}
-
-.link:hover {
-  color: var(--paper);
 }
 
 button {
@@ -56,16 +43,16 @@ button {
   cursor: pointer;
 }
 
-input {
-  caret-color: var(--arterial);
+input,
+textarea {
+  caret-color: var(--gold);
 }
 
-input::placeholder {
-  color: var(--paper-26);
+input::placeholder,
+textarea::placeholder {
+  color: var(--paper-25);
 }
 
-/* The design has no visible scrollbars anywhere — the rules
-   and the photo edges do the work of showing you where you are. */
 *::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -77,15 +64,114 @@ input::placeholder {
 }
 
 :focus-visible {
-  outline: 2px solid var(--arterial);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 
 /* ─────────────────────────────────────────────────────────────
    Motion
+
+   Everything enters the same way — up and in, on a fast-out
+   curve — and the delay utilities stagger it. Nothing loops
+   except the scan line.
    ───────────────────────────────────────────────────────────── */
 
-@keyframes xscan {
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeSlideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeSlideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* The headline arrives at speed and settles — skewed and blurred
+   on the way in, square by the time it stops. */
+@keyframes speedReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) skewX(-8deg);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(4%) skewX(-2deg);
+    filter: blur(0);
+  }
+  100% {
+    transform: translateX(0) skewX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes raceLineLeft {
+  0% {
+    transform: scaleX(0);
+  }
+  70% {
+    transform: scaleX(1.1);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes scanSweep {
   0% {
     transform: translateY(-92px);
     opacity: 0;
@@ -102,35 +188,46 @@ input::placeholder {
   }
 }
 
-@keyframes xpulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.2;
-  }
+.a-up {
+  animation: fadeSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.a-down {
+  animation: fadeSlideDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.a-left {
+  animation: fadeSlideLeft 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.a-right {
+  animation: fadeSlideRight 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.a-scale {
+  animation: scaleIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.a-fade {
+  animation: fadeIn 0.8s ease-out both;
+}
+.a-speed {
+  animation: speedReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.a-line {
+  transform-origin: left;
+  animation: raceLineLeft 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes xrise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes xgrow {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+.delay-1100 { animation-delay: 1.1s; }
+.delay-1200 { animation-delay: 1.2s; }
+.delay-1400 { animation-delay: 1.4s; }
+.delay-1600 { animation-delay: 1.6s; }
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -144,137 +241,181 @@ input::placeholder {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Shared primitives — the component sheet, as CSS
+   Surfaces
    ───────────────────────────────────────────────────────────── */
 
-/* Buttons ---------------------------------------------------- */
+/* The panel recipe. Anything that holds content sits on this. */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--r-panel);
+}
+
+.glass-soft {
+  background: var(--glass-soft);
+  border: 1px solid var(--hairline-soft);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--r-panel);
+}
+
+/* The blur that lets a headline sit on a photograph: the photo
+   stays sharp at the top and dissolves under the type. Masked
+   rather than faded, so there is no visible edge. */
+.photo-veil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  mask: linear-gradient(to bottom, transparent 0%, #000 50%);
+  -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 50%);
+}
+
+/* The gradient that keeps white type legible over any photo. */
+.photo-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(6, 8, 15, 0.92) 0%, rgba(6, 8, 15, 0) 60%);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Controls
+   ───────────────────────────────────────────────────────────── */
 
 .btn {
   display: block;
   width: 100%;
-  padding: 15px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  padding: 17px;
+  border-radius: var(--r-panel);
   border: 1px solid transparent;
-  transition: background 0.14s ease, border-color 0.14s ease;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  text-align: center;
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
 }
 
-/* The one action the screen wants. Never two on a screen. */
+/* Gold is the one action. Never two on a screen. */
 .btn--primary {
-  background: var(--arterial);
-  border-color: var(--arterial);
-  color: #fff;
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #14100a;
 }
 
-.btn--secondary {
-  border-color: var(--hairline-loud);
+.btn--primary:hover {
+  background: #ffc61f;
+}
+
+.btn--glass {
+  background: var(--glass);
+  border-color: var(--hairline-firm);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   color: var(--paper);
 }
 
-.btn--secondary:hover {
-  border-color: var(--paper-55);
+.btn--glass:hover {
+  border-color: var(--hairline-strong);
 }
 
 .btn--quiet {
-  padding: 14px;
-  border-color: var(--hairline-edge);
-  color: var(--paper-55);
-  letter-spacing: 0.16em;
+  background: transparent;
+  border-color: var(--hairline);
+  color: var(--paper-60);
 }
 
 .btn--quiet:hover {
   color: var(--paper);
-  border-color: var(--hairline-strong);
+  border-color: var(--hairline-firm);
 }
 
-/* 36 / 44px square controls — back arrows, share, close. */
-.icon-btn {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--paper);
-  flex: none;
+.btn--white {
+  background: #fff;
+  border-color: #fff;
+  color: #14100a;
 }
 
-/* Chips ------------------------------------------------------
-   Filled red = state you caused.
-   Outline red = a change on a car.
-   White outline = neutral fact. */
-
+/* Chips: fully round, glass when off, gold when on. */
 .chip {
-  padding: 6px 11px;
+  padding: 9px 16px;
   white-space: nowrap;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.13em;
-  border: 1px solid var(--hairline-edge);
-  background: transparent;
-  color: var(--paper-55);
-  transition: border-color 0.14s ease, color 0.14s ease;
+  border-radius: var(--r-chip);
+  border: 1px solid var(--hairline);
+  background: var(--glass-soft);
+  backdrop-filter: var(--glass-blur-nav);
+  -webkit-backdrop-filter: var(--glass-blur-nav);
+  color: var(--paper-60);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
 }
 
 .chip:hover {
-  border-color: var(--hairline-strong);
   color: var(--paper);
+  border-color: var(--hairline-firm);
 }
 
-.chip[aria-pressed='true'],
-.chip--on {
-  border-color: var(--arterial);
-  background: var(--arterial);
-  color: #fff;
+.chip[aria-pressed='true'] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #14100a;
 }
 
-/* Static class badge — JDM, GERMAN, MUSCLE… */
+/* A fact about the car, not a state you caused. */
 .tag {
   display: inline-block;
-  background: var(--arterial);
-  color: #fff;
-  padding: 3px 7px;
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.14em;
+  padding: 6px 12px;
+  border-radius: var(--r-chip);
+  background: var(--gold);
+  color: #14100a;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: -0.01em;
 }
 
-.tag--neutral {
-  background: transparent;
-  border: 1px solid var(--hairline-strong);
-  color: var(--paper-70);
+.tag--glass {
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur-nav);
+  -webkit-backdrop-filter: var(--glass-blur-nav);
+  color: var(--paper-80);
 }
 
-/* Rules ------------------------------------------------------ */
-
-/* MODIFICATIONS ──────────────────── 21 ITEMS */
-.section-rule {
+/* 44px square, no rounding — the nav's own control shape. */
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  flex: none;
   display: flex;
   align-items: center;
-  gap: 9px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  color: var(--paper-34);
+  justify-content: center;
+  border-radius: var(--r-card);
+  background: var(--glass-nav);
+  backdrop-filter: var(--glass-blur-nav);
+  -webkit-backdrop-filter: var(--glass-blur-nav);
+  color: var(--paper);
+  font-size: 17px;
+  transition: background 0.16s ease;
 }
 
-.section-rule::after,
-.section-rule .rule {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--hairline-firm);
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
-.section-rule--trailing::after {
-  content: none;
-}
-
-/* Utilities -------------------------------------------------- */
+/* ─────────────────────────────────────────────────────────────
+   Utilities
+   ───────────────────────────────────────────────────────────── */
 
 .spacer {
   flex: 1;

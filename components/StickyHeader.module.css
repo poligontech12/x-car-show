@@ -1,39 +1,60 @@
-/* Every top-level screen wears the same header: it sticks, it blurs
-   what passes under it, and it ends in a hairline. Nothing else. */
-.header {
+/* The block every destination opens with: a quiet label with its
+   mark, then the name at size on two lines. */
+.title {
+  padding: 0 var(--gutter);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--paper-60);
+  margin-bottom: 6px;
+}
+
+.label svg {
+  flex: none;
+  opacity: 0.8;
+}
+
+.lines {
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  color: var(--paper);
+  margin: 0;
+}
+
+.lines b {
+  display: block;
+  font-weight: inherit;
+}
+
+/* The count or the clock that belongs with the title. */
+.aside {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--paper-60);
+}
+
+.asideGold {
+  color: var(--gold);
+}
+
+/* Chips scroll horizontally under the title and stick there. */
+.filters {
   position: sticky;
   top: 0;
-  z-index: 6;
-  background: rgba(11, 11, 12, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding-top: var(--safe-top);
-  border-bottom: 1px solid var(--hairline);
-}
-
-.row {
+  z-index: 20;
   display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  padding: 8px var(--gutter) 12px;
-}
-
-.rowCenter {
-  align-items: center;
-  padding-top: 10px;
-}
-
-/* Fills the gap between a title and the count at the far right. */
-.rule {
-  flex: 1;
-  height: 1px;
-  background: var(--hairline-firm);
-  margin-bottom: 5px;
-}
-
-.filters {
-  display: flex;
-  gap: 6px;
-  padding: 0 var(--gutter) 11px;
+  gap: 8px;
+  padding: 16px var(--gutter);
   overflow-x: auto;
+  background: linear-gradient(to bottom, var(--ink) 55%, rgba(10, 14, 28, 0) 100%);
 }

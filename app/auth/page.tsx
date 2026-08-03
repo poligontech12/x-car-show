@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-import { byId } from '@/lib/cars';
+import { byId, displayModel } from '@/lib/cars';
 import { useStore, type Role } from '@/lib/store';
 import styles from './auth.module.css';
 
@@ -10,19 +10,19 @@ type Mode = 'register' | 'signin' | 'account';
 
 const COPY: Record<Mode, { label: string; title: string; sub: string; cta: string }> = {
   signin: {
-    label: 'CONECTARE',
+    label: 'Conectare',
     title: 'Bine ai revenit.',
     sub: 'Votul tău, mașinile tale și toți cei pe care îi urmărești.',
-    cta: 'CONECTARE',
+    cta: 'Conectare',
   },
   register: {
-    label: 'CONT NOU',
+    label: 'Cont nou',
     title: 'Intră în show.',
     sub: 'Două minute. Fără cotizație, fără politică de club.',
-    cta: 'CREEAZĂ CONTUL',
+    cta: 'Creează contul',
   },
   account: {
-    label: 'CONT',
+    label: 'Cont',
     title: 'Ești înăuntru.',
     sub: 'Conectat pe telefonul ăsta.',
     cta: '',
@@ -32,12 +32,12 @@ const COPY: Record<Mode, { label: string; title: string; sub: string; cta: strin
 const ROLES: { key: Role; title: string; sub: string }[] = [
   {
     key: 'car',
-    title: 'EXPUN O MAȘINĂ',
+    title: 'Expun o mașină',
     sub: 'Îți înscrii proiectul, primești un stand și un cartonaș de parbriz tipărit. Votul e inclus.',
   },
   {
     key: 'vote',
-    title: 'VOTEZ & URMĂRESC',
+    title: 'Votez și urmăresc',
     sub: 'Un vot pentru mașina show-ului, plus fiecare proiect din listă.',
   },
 ];
@@ -86,7 +86,12 @@ function AuthScreen() {
     <div className={styles.screen}>
       <div className={styles.top}>
         <div className={styles.topRow}>
-          <button type="button" className={styles.close} aria-label="Închide" onClick={() => router.back()}>
+          <button
+            type="button"
+            className="icon-btn"
+            aria-label="Închide"
+            onClick={() => router.back()}
+          >
             ×
           </button>
           <div className={styles.label}>{copy.label}</div>
@@ -94,17 +99,17 @@ function AuthScreen() {
       </div>
 
       <div className={styles.body}>
-        <h1 className={styles.title}>{copy.title}</h1>
-        <p className={styles.sub}>{copy.sub}</p>
+        <h1 className={`${styles.title} a-up delay-200`}>{copy.title}</h1>
+        <p className={`${styles.sub} a-up delay-300`}>{copy.sub}</p>
 
         {mode === 'account' && account && (
           <>
             <div className={styles.rows}>
               {[
-                ['NUME', account.name],
-                ['EMAIL', account.email],
-                ['ROL', account.role === 'car' ? 'PARTICIPANT · 1 MAȘINĂ' : 'VOTANT'],
-                ['VOT', vote ? byId(vote).model : 'NEVOTAT'],
+                ['Nume', account.name],
+                ['Email', account.email],
+                ['Rol', account.role === 'car' ? 'Participant · 1 mașină' : 'Votant'],
+                ['Vot', vote ? displayModel(byId(vote)) : 'Nevotat'],
               ].map(([k, v]) => (
                 <div key={k} className={styles.row}>
                   <div className={styles.rowKey}>{k}</div>
@@ -129,14 +134,14 @@ function AuthScreen() {
                 setJustSignedOut(true);
               }}
             >
-              DECONECTARE
+              Deconectare
             </button>
           </>
         )}
 
         {mode === 'register' && (
           <>
-            <div className={`${styles.fieldLabel} ${styles.roleHead}`}>SUNT AICI CA SĂ</div>
+            <div className={`${styles.fieldLabel} ${styles.roleHead}`}>Sunt aici ca să</div>
             {ROLES.map((r) => (
               <button
                 key={r.key}
@@ -160,7 +165,7 @@ function AuthScreen() {
             {mode === 'register' && (
               <div className={styles.field}>
                 <label className={styles.fieldLabel} htmlFor="name">
-                  NUME
+                  Nume
                 </label>
                 <input
                   id="name"
@@ -176,7 +181,7 @@ function AuthScreen() {
 
             <div className={styles.field}>
               <label className={styles.fieldLabel} htmlFor="email">
-                EMAIL
+                Email
               </label>
               <input
                 id="email"
@@ -193,7 +198,7 @@ function AuthScreen() {
                 never stored — it is here so the flow reads true. */}
             <div className={styles.field}>
               <label className={styles.fieldLabel} htmlFor="password">
-                PAROLĂ
+                Parolă
               </label>
               <input
                 id="password"
@@ -210,8 +215,8 @@ function AuthScreen() {
               onClick={() => setAuthMode(authMode === 'register' ? 'signin' : 'register')}
             >
               {authMode === 'register'
-                ? 'AI DEJA CONT? CONECTEAZĂ-TE →'
-                : 'EȘTI NOU? CREEAZĂ-ȚI CONT →'}
+                ? 'Ai deja cont? Conectează-te →'
+                : 'Ești nou? Creează-ți cont →'}
             </button>
           </>
         )}

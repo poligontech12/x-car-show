@@ -4,8 +4,8 @@
  * the road. (Meets are not a feature yet.)
  */
 
-export type FeedCategory = 'PROIECTE' | 'VĂZUTE';
-export type FeedFilter = 'TOATE' | FeedCategory;
+export type FeedCategory = 'Proiecte' | 'Văzute';
+export type FeedFilter = 'Toate' | FeedCategory;
 
 export interface FeedPost {
   /** Persistence key for the photo slot. Must be unique per page. */
@@ -24,7 +24,7 @@ export interface FeedPost {
 
 export const FEED: FeedPost[] = [
   {
-    kind: 'PROIECT ACTUALIZAT',
+    kind: 'Proiect actualizat',
     kindAccent: true,
     carId: 's14',
     title: 'SILVIA S14 · #14',
@@ -32,20 +32,20 @@ export const FEED: FeedPost[] = [
     slot: 'feed-1',
     slotHint: 'Jantele întoarse de la vopsit',
     body: 'Meister-ele s-au întors de la pulverizat. Bronzul trebuia să fie temporar și acum nu mi-o mai imaginez cu altceva.',
-    cat: 'PROIECTE',
+    cat: 'Proiecte',
   },
   {
-    kind: 'VĂZUTĂ · DN2 PĂTRĂUȚI',
+    kind: 'Văzută · DN2 Pătrăuți',
     kindAccent: false,
-    title: 'VĂZUTĂ DE TUDOR V.',
+    title: 'Văzută de Tudor V.',
     time: '5H',
     slot: 'feed-2',
     slotHint: 'E30 touring, pe marginea drumului',
     body: 'E30 touring pe drumul Sucevei, pe BBS, la înălțimea potrivită. Dacă e proprietarul pe aici — înscrie-o. Mai avem loc în Padocul B.',
-    cat: 'VĂZUTE',
+    cat: 'Văzute',
   },
   {
-    kind: 'PROIECT ACTUALIZAT',
+    kind: 'Proiect actualizat',
     kindAccent: true,
     carId: 'aro',
     title: 'ARO 244 · #44',
@@ -53,26 +53,26 @@ export const FEED: FeedPost[] = [
     slot: 'feed-3',
     slotHint: 'ARO pe arcuri noi',
     body: 'Arcuri noi montate. E cu trei centimetri mai înalt și nu mai intră în propriul meu garaj. A meritat.',
-    cat: 'PROIECTE',
+    cat: 'Proiecte',
   },
   {
-    kind: 'VĂZUTĂ · CAJVANA CENTRU',
+    kind: 'Văzută · Cajvana centru',
     kindAccent: false,
     carId: 'd13',
-    title: 'VĂZUTĂ DE MIHAI B.',
+    title: 'Văzută de Mihai B.',
     time: '2Z',
     slot: 'feed-4',
     slotHint: 'Dacia 1300 în fața magazinului',
     body: 'Ieșită după pâine. La fel cum face din 1978.',
-    cat: 'VĂZUTE',
+    cat: 'Văzute',
   },
 ];
 
-export const FEED_FILTERS: readonly FeedFilter[] = ['TOATE', 'PROIECTE', 'VĂZUTE'] as const;
+export const FEED_FILTERS: readonly FeedFilter[] = ['Toate', 'Proiecte', 'Văzute'] as const;
 
 /** Cards scanned recently on show day. Most recent first. */
 export const RECENT_SCANS: readonly [string, string][] = [
-  ['sup', 'ACUM 4 MIN'],
-  ['d13', 'ACUM 12 MIN'],
-  ['e30', 'ACUM 36 MIN'],
+  ['sup', 'acum 4 min'],
+  ['d13', 'acum 12 min'],
+  ['e30', 'acum 36 min'],
 ] as const;

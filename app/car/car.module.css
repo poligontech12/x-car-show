@@ -1,6 +1,10 @@
+.screen {
+  padding-bottom: 120px;
+}
+
 /* ── Hero ────────────────────────────────────────────────────
-   Three photos, swipeable, tall enough that the headline below
-   crashes up into the fade rather than sitting under it. */
+   Three photographs, swipeable, running under the nav. The
+   veil is what lets the name sit on top of them. */
 
 .hero {
   position: relative;
@@ -10,12 +14,12 @@
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  height: 452px;
+  height: 460px;
 }
 
 .frame {
   flex: 0 0 100%;
-  height: 452px;
+  height: 460px;
   scroll-snap-align: start;
   position: relative;
   background: var(--slot);
@@ -26,9 +30,10 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 110px;
-  background: linear-gradient(to bottom, rgba(8, 8, 9, 0.75), rgba(8, 8, 9, 0));
+  height: 130px;
+  background: linear-gradient(to bottom, rgba(6, 8, 15, 0.8), rgba(6, 8, 15, 0));
   pointer-events: none;
+  z-index: 2;
 }
 
 .heroBottom {
@@ -36,273 +41,326 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 130px;
-  background: linear-gradient(to top, var(--ink) 4%, rgba(11, 11, 12, 0));
+  height: 200px;
+  background: linear-gradient(to top, var(--ink) 6%, rgba(10, 14, 28, 0));
   pointer-events: none;
+  z-index: 2;
 }
 
 .back {
   position: absolute;
   top: var(--safe-top);
-  left: 14px;
-  z-index: 3;
-  background: rgba(8, 8, 9, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  left: var(--gutter);
+  z-index: 5;
 }
 
 .dots {
   position: absolute;
-  left: 14px;
-  bottom: 84px;
+  left: var(--gutter);
+  bottom: 96px;
+  z-index: 4;
   display: flex;
-  gap: 4px;
+  gap: 5px;
   pointer-events: none;
 }
 
 .dots i {
   display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--hairline-loud);
-  transition: background 0.16s ease;
+  width: 24px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: background 0.2s ease;
 }
 
 .dots i[data-on='true'] {
-  background: var(--arterial);
+  background: var(--gold);
 }
 
-/* ── Identity ────────────────────────────────────────────────── */
+/* ── Identity ────────────────────────────────────────────────
+   The name crashes up into the fade rather than sitting under it. */
 
 .masthead {
-  padding: 0 var(--gutter);
-  margin-top: -54px;
   position: relative;
+  z-index: 4;
+  margin-top: -72px;
+  padding: 0 var(--gutter);
 }
 
 .tags {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 .stand {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.14em;
-  color: var(--paper-45);
+  font-size: 13px;
+  color: var(--paper-60);
 }
 
-.headline {
+.name {
+  margin: 0;
+  font-weight: 600;
+  font-size: clamp(38px, 12.5vw, 58px);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
   text-wrap: balance;
 }
 
-/* Winning it once is a fact about the car, so it sits with the car,
-   not in a trophy case somewhere else. */
-.win {
-  margin: 16px var(--gutter) 0;
-  border: 1px solid var(--arterial-edge);
-  padding: 11px 13px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.year {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--paper-60);
 }
 
-.diamond {
-  width: 14px;
-  height: 14px;
+/* Winning it once is a fact about the car, so it sits with the car. */
+.win {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px var(--gutter) 0;
+  padding: 14px 16px;
+  border-radius: var(--r-panel);
+  background: var(--gold-wash);
+  border: 1px solid var(--gold-edge);
+}
+
+.trophy {
   flex: none;
-  background: var(--arterial);
-  transform: rotate(45deg);
+  color: var(--gold);
+}
+
+.winLabel {
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.02em;
 }
 
 .winYear {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  color: var(--arterial-lt);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--gold);
 }
 
 .followRow {
   display: flex;
-  gap: 9px;
-  padding: 18px var(--gutter) 0;
   align-items: center;
+  gap: 12px;
+  padding: 20px var(--gutter) 0;
+}
+
+.followRow .btn {
+  flex: 1;
 }
 
 .followers {
-  width: 96px;
   flex: none;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  line-height: 1.5;
-  color: var(--paper-34);
+  width: 92px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--paper-60);
 }
 
-/* ── Numbers ─────────────────────────────────────────────────
-   Three big cells. Mono carries every one of them. */
+/* ── The numbers ─────────────────────────────────────────────
+   Stacked, one per line, at a size that makes them the
+   composition rather than a value inside one. */
 
 .stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  margin-top: 20px;
-  border-top: 1px solid var(--hairline-firm);
-  border-bottom: 1px solid var(--hairline-firm);
+  padding: 34px var(--gutter) 0;
 }
 
 .stat {
-  padding: 15px 0 14px var(--gutter);
-  border-right: 1px solid var(--hairline-soft);
+  padding-bottom: 22px;
 }
 
-.stat:last-child {
-  border-right: 0;
-}
-
-.k {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.15em;
-  color: rgba(242, 242, 240, 0.36);
+.statLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--paper-60);
 }
 
 .statValue {
   display: flex;
   align-items: baseline;
-  gap: 3px;
-  margin-top: 7px;
+  gap: 10px;
 }
 
 .unit {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: -0.02em;
   color: var(--paper-40);
 }
+
+/* ── Specification ───────────────────────────────────────────── */
 
 .specs {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 8px var(--gutter) 0;
 }
 
 .spec {
-  padding: 13px 14px 13px var(--gutter);
-  border-bottom: 1px solid var(--hairline-soft);
-  border-right: 1px solid var(--hairline-soft);
+  padding: 15px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
-.spec:nth-child(even) {
-  border-right: 0;
+.specKey {
+  font-size: 12px;
+  color: var(--paper-60);
 }
 
 .specValue {
-  font-family: var(--font-display);
+  margin-top: 7px;
   font-weight: 600;
-  font-size: 16px;
-  line-height: 1.1;
-  margin-top: 5px;
+  font-size: 17px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
 }
 
-/* ── Mods ────────────────────────────────────────────────────── */
+/* ── Sections ────────────────────────────────────────────────── */
 
 .sectionHead {
-  padding: 24px var(--gutter) 0;
-  margin-bottom: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 34px var(--gutter) 14px;
+}
+
+.sectionHead h2 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.035em;
+}
+
+.sectionCount {
+  font-size: 13px;
+  color: var(--paper-60);
+}
+
+.mods {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 var(--gutter);
 }
 
 .modGroup {
-  border-bottom: 1px solid var(--hairline-soft);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transition: border-color 0.16s ease;
+}
+
+.modGroupOpen {
+  border-color: var(--gold-edge);
 }
 
 .modHead {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
-  padding: 14px var(--gutter);
-}
-
-/* The open group is the one thing you are reading — it gets the red. */
-.modBar {
-  width: 3px;
-  height: 15px;
-  flex: none;
-  background: rgba(255, 255, 255, 0.22);
-}
-
-.modBarOpen {
-  background: var(--arterial);
+  padding: 16px;
 }
 
 .modName {
   flex: 1;
   text-align: left;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.03em;
 }
 
 .modSign {
-  width: 12px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--paper-45);
+  width: 22px;
+  height: 22px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 15px;
+  line-height: 1;
+  color: var(--paper-60);
+}
+
+.modGroupOpen .modSign {
+  background: var(--gold);
+  color: #14100a;
 }
 
 .modItems {
-  padding: 0 var(--gutter) 15px 32px;
   margin: 0;
+  padding: 0 16px 16px;
   list-style: none;
 }
 
 .modItems li {
   display: flex;
-  gap: 9px;
-  padding: 5px 0;
-  font-size: 13.5px;
-  color: rgba(242, 242, 240, 0.78);
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--paper-80);
 }
 
 .modItems li::before {
-  content: '—';
-  font-family: var(--font-mono);
-  color: rgba(242, 242, 240, 0.25);
-}
-
-/* ── Story ───────────────────────────────────────────────────── */
-
-.storyHead {
-  padding: 24px var(--gutter) 0;
-  margin-bottom: 12px;
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--gold-dim);
 }
 
 .story {
   padding: 0 var(--gutter);
-  font-size: 15px;
-  line-height: 1.52;
-  color: rgba(242, 242, 240, 0.84);
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--paper-80);
   white-space: pre-line;
   text-wrap: pretty;
-  margin: 0;
 }
 
 /* ── Owner ───────────────────────────────────────────────────
-   The owner is a card at the foot of the car's page, never the
-   other way round. */
+   A card at the foot of the car's page, never the other way round. */
 
 .owner {
-  margin: 26px var(--gutter) 0;
-  border-top: 1px solid var(--hairline-firm);
-  padding-top: 16px;
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 14px;
+  margin: 30px var(--gutter) 0;
+  padding: 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .ownerAvatar {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   flex: none;
-  border-radius: 50%;
+  border-radius: 999px;
   background: var(--hatch);
   border: 1px solid var(--hairline-firm);
 }
@@ -314,67 +372,58 @@
 
 .ownerBody b {
   display: block;
-  font-family: var(--font-display);
   font-weight: 600;
-  font-size: 18px;
-  line-height: 1;
+  font-size: 17px;
+  letter-spacing: -0.03em;
 }
 
 .ownerBody span {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.12em;
-  color: var(--paper-40);
-  margin-top: 6px;
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--paper-60);
 }
 
-.ownerFollow {
-  flex: none;
-  border: 1px solid var(--hairline-edge);
-  padding: 8px 11px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  color: var(--paper-70);
-}
-
-/* One person, many cars, one garage. */
 .garage {
-  margin: 14px var(--gutter) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px var(--gutter) 0;
 }
 
 .garageRow {
   display: flex;
   align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 10px 0;
-  border-top: 1px solid var(--hairline-faint);
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass-soft);
+  border: 1px solid var(--hairline-soft);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transition: border-color 0.16s ease;
+}
+
+.garageRow:hover {
+  border-color: var(--hairline-firm);
 }
 
 .garageThumb {
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   flex: none;
+  border-radius: var(--r-card);
   background: var(--hatch);
 }
 
 .garageRow b {
   flex: 1;
-  text-align: left;
-  font-family: var(--font-display);
   font-weight: 600;
   font-size: 15px;
+  letter-spacing: -0.03em;
 }
 
 .garageRow em {
   font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--paper-30);
-}
-
-.tail {
-  height: 34px;
+  color: var(--gold);
 }

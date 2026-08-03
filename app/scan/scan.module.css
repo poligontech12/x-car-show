@@ -2,30 +2,38 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--panel-scan);
+  padding: 0 var(--gutter) calc(var(--safe-bottom) + 76px);
+  gap: 12px;
 }
+
+/* ── Viewfinder ──────────────────────────────────────────────
+   A panel like every other, with the reticle drawn inside it. */
 
 .viewfinder {
   position: relative;
   flex: 1;
   min-height: 0;
   width: 100%;
-  background: radial-gradient(ellipse at 50% 42%, #1b1c1f 0%, #0a0a0b 72%);
+  margin-top: var(--safe-top);
+  border-radius: var(--r-panel);
   overflow: hidden;
+  background: radial-gradient(ellipse at 50% 42%, #1b2136 0%, #070a14 72%);
+  border: 1px solid var(--hairline);
   cursor: pointer;
 }
 
-/* A card lying at an angle on a dashboard, which is how you actually
-   find one. Stand-in for the camera feed. */
+/* A card lying at an angle on a dashboard, which is how you
+   actually find one. Stand-in for the camera feed. */
 .card {
   position: absolute;
   left: 50%;
   top: 46%;
   transform: translate(-50%, -50%) rotate(-7deg);
-  width: 212px;
-  height: 132px;
-  background: repeating-linear-gradient(135deg, #232427 0 8px, #1c1d20 8px 16px);
-  border: 1px solid var(--hairline-soft);
+  width: 208px;
+  height: 130px;
+  border-radius: var(--r-card);
+  background: repeating-linear-gradient(135deg, #232a42 0 8px, #1b2136 8px 16px);
+  border: 1px solid var(--hairline);
   opacity: 0.85;
 }
 
@@ -34,101 +42,99 @@
   left: 50%;
   top: 46%;
   transform: translate(-50%, -50%);
-  width: 228px;
-  height: 228px;
+  width: 224px;
+  height: 224px;
 }
 
 .reticle i {
   position: absolute;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
 }
 
 .reticle i:nth-child(1) {
   top: 0;
   left: 0;
-  border-top: 2px solid var(--arterial);
-  border-left: 2px solid var(--arterial);
+  border-top: 2.5px solid var(--gold);
+  border-left: 2.5px solid var(--gold);
+  border-top-left-radius: 14px;
 }
 
 .reticle i:nth-child(2) {
   top: 0;
   right: 0;
-  border-top: 2px solid var(--arterial);
-  border-right: 2px solid var(--arterial);
+  border-top: 2.5px solid var(--gold);
+  border-right: 2.5px solid var(--gold);
+  border-top-right-radius: 14px;
 }
 
 .reticle i:nth-child(3) {
   bottom: 0;
   left: 0;
-  border-bottom: 2px solid var(--arterial);
-  border-left: 2px solid var(--arterial);
+  border-bottom: 2.5px solid var(--gold);
+  border-left: 2.5px solid var(--gold);
+  border-bottom-left-radius: 14px;
 }
 
 .reticle i:nth-child(4) {
   bottom: 0;
   right: 0;
-  border-bottom: 2px solid var(--arterial);
-  border-right: 2px solid var(--arterial);
+  border-bottom: 2.5px solid var(--gold);
+  border-right: 2.5px solid var(--gold);
+  border-bottom-right-radius: 14px;
 }
 
 .line {
   position: absolute;
-  left: 6px;
-  right: 6px;
+  left: 8px;
+  right: 8px;
   top: 50%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--arterial), transparent);
-  animation: xscan 2.4s ease-in-out infinite;
-}
-
-.label {
-  position: absolute;
-  top: var(--safe-top);
-  left: var(--gutter);
-  right: var(--gutter);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  color: var(--paper-55);
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: scanSweep 2.4s ease-in-out infinite;
 }
 
 .hint {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 26px;
+  bottom: 22px;
   text-align: center;
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.14em;
-  color: var(--paper-40);
+  font-size: 13.5px;
+  color: var(--paper-60);
 }
 
 .hintFound {
-  color: var(--arterial-lt);
+  color: var(--gold);
+  font-weight: 500;
 }
 
 /* ── Result ──────────────────────────────────────────────────
    A match is the one thing the screen wants you to act on, so
-   it gets the red edge and the whole width. */
+   it gets the gold edge and the whole width. */
 
 .match {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 14px;
   width: 100%;
-  background: var(--panel-sheet);
-  border-top: 2px solid var(--arterial);
-  padding: var(--gutter);
-  animation: xrise 0.28s ease-out;
+  flex: none;
+  padding: 16px;
+  border-radius: var(--r-panel);
+  background: var(--gold-wash);
+  border: 1px solid var(--gold-edge);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  animation: fadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .thumb {
   width: 58px;
   height: 58px;
   flex: none;
-  background: repeating-linear-gradient(135deg, #1d1e21 0 7px, #161719 7px 14px);
+  border-radius: var(--r-card);
+  background: var(--hatch);
   border: 1px solid var(--hairline-firm);
 }
 
@@ -140,71 +146,76 @@
 
 .matchKind {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.16em;
-  color: var(--arterial-lt);
+  font-size: 12px;
+  color: var(--gold);
 }
 
 .matchName {
   display: block;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 1;
   margin-top: 6px;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
 }
 
 .matchMeta {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.11em;
-  color: var(--paper-40);
-  margin-top: 6px;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--paper-60);
 }
 
 .matchArrow {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--arterial);
+  flex: none;
+  font-size: 18px;
+  color: var(--gold);
 }
 
+/* ── Recents ─────────────────────────────────────────────────── */
+
 .recents {
-  background: var(--panel-sheet);
-  border-top: 1px solid var(--hairline-firm);
-  padding: var(--gutter) var(--gutter) 24px;
+  flex: none;
+  padding: 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .recentsHead {
-  margin-bottom: 11px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--paper-60);
 }
 
 .recent {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
-  padding: 8px 0;
+  padding: 9px 0;
 }
 
 .recentNo {
-  width: 22px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: rgba(242, 242, 240, 0.35);
+  width: 30px;
+  flex: none;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+  color: var(--gold);
 }
 
 .recent b {
   flex: 1;
   text-align: left;
-  font-family: var(--font-display);
   font-weight: 600;
   font-size: 15px;
+  letter-spacing: -0.03em;
 }
 
 .recent span {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  color: var(--paper-30);
+  font-size: 12px;
+  color: var(--paper-40);
 }

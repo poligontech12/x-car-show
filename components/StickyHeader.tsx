@@ -1,23 +1,39 @@
 import styles from './StickyHeader.module.css';
 
-export function StickyHeader({ children }: { children: React.ReactNode }) {
-  return <header className={styles.header}>{children}</header>;
-}
-
-export function HeaderRow({
-  children,
-  align = 'end',
+/**
+ * Label, mark, then the name on two lines at 48px. Every
+ * destination in the app opens with this block.
+ */
+export function ScreenTitle({
+  label,
+  icon,
+  lines,
+  aside,
+  className,
 }: {
-  children: React.ReactNode;
-  align?: 'end' | 'center';
+  label: string;
+  icon?: React.ReactNode;
+  lines: [string, string?];
+  aside?: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <div className={`${styles.row} ${align === 'center' ? styles.rowCenter : ''}`}>{children}</div>
+    <div className={`${styles.title} ${className ?? ''}`}>
+      <div className={styles.label}>
+        {icon}
+        <span>{label}</span>
+      </div>
+      <h1 className={styles.lines}>
+        <b>{lines[0]}</b>
+        {lines[1] && <b>{lines[1]}</b>}
+      </h1>
+      {aside && <div className={styles.aside}>{aside}</div>}
+    </div>
   );
 }
 
-export function HeaderRule() {
-  return <div className={styles.rule} />;
+export function TitleAside({ children, gold }: { children: React.ReactNode; gold?: boolean }) {
+  return <span className={gold ? styles.asideGold : undefined}>{children}</span>;
 }
 
 /** One filter row. No trays, no second level. */

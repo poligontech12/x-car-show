@@ -3,89 +3,103 @@
 import Link from 'next/link';
 import { Chip } from '@/components/Chip';
 import { ImageSlot } from '@/components/ImageSlot';
-import { FilterRow, HeaderRow, StickyHeader } from '@/components/StickyHeader';
-import { byId } from '@/lib/cars';
+import { FilterRow, ScreenTitle, TitleAside } from '@/components/StickyHeader';
+import { ROSTER_TOTAL, byId } from '@/lib/cars';
 import { EVENT } from '@/lib/event';
 import { FEED, FEED_FILTERS, type FeedPost } from '@/lib/feed';
 import { useStore } from '@/lib/store';
 import styles from './feed.module.css';
 
-/** Builds run warm, sightings cooler — a tell you read without reading. */
-const tone = (p: FeedPost) => (p.cat === 'VĂZUTE' ? '#17181A' : '#1A1B1D');
+function Flag() {
+  return (
+    <span className={styles.flag} aria-hidden="true">
+      <i />
+      <i />
+      <i />
+    </span>
+  );
+}
 
 export default function FeedScreen() {
-  const { feedFilter, setFeedFilter, account } = useStore();
+  const { feedFilter, setFeedFilter } = useStore();
 
-  const posts = FEED.filter((p) => feedFilter === 'TOATE' || p.cat === feedFilter);
+  const posts = FEED.filter((p) => feedFilter === 'Toate' || p.cat === feedFilter);
 
   return (
-    <>
-      <StickyHeader>
-        <HeaderRow align="center">
-          <div className={styles.mark} aria-hidden="true">
-            X
-          </div>
-          <div className={styles.wordmark}>
-            <b>CAR SHOW</b>
-            <span>{EVENT.dateShort}</span>
-          </div>
-          <div className="spacer" />
-          <Link
-            href={account ? '/auth' : '/auth?mode=register&role=car'}
-            className={`${styles.account} ${account ? styles.accountIn : ''}`}
-          >
-            {account ? account.name : 'CONECTARE'}
-          </Link>
-        </HeaderRow>
+    <div className={styles.screen}>
+      <ScreenTitle
+        className="a-up delay-300"
+        label="România"
+        icon={<Flag />}
+        lines={['Cajvana', 'Bucovina']}
+        aside={
+          <>
+            <TitleAside>
+              {EVENT.edition} · {EVENT.dateNumeric.split(' · ')[1]}
+            </TitleAside>
+            <TitleAside gold>{ROSTER_TOTAL} de înscrieri</TitleAside>
+          </>
+        }
+      />
 
-        <FilterRow label="Filtrează fluxul">
-          {FEED_FILTERS.map((f) => (
-            <Chip key={f} label={f} on={feedFilter === f} onClick={() => setFeedFilter(f)} />
-          ))}
-        </FilterRow>
-      </StickyHeader>
+      <FilterRow label="Filtrează fluxul">
+        {FEED_FILTERS.map((f) => (
+          <Chip key={f} label={f} on={feedFilter === f} onClick={() => setFeedFilter(f)} />
+        ))}
+      </FilterRow>
 
-      {posts.length === 0 && <div className={styles.empty}>NIMIC AICI ÎNCĂ</div>}
+      {posts.length === 0 && <div className={styles.empty}>Nimic aici încă.</div>}
 
-      {posts.map((p, i) => {
+      {posts.map((p: FeedPost, i) => {
         const car = p.carId ? byId(p.carId) : null;
+        const delay = ['delay-400', 'delay-500', 'delay-600', 'delay-700'][Math.min(i, 3)];
+
+        const byline = (
+          <>
+            <span className={styles.avatar}>{car ? car.no : '·'}</span>
+            <span className={styles.who}>
+              <b>{p.title}</b>
+              <span className={`${styles.kind} ${p.kindAccent ? styles.kindAccent : ''}`}>
+                {p.kind}
+              </span>
+            </span>
+            <span className={styles.time}>{p.time}</span>
+          </>
+        );
 
         return (
-          <article key={`${p.title}-${i}`} className={styles.post}>
-            <div className={styles.postHead}>
-              <div className={styles.avatar} style={{ background: tone(p) }}>
-                {car ? car.no : '·'}
-              </div>
-              <div className={styles.postTitle}>
-                <b>{p.title}</b>
-                <span className={`${styles.kind} ${p.kindAccent ? styles.kindAccent : ''}`}>
-                  {p.kind}
-                </span>
-              </div>
-              <div className="spacer" />
-              <div className={styles.time}>{p.time}</div>
-            </div>
-
-            {p.slot &&
-              (car ? (
-                <Link href={`/car/${car.id}`} className={styles.photo}>
-                  <ImageSlot id={p.slot} hint={p.slotHint ?? ''} mode="inline" />
-                </Link>
-              ) : (
-                <div className={styles.photo}>
-                  <ImageSlot id={p.slot} hint={p.slotHint ?? ''} />
-                </div>
-              ))}
+          <article key={`${p.title}-${i}`} className={`${styles.post} a-up ${delay}`}>
+            {p.slot ? (
+              <>
+                {car ? (
+                  <Link href={`/car/${car.id}`} className={styles.photo}>
+                    <ImageSlot id={p.slot} hint={p.slotHint ?? ''} mode="inline" />
+                    <span className="photo-scrim" />
+                    <span className="photo-veil" />
+                    <span className={styles.overlay}>{byline}</span>
+                  </Link>
+                ) : (
+                  <div className={styles.photo}>
+                    <ImageSlot id={p.slot} hint={p.slotHint ?? ''} />
+                    <span className="photo-scrim" />
+                    <span className="photo-veil" />
+                    <span className={styles.overlay}>{byline}</span>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className={styles.headPlain}>{byline}</div>
+            )}
 
             {p.body && <p className={styles.body}>{p.body}</p>}
           </article>
         );
       })}
 
-      <Link href="/partners" className={styles.partners}>
-        <span>PARTENERI &amp; ATELIERE</span>
+      <Link href="/partners" className={`${styles.partners} a-up delay-800`}>
+        <span>Parteneri &amp; ateliere</span>
         <em>→</em>
       </Link>
-    </>
+    </div>
   );
 }

@@ -3,9 +3,14 @@
 Cajvana, Suceava. One meet a year, plus the year-round community around it.
 142 entries, one award, one vote each.
 
-This is the implementation of the design canvas in
+Built from the design canvas in
 [`design/X Car Show.dc.html`](design/X%20Car%20Show.dc.html) — its second pass,
 which supersedes the first: **four tabs not five, one award, accounts added.**
+
+The canvas defined the product; the **visual language was later replaced**
+with the one described under *The rules the design runs on* below. The canvas
+argued for the opposite case — "no cards, no corners", mono numerals, one red —
+so read it for what the app is, not for how it looks.
 
 ```bash
 npm install
@@ -39,35 +44,45 @@ layouts that constrain them, because the mono labels are sized to the pixel.
 
 ```
 app/
-  tokens.css        the colour and type scale — the source of truth
-  globals.css       reset, motion, and the component sheet as CSS
-  layout.tsx        fonts, the store, the app shell
+  tokens.css        colour, glass, type and radius — the source of truth
+  globals.css       reset, the eight keyframes + delay utilities, surfaces, controls
+  layout.tsx        Albert Sans, the store, the app shell
   <route>/          one folder per screen, each with its own .module.css
-components/         AppShell, TabBar, ImageSlot, QrCode, chips and rules
+components/
+  AppShell          the 390x844 frame, device chrome, scroll vs fill
+  PhoneNav          the fixed nav and the full-screen menu overlay
+  TabBar            the floating glass tab pill
+  ImageSlot         drop-target photo wells
 lib/
   cars.ts           the twelve modelled builds, plus standings
   store.tsx         account, vote, follows, filters — persisted to localStorage
   slots.ts          photo slots: downscale, encode, persist
+  useCountUp.ts     display numbers count in on a cubic ease-out
 design/             the original canvas and the app it embeds, for reference
 ```
 
 ## The rules the design runs on
 
-Four things drive every screen, and they are worth keeping when you extend it:
+The interface was rebuilt on the visual language of the F1 / Silverstone
+hero: a near-black navy ground, glass panels over photography, gold as the
+one accent, and very tight display type. Four rules carry it:
 
-**The car is the profile.** The owner is a card at the foot of the car's page,
-never the other way round. One person, many cars, one garage.
+**Gold belongs to numbers.** `--gold` marks the figure the screen is about,
+the state you caused, and the one action. Red is the marque — the mark in
+the nav and the menu behind it — and appears nowhere else. If a screen wants
+a second gold thing, one of them is not the point of the screen.
 
-**Numbers are the ornament.** IBM Plex Mono carries every spec, time, vote and
-stand number. Nothing decorative sits on top of them.
+**Depth comes from glass, not from a second background.** Everything sits on
+the same `--ink`. Panels are `--glass` with a 1px white hairline on top,
+because without that edge a dark panel has no shape against a dark photo.
 
-**One red, three jobs.** `--arterial` marks live/now, the vote you cast, and the
-one action the screen wants. If a fourth appears, something else has to give it
-up. This is why `a` inherits its colour instead of turning red — most links here
-are whole rows and photos, not words in a sentence.
+**Type is one family doing several jobs.** Albert Sans, with weight and
+tracking carrying the difference. Display numbers run 110px at `-0.06em` and
+`0.72` leading; labels sit at 13–15px in `--paper-60`; nothing is set in caps.
 
-**No cards, no corners.** Full-bleed photos and 1px rules instead of rounded
-containers. `border-radius` is opt-in and used only on avatars.
+**Photography wins, and the veil is how.** `.photo-veil` blurs the bottom
+half of an image behind a mask gradient, so a headline can sit on a photograph
+without a box, a scrim edge, or a drop shadow.
 
 ## Prototype boundaries
 
@@ -89,9 +104,13 @@ Small, deliberate changes, all of them the canvas's intent applied to working co
   the car's URL, because a card whose code does not scan has no reason to exist.
 - **Print sizes are exact.** Cards are drawn once in the canvas's 520 × 366
   proportions; `--u` decides whether one of those units is a CSS pixel (screen) or
-  `210mm/520` (paper), so the two can never drift. The stand number sits at 68 units
-  rather than 74, and plate spec values at 17 rather than 19, so `A-14` and `SR20DET`
-  fit their columns on every entry rather than only on some.
+  `210mm/520` (paper), so the two can never drift. Albert Sans is far wider than the
+  condensed face the plate was first fitted to, so the stand number sits at 48 units
+  and the label tracking came off — `A-14` and `SR20DET` now clear their columns on
+  every entry with room to spare.
+- **The cards keep print logic, not screen logic.** Glass and backdrop blur mean
+  nothing on paper, so the three cards take the type and the accent but none of the
+  surfaces.
 - **Follows are per car**, not one flag for whichever car you are looking at.
 - **A new account starts with no vote cast.** The canvas prototype seeded one.
 - **The build story is a real textarea** with a live counter, not a static placeholder.

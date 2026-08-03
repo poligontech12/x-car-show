@@ -1,47 +1,42 @@
-.top {
-  padding: var(--safe-top) var(--gutter) 0;
-}
-
-.topRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.back {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: rgba(242, 242, 240, 0.6);
-  width: 18px;
+.screen {
+  padding-top: var(--safe-top);
+  padding-bottom: 120px;
 }
 
 .note {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  line-height: 1.7;
-  color: var(--paper-34);
-  margin-top: 14px;
+  margin: 20px var(--gutter) 24px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--paper-60);
+  text-wrap: pretty;
 }
 
 .list {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 var(--gutter);
 }
 
-/* Shops as profiles — a row each, no logos competing for attention. */
+/* Shops as profiles — a panel each, no logos competing for attention. */
 .partner {
   display: flex;
-  gap: 13px;
-  padding: 15px var(--gutter);
-  border-top: 1px solid var(--hairline-soft);
   align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .logo {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   flex: none;
-  background: repeating-linear-gradient(135deg, #1a1b1d 0 7px, #141517 7px 14px);
+  border-radius: var(--r-card);
+  background: var(--hatch);
   border: 1px solid var(--hairline-firm);
 }
 
@@ -52,21 +47,14 @@
 
 .body b {
   display: block;
-  font-family: var(--font-display);
   font-weight: 600;
-  font-size: 18px;
-  line-height: 1;
+  font-size: 17px;
+  letter-spacing: -0.03em;
 }
 
 .body span {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.12em;
-  color: var(--paper-40);
-  margin-top: 6px;
-}
-
-.tail {
-  height: 34px;
+  margin-top: 5px;
+  font-size: 12.5px;
+  color: var(--paper-60);
 }

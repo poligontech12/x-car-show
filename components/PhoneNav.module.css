@@ -1,0 +1,161 @@
+/* Sits over whatever the screen puts at the top — a photo, a
+   title, a viewfinder. It never scrolls and never has a
+   background of its own. */
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  margin-top: 20px;
+  padding: 0 var(--gutter);
+  pointer-events: none;
+}
+
+.nav > * {
+  pointer-events: auto;
+}
+
+.mark {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-card);
+  background: var(--red);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: #fff;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The account button is the solid one — it is the only place in
+   the nav that resolves to a person. */
+.profile {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-card);
+  background: #fff;
+  color: #14100a;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+}
+
+.menu {
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu i {
+  display: block;
+  height: 2px;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.menu i:first-child {
+  width: 21px;
+}
+
+.menu i:last-child {
+  width: 10px;
+}
+
+/* ── Overlay ─────────────────────────────────────────────────
+   The marque colour, and the only place it appears at size. */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--safe-top) + 24px) var(--gutter) calc(var(--safe-bottom) + 24px);
+  background: linear-gradient(160deg, var(--red-black) 0%, var(--red-deep) 40%, var(--red) 100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+.overlayOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: var(--gutter);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-card);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur-nav);
+  -webkit-backdrop-filter: var(--glass-blur-nav);
+  font-size: 22px;
+  line-height: 1;
+  color: #fff;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Each link slides in behind the one above it. */
+.link {
+  display: block;
+  padding: 6px 0;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: #fff;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.16s ease;
+}
+
+.overlayOpen .link {
+  opacity: 1;
+  transform: none;
+}
+
+.link:hover {
+  color: var(--gold);
+}
+
+.linkOn {
+  color: var(--gold);
+}
+
+.meta {
+  margin-top: 28px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+}

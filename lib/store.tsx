@@ -23,7 +23,7 @@ const KEY = 'x-car-show/state';
 
 export type Role = 'car' | 'vote';
 export type Drive = 'FWD' | 'RWD' | 'AWD';
-export type ClassFilter = 'TOATE' | CarClass;
+export type ClassFilter = 'Toate' | CarClass;
 
 export interface Account {
   name: string;
@@ -59,8 +59,8 @@ const INITIAL: State = {
   account: null,
   vote: null,
   following: {},
-  feedFilter: 'TOATE',
-  classFilter: 'TOATE',
+  feedFilter: 'Toate',
+  classFilter: 'Toate',
   onboarding: EMPTY_DRAFT,
 };
 
@@ -101,8 +101,8 @@ function read(): State {
     return {
       ...INITIAL,
       ...parsed,
-      feedFilter: oneOf(parsed.feedFilter, FEED_FILTERS, 'TOATE'),
-      classFilter: oneOf(parsed.classFilter, CLASSES, 'TOATE'),
+      feedFilter: oneOf(parsed.feedFilter, FEED_FILTERS, 'Toate'),
+      classFilter: oneOf(parsed.classFilter, CLASSES, 'Toate'),
       following: parsed.following ?? {},
       onboarding: { ...EMPTY_DRAFT, ...(parsed.onboarding ?? {}) },
     };
@@ -111,10 +111,10 @@ function read(): State {
   }
 }
 
-/** Whatever they typed, shown the way the app shows every name. */
+/** Whatever they typed, shown the way the app writes every name. */
 function nameFrom(typed: string, email: string): string {
-  const base = typed.trim() || email.split('@')[0] || 'MEMBRU';
-  return base.toUpperCase();
+  const base = typed.trim() || email.split('@')[0] || 'Membru';
+  return base.charAt(0).toUpperCase() + base.slice(1);
 }
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {

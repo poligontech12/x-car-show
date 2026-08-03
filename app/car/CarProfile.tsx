@@ -1,22 +1,46 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ImageSlot } from '@/components/ImageSlot';
-import { SectionRule } from '@/components/SectionRule';
-import { garageOf, headline, modCount, type Car } from '@/lib/cars';
+import { displayModel, garageOf, modCount, type Car } from '@/lib/cars';
+import { useCountUp } from '@/lib/useCountUp';
 import { useStore } from '@/lib/store';
 import styles from './car.module.css';
 
 const HERO_HINTS = ['Pune poza principală', 'Pune compartimentul motor', 'Pune un detaliu'];
+
+/** Power leads in gold; the other two fall away behind it. */
+function Stat({
+  label,
+  value,
+  unit,
+  delay,
+  gold,
+}: {
+  label: string;
+  value: string;
+  unit: string;
+  delay: number;
+  gold?: boolean;
+}) {
+  const n = useCountUp(Number(value), { delay });
+  return (
+    <div className={`${styles.stat} a-up`} style={{ animationDelay: `${delay}ms` }}>
+      <div className={styles.statLabel}>{label}</div>
+      <div className={styles.statValue}>
+        <span className={`n-xl ${gold ? 'n-gold' : 'n-fade'}`}>{n.toLocaleString('ro-RO')}</span>
+        <span className={styles.unit}>{unit}</span>
+      </div>
+    </div>
+  );
+}
 
 /**
  * The car is the profile. Everything on this page belongs to the car;
  * the owner is a card at the foot of it, never the other way round.
  */
 export function CarProfile({ car }: { car: Car }) {
-  const router = useRouter();
   const { isFollowing, toggleFollow } = useStore();
   const [hero, setHero] = useState(0);
   // The first group is open on arrival — for most cars that is the engine,
@@ -25,9 +49,10 @@ export function CarProfile({ car }: { car: Car }) {
 
   const following = isFollowing(car.id);
   const garage = garageOf(car);
+  const followers = following ? Number(car.followers) + 1 : Number(car.followers);
 
   return (
-    <>
+    <div className={styles.screen}>
       <div className={styles.hero}>
         <div
           className={styles.rail}
@@ -45,16 +70,9 @@ export function CarProfile({ car }: { car: Car }) {
         </div>
 
         <div className={styles.heroTop} />
+        {/* The blur that lets the name sit on the photograph. */}
+        <div className="photo-veil" style={{ zIndex: 3 }} />
         <div className={styles.heroBottom} />
-
-        <button
-          type="button"
-          className={`icon-btn ${styles.back}`}
-          aria-label="Înapoi"
-          onClick={() => router.back()}
-        >
-          ←
-        </button>
 
         <div className={styles.dots} aria-hidden="true">
           {HERO_HINTS.map((_, i) => (
@@ -64,100 +82,107 @@ export function CarProfile({ car }: { car: Car }) {
       </div>
 
       <div className={styles.masthead}>
-        <div className={styles.tags}>
+        <div className={`${styles.tags} a-up delay-300`}>
           <span className="tag">{car.cls}</span>
-          <span className={styles.stand}>STAND {car.stand}</span>
+          <span className={styles.stand}>Stand {car.stand}</span>
         </div>
-        <h1 className={`t-display ${styles.headline}`}>{headline(car)}</h1>
+        <h1 className={`${styles.name} a-speed delay-400`}>{displayModel(car)}</h1>
+        <div className={`${styles.year} a-up delay-500`}>
+          {car.year} · {car.make}
+        </div>
       </div>
 
       {car.win && (
-        <div className={styles.win}>
-          <div className={styles.diamond} />
-          <div className="t-label" style={{ flex: 1 }}>
-            MAȘINA SHOW-ULUI
-          </div>
-          <div className={styles.winYear}>{car.win}</div>
+        <div className={`${styles.win} a-up delay-500`}>
+          <svg
+            className={styles.trophy}
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M4.5 2.5h9v4a4.5 4.5 0 0 1-9 0v-4Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path d="M9 11v3M6 15.5h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          <span className={styles.winLabel}>Mașina show-ului</span>
+          <span className={styles.winYear}>{car.win}</span>
         </div>
       )}
 
-      <div className={styles.followRow}>
+      <div className={`${styles.followRow} a-up delay-600`}>
         <button
           type="button"
-          className={`btn ${following ? 'btn--secondary' : 'btn--primary'}`}
-          style={{ padding: 13, letterSpacing: '0.18em' }}
+          className={`btn ${following ? 'btn--glass' : 'btn--primary'}`}
           aria-pressed={following}
           onClick={() => toggleFollow(car.id)}
         >
-          {following ? 'URMĂREȘTI' : 'URMĂREȘTE'}
+          {following ? 'Urmărești' : 'Urmărește'}
         </button>
-        <div className={styles.followers}>
-          {(following ? Number(car.followers) + 1 : Number(car.followers)).toLocaleString('ro-RO')}{' '}
-          URMĂRITORI
-        </div>
+        <div className={styles.followers}>{followers.toLocaleString('ro-RO')} urmăritori</div>
       </div>
 
       <div className={styles.stats}>
-        {[
-          { k: 'PUTERE', v: car.power, u: 'CP' },
-          { k: 'CUPLU', v: car.tq, u: 'NM' },
-          { k: 'GREUTATE', v: car.weight, u: 'KG' },
-        ].map((s) => (
-          <div key={s.k} className={styles.stat}>
-            <div className={styles.k}>{s.k}</div>
-            <div className={styles.statValue}>
-              <span className="t-data-xl">{s.v}</span>
-              <span className={styles.unit}>{s.u}</span>
-            </div>
-          </div>
-        ))}
+        <Stat label="Putere" value={car.power} unit="CP" delay={700} gold />
+        <Stat label="Cuplu" value={car.tq} unit="NM" delay={900} />
+        <Stat label="Greutate" value={car.weight} unit="KG" delay={1100} />
       </div>
 
       <div className={styles.specs}>
         {[
-          ['MOTOR', car.engine],
-          ['TRACȚIUNE', `${car.drive} · ${car.gbox}`],
-          ['JANTE', car.wheels],
-          ['VOPSEA', car.paint],
+          ['Motor', car.engine],
+          ['Tracțiune', `${car.drive} · ${car.gbox}`],
+          ['Jante', car.wheels],
+          ['Vopsea', car.paint],
         ].map(([k, v]) => (
           <div key={k} className={styles.spec}>
-            <div className={styles.k}>{k}</div>
+            <div className={styles.specKey}>{k}</div>
             <div className={styles.specValue}>{v}</div>
           </div>
         ))}
       </div>
 
       <div className={styles.sectionHead}>
-        <SectionRule label="MODIFICĂRI" trailing={`${modCount(car)} PIESE`} />
+        <h2>Modificări</h2>
+        <div className="spacer" />
+        <span className={styles.sectionCount}>{modCount(car)} piese</span>
       </div>
 
-      {car.mods.map((g) => {
-        const open = openMod === g.name;
-        return (
-          <div key={g.name} className={styles.modGroup}>
-            <button
-              type="button"
-              className={styles.modHead}
-              aria-expanded={open}
-              onClick={() => setOpenMod(open ? null : g.name)}
+      <div className={styles.mods}>
+        {car.mods.map((g) => {
+          const open = openMod === g.name;
+          return (
+            <div
+              key={g.name}
+              className={`${styles.modGroup} ${open ? styles.modGroupOpen : ''}`}
             >
-              <span className={`${styles.modBar} ${open ? styles.modBarOpen : ''}`} />
-              <span className={`t-label ${styles.modName}`}>{g.name}</span>
-              <span className={styles.modSign}>{open ? '−' : '+'}</span>
-            </button>
-            {open && (
-              <ul className={styles.modItems}>
-                {g.items.map((i) => (
-                  <li key={i}>{i}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
-      })}
+              <button
+                type="button"
+                className={styles.modHead}
+                aria-expanded={open}
+                onClick={() => setOpenMod(open ? null : g.name)}
+              >
+                <span className={styles.modName}>{g.name}</span>
+                <span className={styles.modSign}>{open ? '−' : '+'}</span>
+              </button>
+              {open && (
+                <ul className={styles.modItems}>
+                  {g.items.map((i) => (
+                    <li key={i}>{i}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-      <div className={styles.storyHead}>
-        <SectionRule label="POVESTEA" />
+      <div className={styles.sectionHead}>
+        <h2>Povestea</h2>
       </div>
       <p className={styles.story}>{car.story}</p>
 
@@ -169,8 +194,8 @@ export function CarProfile({ car }: { car: Car }) {
             @{car.handle} · {car.town}
           </span>
         </div>
-        <button type="button" className={styles.ownerFollow}>
-          URMĂREȘTE
+        <button type="button" className="chip">
+          Urmărește
         </button>
       </div>
 
@@ -180,15 +205,13 @@ export function CarProfile({ car }: { car: Car }) {
             <Link key={g.id} href={`/car/${g.id}`} className={styles.garageRow}>
               <span className={styles.garageThumb} />
               <b>
-                {g.year} {g.model}
+                {g.year} {displayModel(g)}
               </b>
               <em>→</em>
             </Link>
           ))}
         </div>
       )}
-
-      <div className={styles.tail} />
-    </>
+    </div>
   );
 }

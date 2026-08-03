@@ -113,7 +113,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
 
           <div className={styles.plateFoot}>
             <b>
-              {car.owner} · @{car.handle.toUpperCase()} · {car.town}
+              {car.owner} · @{car.handle} · {car.town}
             </b>
             <span>LASĂ PE PARBRIZ</span>
           </div>

@@ -5,82 +5,75 @@
 }
 
 .top {
-  padding: var(--safe-top) var(--gutter) 0;
   flex: none;
+  padding: 20px var(--gutter) 0;
 }
 
 .topRow {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.close {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: rgba(242, 242, 240, 0.6);
-  width: 18px;
+  gap: 12px;
 }
 
 .label {
   flex: 1;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  color: var(--paper-40);
+  font-size: 14px;
+  color: var(--paper-60);
 }
 
 .stepLabel {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  color: var(--paper-30);
+  font-size: 13px;
+  color: var(--paper-40);
 }
 
 /* Four segments, not a percentage — you can see how much is left. */
 .progress {
   display: flex;
-  gap: 3px;
-  margin-top: 12px;
+  gap: 4px;
+  margin-top: 18px;
 }
 
 .progress i {
   flex: 1;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.14);
-  transition: background 0.2s ease;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background 0.3s ease;
 }
 
 .progress i[data-done='true'] {
-  background: var(--arterial);
+  background: var(--gold);
 }
 
 .body {
   flex: 1;
   overflow-y: auto;
-  padding: 26px var(--gutter) 0;
+  padding: 32px var(--gutter) 0;
 }
 
 .title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 34px;
+  margin: 0;
+  font-weight: 600;
+  font-size: 40px;
   line-height: 0.92;
-  letter-spacing: 0.005em;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
 }
 
 .sub {
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--paper-55);
-  margin-top: 9px;
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--paper-60);
 }
 
 .fieldLabel {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.16em;
-  color: var(--paper-34);
+  font-size: 13px;
+  color: var(--paper-60);
+}
+
+.spaced {
+  margin-top: 30px;
 }
 
 /* ── Step 1 · badge and year ─────────────────────────────────── */
@@ -88,56 +81,61 @@
 .opts {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   margin-top: 22px;
 }
 
 .optsTight {
-  margin-top: 9px;
+  margin-top: 10px;
 }
 
 .make,
 .year,
 .drive {
-  border: 1px solid var(--hairline-edge);
-  background: transparent;
-  color: var(--paper-55);
-  transition: border-color 0.14s ease, background 0.14s ease, color 0.14s ease;
+  border-radius: var(--r-chip);
+  border: 1px solid var(--hairline);
+  background: var(--glass-soft);
+  backdrop-filter: var(--glass-blur-nav);
+  -webkit-backdrop-filter: var(--glass-blur-nav);
+  color: var(--paper-60);
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.make:hover,
+.year:hover,
+.drive:hover {
+  color: var(--paper);
+  border-color: var(--hairline-firm);
 }
 
 .make[aria-pressed='true'],
 .year[aria-pressed='true'],
 .drive[aria-pressed='true'] {
-  border-color: var(--arterial);
-  background: var(--arterial);
-  color: #fff;
+  border-color: var(--gold);
+  background: var(--gold);
+  color: #14100a;
 }
 
 .make {
-  padding: 9px 12px;
-  font-family: var(--font-display);
+  padding: 11px 16px;
   font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 0.03em;
+  font-size: 15px;
 }
 
 .year {
-  padding: 8px 12px;
-  font-family: var(--font-mono);
-  font-size: 11px;
+  padding: 10px 16px;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .drive {
   flex: 1;
   text-align: center;
-  padding: 14px 0;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-}
-
-.spaced {
-  margin-top: 26px;
+  padding: 16px 0;
+  font-weight: 600;
+  font-size: 15px;
 }
 
 /* ── Step 2 · numbers ────────────────────────────────────────
@@ -146,26 +144,31 @@
 .stepper {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-top: 12px;
+  gap: 16px;
+  margin-top: 16px;
 }
 
 .pm {
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
   flex: none;
-  border: 1px solid var(--hairline-edge);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 18px;
-  color: var(--paper-70);
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--paper-80);
+  transition: border-color 0.16s ease, color 0.16s ease;
 }
 
 .pm:hover {
-  border-color: var(--hairline-strong);
-  color: var(--paper);
+  border-color: var(--gold-edge);
+  color: var(--gold);
 }
 
 .power {
@@ -173,50 +176,44 @@
   text-align: center;
 }
 
-.powerValue {
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: 46px;
-  line-height: 0.9;
-  letter-spacing: -0.03em;
-}
-
 .powerUnit {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  color: rgba(242, 242, 240, 0.36);
-  margin-top: 7px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--paper-60);
 }
 
 .driveRow {
   display: flex;
-  gap: 6px;
-  margin-top: 9px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 /* ── Step 3 · photos ─────────────────────────────────────────── */
 
 .heroSlot {
   position: relative;
-  height: 210px;
-  margin-top: 22px;
+  height: 220px;
+  margin-top: 24px;
+  border-radius: var(--r-panel);
+  overflow: hidden;
   background: var(--slot);
-  border: 1px solid var(--hairline-firm);
+  border: 1px solid var(--hairline);
 }
 
 .pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .pairSlot {
   position: relative;
-  height: 112px;
+  height: 120px;
+  border-radius: var(--r-panel);
+  overflow: hidden;
   background: var(--slot);
-  border: 1px solid var(--hairline-firm);
+  border: 1px solid var(--hairline);
 }
 
 /* ── Step 4 · the story ──────────────────────────────────────── */
@@ -224,134 +221,122 @@
 .story {
   display: block;
   width: 100%;
-  margin-top: 20px;
-  border: 1px solid var(--hairline-firm);
-  padding: 14px;
-  min-height: 150px;
-  background: transparent;
-  color: var(--paper-86);
-  font-family: var(--font-body);
+  margin-top: 24px;
+  padding: 16px;
+  min-height: 170px;
+  border-radius: var(--r-panel);
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--paper-80);
+  font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.5;
   resize: none;
   outline: none;
+  transition: border-color 0.16s ease;
 }
 
 .story:focus {
-  border-color: var(--hairline-strong);
+  border-color: var(--gold-edge);
 }
 
 .counter {
   margin-top: 10px;
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  color: var(--paper-30);
+  font-size: 12.5px;
+  color: var(--paper-40);
 }
 
 .counterFull {
-  color: var(--arterial-lt);
+  color: var(--gold);
 }
 
 /* ── Done · the card they will be handed at the gate ─────────── */
 
 .card {
-  margin-top: 22px;
-  border: 1px solid var(--hairline-edge);
+  margin-top: 26px;
+  border-radius: var(--r-panel);
   overflow: hidden;
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .cardHead {
-  background: var(--arterial);
-  padding: 10px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 13px 16px;
+  background: var(--red);
 }
 
 .cardHead b {
-  font-family: var(--font-display);
   font-weight: 700;
   font-size: 15px;
-  letter-spacing: 0.06em;
+  letter-spacing: -0.02em;
   color: #fff;
 }
 
 .cardHead span {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.85);
 }
 
 .cardBody {
   display: flex;
-  gap: 12px;
-  padding: 14px 12px;
+  gap: 16px;
+  padding: 18px 16px;
+  align-items: center;
 }
 
 .cardQr {
-  width: 78px;
-  height: 78px;
+  width: 84px;
+  height: 84px;
   flex: none;
-  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: #fff;
 }
 
 .cardStandLabel {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.16em;
-  color: var(--paper-40);
-}
-
-.cardStand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 0.9;
-  margin-top: 4px;
+  font-size: 12px;
+  color: var(--paper-60);
 }
 
 .cardLine {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  color: var(--paper-45);
-  margin-top: 9px;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--paper-60);
 }
 
 .doneNote {
-  margin-top: 16px;
+  margin-top: 20px;
   font-size: 14.5px;
-  line-height: 1.5;
-  color: rgba(242, 242, 240, 0.62);
+  line-height: 1.55;
+  color: var(--paper-60);
   text-wrap: pretty;
 }
 
 .tail {
-  height: 26px;
+  height: 28px;
 }
 
 .footer {
   flex: none;
-  border-top: 1px solid var(--hairline-firm);
-  background: var(--ink);
-  padding: 12px var(--gutter) 30px;
   display: flex;
-  gap: 9px;
+  gap: 10px;
   align-items: center;
+  padding: 14px var(--gutter) calc(var(--safe-bottom) + 14px);
+  background: linear-gradient(to top, var(--ink) 70%, rgba(10, 14, 28, 0));
 }
 
 .back {
   flex: none;
   width: auto;
-  padding: 15px 16px;
-  border: 1px solid var(--hairline-edge);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: rgba(242, 242, 240, 0.65);
+  padding: 17px 20px;
 }

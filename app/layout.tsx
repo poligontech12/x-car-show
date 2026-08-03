@@ -1,27 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import { Barlow, Barlow_Condensed, IBM_Plex_Mono } from 'next/font/google';
+import { Albert_Sans } from 'next/font/google';
 import { AppShell } from '@/components/AppShell';
 import { StoreProvider } from '@/lib/store';
 import './globals.css';
 
-const barlow = Barlow({
+const albert = Albert_Sans({
   subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500', '600'],
-  variable: '--font-barlow',
-  display: 'swap',
-});
-
-const barlowCondensed = Barlow_Condensed({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['500', '600', '700'],
-  variable: '--font-barlow-condensed',
-  display: 'swap',
-});
-
-const plexMono = IBM_Plex_Mono({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500', '600'],
-  variable: '--font-plex-mono',
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-albert',
   display: 'swap',
 });
 
@@ -35,7 +21,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#0B0B0C',
+  themeColor: '#0a0e1c',
   colorScheme: 'dark',
 };
 
@@ -43,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="ro"
-      className={`${barlow.variable} ${barlowCondensed.variable} ${plexMono.variable}`}
+      className={albert.variable}
     >
       <body>
         <StoreProvider>

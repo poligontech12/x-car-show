@@ -9,10 +9,10 @@ import styles from './TabBar.module.css';
  * (the entry you scanned, the standings) lives in Scan and Award.
  */
 const TABS = [
-  { href: '/', label: 'FLUX', glyph: 'feed' },
-  { href: '/roster', label: 'ÎNSCRIȘI', glyph: 'roster' },
-  { href: '/scan', label: 'SCANARE', glyph: 'scan' },
-  { href: '/award', label: 'PREMIU', glyph: 'award' },
+  { href: '/', label: 'Flux', glyph: 'feed' },
+  { href: '/roster', label: 'Înscriși', glyph: 'roster' },
+  { href: '/scan', label: 'Scanare', glyph: 'scan' },
+  { href: '/award', label: 'Premiu', glyph: 'award' },
 ] as const;
 
 function Glyph({ name }: { name: string }) {
@@ -79,7 +79,7 @@ export function TabBar() {
             aria-current={active ? 'page' : undefined}
           >
             <Glyph name={t.glyph} />
-            <span className="t-micro">{t.label}</span>
+            <span>{t.label}</span>
           </Link>
         );
       })}

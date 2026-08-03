@@ -1,137 +1,195 @@
 /* ─────────────────────────────────────────────────────────────
    X CAR SHOW — design tokens
-   Lifted from the COLOUR & TYPE SCALE section of the design
-   canvas (design/X Car Show.dc.html). This file is the source
-   of truth; nothing below should be hard-coded in a component.
+
+   Adapted from the F1 / Silverstone hero language: a near-black
+   navy ground, gold as the one accent that carries every number,
+   glass panels over photography, and very tight display type.
+
+   This file is the source of truth. Nothing below should be
+   hard-coded in a component.
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  /* ── Colour ────────────────────────────────────────────────
-     Red is rationed. On any given screen it appears at most
-     three times: the live/now marker, the vote you cast, and
-     the one action the screen wants. If a fourth appears,
-     something else has to give it up. */
+  /* ── Ground ────────────────────────────────────────────────
+     Everything sits on the same near-black navy. Depth comes
+     from glass and blur, not from a second background colour. */
 
-  --ink: #0b0b0c; /* app background */
-  --panel: #131315; /* raised blocks, owner card */
-  --panel-deep: #0e0e10; /* partner bands, canvas */
-  --panel-scan: #08080a; /* scan viewfinder ground */
-  --panel-sheet: #0f1012; /* scan result sheet */
-  --slot: #141517; /* empty photo slot */
+  --ink: #0a0e1c;
+  --ink-deep: #06080f; /* behind the phone frame, print index */
+  --slot: #11162a; /* an empty photo well */
 
-  --paper: #f2f2f0; /* primary text */
-  --paper-86: rgba(242, 242, 240, 0.86);
-  --paper-70: rgba(242, 242, 240, 0.7);
-  --paper-55: rgba(242, 242, 240, 0.55); /* secondary text */
-  --paper-45: rgba(242, 242, 240, 0.45);
-  --paper-40: rgba(242, 242, 240, 0.4);
-  --paper-34: rgba(242, 242, 240, 0.34); /* labels, meta */
-  --paper-30: rgba(242, 242, 240, 0.3);
-  --paper-26: rgba(242, 242, 240, 0.26); /* placeholder text */
+  /* ── Glass ────────────────────────────────────────────────
+     One recipe, three weights. Always a 1px white hairline on
+     top, or the panel has no edge against a dark photo. */
 
-  --arterial: #e01b22; /* live · your vote · action */
-  --arterial-lt: #e85159; /* red text on black */
-  --arterial-wash: rgba(224, 27, 34, 0.14); /* result bars, now row */
-  --arterial-tint: rgba(224, 27, 34, 0.07); /* selected role card */
-  --arterial-edge: rgba(224, 27, 34, 0.45); /* red hairline */
+  --glass: rgba(20, 20, 30, 0.8);
+  --glass-soft: rgba(20, 20, 30, 0.55);
+  --glass-nav: rgba(255, 255, 255, 0.15);
+  --glass-blur: blur(16px);
+  --glass-blur-nav: blur(12px);
 
-  /* Hairline ladder. `--hairline` is the canonical divider;
-     the rest exist so borders can recede or step forward
-     without inventing new values at the call site. */
-  --hairline-faint: rgba(255, 255, 255, 0.06);
-  --hairline-soft: rgba(255, 255, 255, 0.08);
-  --hairline: rgba(255, 255, 255, 0.09); /* every divider */
-  --hairline-firm: rgba(255, 255, 255, 0.12);
-  --hairline-edge: rgba(255, 255, 255, 0.16);
-  --hairline-strong: rgba(255, 255, 255, 0.2);
-  --hairline-loud: rgba(255, 255, 255, 0.3);
+  --hairline: rgba(255, 255, 255, 0.1); /* the panel edge */
+  --hairline-soft: rgba(255, 255, 255, 0.06);
+  --hairline-firm: rgba(255, 255, 255, 0.15);
+  --hairline-strong: rgba(255, 255, 255, 0.25);
 
-  --hatch: repeating-linear-gradient(135deg, #1d1e21 0 6px, #161719 6px 12px);
+  /* ── Ink on glass ─────────────────────────────────────────
+     White and three steps down. Labels live at 60%. */
+
+  --paper: #ffffff;
+  --paper-80: rgba(255, 255, 255, 0.8);
+  --paper-60: rgba(255, 255, 255, 0.6); /* every label */
+  --paper-40: rgba(255, 255, 255, 0.4);
+  --paper-25: rgba(255, 255, 255, 0.25); /* placeholders */
+
+  /* ── Accent ───────────────────────────────────────────────
+     Gold is the accent and it belongs to numbers: the figure
+     the screen is about, the state you caused, the one action.
+     Red is the marque — the mark and the menu, nothing else. */
+
+  --gold: #edb40b;
+  --gold-dim: rgba(237, 180, 11, 0.55);
+  --gold-wash: rgba(237, 180, 11, 0.12);
+  --gold-edge: rgba(237, 180, 11, 0.45);
+
+  --red: #e10600;
+  --red-deep: #8b0000;
+  --red-black: #1a0000;
+
+  /* A display number that fades as it falls, rather than sitting
+     flat on the panel. Used at 110px and up. */
+  --number-fade: linear-gradient(
+    to bottom,
+    #fff 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 85%
+  );
+
+  --hatch: repeating-linear-gradient(135deg, #1a1f33 0 6px, #12172a 6px 12px);
 
   /* ── Type ──────────────────────────────────────────────────
-     Barlow Condensed carries headlines, Barlow carries prose,
-     IBM Plex Mono carries every number and label. */
+     One family. Weight and tracking do the work that a second
+     family would otherwise do. */
 
-  --font-display: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
-  --font-body: var(--font-barlow), Barlow, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: var(--font-albert), 'Albert Sans', system-ui, sans-serif;
+
+  /* ── Radius ────────────────────────────────────────────────
+     Nothing is square. The frame is the loosest, panels sit in
+     the middle, chips are fully round. */
+
+  --r-frame: clamp(30px, 4vw, 54px);
+  --r-screen: clamp(24px, 3.2vw, 44px);
+  --r-panel: 16px;
+  --r-card: 12px;
+  --r-chip: 999px;
 
   /* ── Layout ────────────────────────────────────────────────
-     The design is drawn at 402 x 874 (iPhone 16 Pro). */
-  --frame-w: 402px;
-  --frame-h: 874px;
-  --gutter: 16px;
-  --safe-top: 56px; /* status bar + notch */
-  --safe-bottom: 26px; /* home indicator */
+     The app is drawn at 390 x 844. */
+  --frame-w: 390px;
+  --frame-h: 844px;
+  --gutter: 20px;
+  --safe-top: 76px; /* status bar + the fixed nav */
+  --safe-bottom: 24px;
 }
 
 /* ── Type scale ──────────────────────────────────────────────
-   Nine steps. Anything not on this list is a mistake. */
+   Seven steps. Display type is tight on both axes — tracking
+   down to -0.08em, leading down to 0.72. */
+
+.t-hero {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+}
 
 .t-display {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 38px;
-  line-height: 0.88;
-  letter-spacing: 0.005em;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
 }
 
 .t-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 0.85;
-  letter-spacing: 0.01em;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
 }
 
 .t-subhead {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 19px;
-  line-height: 1;
-  letter-spacing: 0.02em;
-}
-
-.t-label {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.1;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.03em;
 }
 
 .t-body {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 15px;
   line-height: 1.5;
+  color: var(--paper-80);
   text-wrap: pretty;
 }
 
-.t-data-xl {
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: 25px;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-}
-
-.t-data {
-  font-family: var(--font-mono);
+/* The label voice: small, quiet, never shouty caps. */
+.t-label {
+  font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 13px;
-}
-
-.t-meta {
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--paper-60);
 }
 
 .t-micro {
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: 7.5px;
-  letter-spacing: 0.14em;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+/* ── Display numbers ─────────────────────────────────────────
+   The thing the screen is about. Big enough that it is the
+   composition rather than a value inside one. */
+
+.n-xl {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 110px;
+  line-height: 0.72;
+  letter-spacing: -0.06em;
+}
+
+.n-lg {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 0.79;
+  letter-spacing: -0.06em;
+}
+
+.n-md {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+}
+
+/* White at the top, gone by the bottom. */
+.n-fade {
+  background: var(--number-fade);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.n-gold {
+  color: var(--gold);
 }

@@ -1,140 +1,150 @@
-.mark {
-  width: 26px;
-  height: 26px;
-  flex: none;
-  background: var(--arterial);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 19px;
-  line-height: 1;
-  color: #fff;
+.screen {
+  padding-top: var(--safe-top);
+  padding-bottom: 120px;
 }
 
-.wordmark {
+.flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 3px;
 }
 
-.wordmark b {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 19px;
-  line-height: 0.9;
-  letter-spacing: 0.05em;
+.flag i {
+  flex: 1;
+  display: block;
 }
 
-.wordmark span {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.15em;
-  color: var(--paper-34);
+.flag i:nth-child(1) {
+  background: #002b7f;
+}
+.flag i:nth-child(2) {
+  background: #fcd116;
+}
+.flag i:nth-child(3) {
+  background: #ce1126;
 }
 
-/* The one action on a signed-out feed. Becomes a quiet outline once
-   there is a name to show, so the red goes back to being spendable. */
-.account {
-  padding: 7px 11px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  border: 1px solid var(--arterial);
-  background: var(--arterial);
-  color: #fff;
-  white-space: nowrap;
-}
-
-.accountIn {
-  border-color: var(--hairline-strong);
-  background: transparent;
-  color: var(--paper-70);
-}
+/* ── A post ──────────────────────────────────────────────────
+   The photograph is the card. Everything else sits on it or
+   under it, inside one rounded panel. */
 
 .post {
-  border-bottom: 1px solid var(--hairline-soft);
-  padding: 16px 0 18px;
-}
-
-.postHead {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 var(--gutter) 12px;
-}
-
-.avatar {
-  width: 30px;
-  height: 30px;
-  flex: none;
-  border: 1px solid var(--hairline-firm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--paper-45);
-}
-
-.postTitle {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-
-.postTitle b {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1;
-  letter-spacing: 0.02em;
-}
-
-.kind {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.13em;
-  color: var(--paper-45);
-}
-
-.kindAccent {
-  color: var(--arterial-lt);
-}
-
-.time {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--paper-30);
+  margin: 0 var(--gutter) 14px;
+  border-radius: var(--r-panel);
+  overflow: hidden;
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .photo {
   display: block;
   position: relative;
   width: 100%;
-  height: 266px;
+  height: 250px;
   background: var(--slot);
 }
 
+.overlay {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--hairline-firm);
+  backdrop-filter: var(--glass-blur-nav);
+  -webkit-backdrop-filter: var(--glass-blur-nav);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+}
+
+.who {
+  min-width: 0;
+  flex: 1;
+}
+
+.who b {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.kind {
+  display: block;
+  font-size: 12px;
+  line-height: 1.3;
+  margin-top: 3px;
+  color: var(--paper-60);
+}
+
+.kindAccent {
+  color: var(--gold);
+}
+
+.time {
+  flex: none;
+  font-size: 12px;
+  color: var(--paper-40);
+}
+
 .body {
-  padding: 14px var(--gutter) 0;
+  padding: 14px 16px 16px;
+  margin: 0;
   font-size: 14.5px;
-  line-height: 1.45;
-  color: var(--paper-86);
+  line-height: 1.5;
+  color: var(--paper-80);
   text-wrap: pretty;
+}
+
+/* A post with no photograph still needs its byline. */
+.headPlain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 0;
 }
 
 .partners {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 18px var(--gutter) 30px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  color: var(--paper-40);
+  gap: 12px;
+  margin: 6px var(--gutter) 0;
+  padding: 18px;
+  border-radius: var(--r-panel);
+  background: var(--glass-soft);
+  border: 1px solid var(--hairline-soft);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  transition: border-color 0.16s ease;
+}
+
+.partners:hover {
+  border-color: var(--hairline-firm);
 }
 
 .partners span {
@@ -143,15 +153,12 @@
 
 .partners em {
   font-style: normal;
-  font-size: 12px;
-  color: var(--paper-30);
+  color: var(--gold);
 }
 
 .empty {
-  padding: 40px var(--gutter);
+  padding: 60px var(--gutter);
   text-align: center;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.13em;
-  color: var(--paper-30);
+  font-size: 14px;
+  color: var(--paper-40);
 }

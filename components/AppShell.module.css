@@ -1,6 +1,6 @@
 /* On a phone the app is the viewport. On a desktop it sits in a
-   402 x 874 frame — the size the design was drawn at — so the
-   proportions never lie about what a screen actually holds. */
+   390 x 844 frame — the size the design is drawn at — with the
+   device chrome around it, so the proportions never lie. */
 
 .stage {
   min-height: 100dvh;
@@ -20,37 +20,40 @@
   overflow: hidden;
 }
 
-.notch {
+.island {
   display: none;
 }
 
-@media (min-width: 640px) and (min-height: 900px) {
+@media (min-width: 640px) and (min-height: 880px) {
   .stage {
-    background: var(--panel-deep);
+    background: var(--ink-deep);
     padding: 24px;
   }
 
+  /* The black bezel and the inner white ring are the device;
+     the screen inside gets the smaller radius. */
   .frame {
     width: var(--frame-w);
     height: var(--frame-h);
     flex: none;
-    border: 1px solid var(--hairline-firm);
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+    border-radius: var(--r-screen);
+    box-shadow:
+      0 0 0 clamp(6px, 1vw, 12px) #000,
+      0 0 0 calc(clamp(6px, 1vw, 12px) + 1px) rgba(255, 255, 255, 0.15),
+      0 30px 80px rgba(0, 0, 0, 0.7);
   }
 
-  /* Device chrome, not app chrome — it explains the 56px of safe
-     area at the top of every screen. */
-  .notch {
+  .island {
     display: block;
     position: absolute;
-    top: 11px;
+    top: 3%;
     left: 50%;
     transform: translateX(-50%);
-    width: 108px;
-    height: 30px;
-    border-radius: 16px;
+    width: 30%;
+    height: 4%;
     background: #000;
-    z-index: 40;
+    border-radius: 999px;
+    z-index: 60;
     pointer-events: none;
   }
 }
@@ -61,26 +64,12 @@
   position: relative;
 }
 
-/* Screens that scroll: feed, roster, car, award, partners. */
-.main--scroll {
+.mainScroll {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Screens that own the full height and manage their own scrolling:
-   scan, auth, register-a-car. */
-.main--fill {
+.mainFill {
   overflow: hidden;
-}
-
-/* Fades content out under the status bar rather than cutting it. */
-.topFade {
-  position: sticky;
-  top: 0;
-  height: 68px;
-  margin-bottom: -68px;
-  z-index: 5;
-  pointer-events: none;
-  background: linear-gradient(to bottom, var(--ink) 0 48px, rgba(11, 11, 12, 0) 68px);
 }
