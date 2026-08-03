@@ -1,14 +1,15 @@
 'use server';
 
 import { randomBytes } from 'node:crypto';
-import { and, eq } from 'drizzle-orm';
+import { and, count, eq, gte, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 import { auth } from './auth';
 import type { CarClass, ModCategory, ModGroup } from './cars';
 import { db } from './db';
-import { cars, follows, mods, users, votes } from './db/schema';
+import { cars, follows, mods, spottedPosts, spottedUsage, users, votes } from './db/schema';
 import { EVENT, VOTE_LIMIT, votingOpen } from './event';
+import { decodeSpottedImage } from './spotted-image';
 
 /**
  * Everything a member can change goes through here. Each action reads the
@@ -19,6 +20,14 @@ import { EVENT, VOTE_LIMIT, votingOpen } from './event';
 const CLASSES: CarClass[] = ['JDM', 'Germane', 'Muscle', 'Clasice', 'Stance', 'Off-road'];
 const DRIVES = ['FWD', 'RWD', 'AWD', '4WD'] as const;
 const MOD_CATEGORIES: ModCategory[] = ['Motor', 'Suspensie', 'Jante', 'Exterior', 'Interior'];
+const SPOTTED_SCOPE = 'global';
+const HOUR_MS = 60 * 60 * 1000;
+const USER_POSTS_PER_HOUR = 10;
+const USER_POSTS_LIFETIME = 250;
+const GLOBAL_DECODE_ATTEMPTS_PER_HOUR = 300;
+const GLOBAL_POSTS_PER_HOUR = 100;
+const GLOBAL_POST_LIMIT = 20_000;
+const GLOBAL_BYTE_LIMIT = 1_000_000_000;
 
 /** No I/O/0/1 — these end up printed on a card and read aloud at a gate. */
 const ALPHABET = '23456789abcdefghjkmnpqrstuvwxyz';
@@ -166,6 +175,174 @@ export async function deleteCar(id: string): Promise<void> {
   revalidatePath('/roster');
   revalidatePath('/garage');
   revalidatePath('/award');
+}
+
+export interface SpottedInput {
+  imageDataUrl: string;
+  location?: string;
+  caption?: string;
+}
+
+export type SpottedResult =
+  | { ok: true; id: string }
+  | { ok: false; error: string };
+
+const SPOTTED_ERRORS = new Set([
+  'Alege o fotografie JPEG, PNG sau WebP.',
+  'Fotografia nu poate fi citită.',
+  'Fotografia este prea mare.',
+  'Ai adăugat multe apariții. Mai încearcă într-o oră.',
+  'Ai ajuns la limita de apariții pentru acest cont.',
+  'Spotted este ocupat momentan. Mai încearcă puțin mai târziu.',
+  'Spațiul Spotted este momentan plin.',
+]);
+
+async function reserveSpottedDecodeAttempt(): Promise<string | null> {
+  return db.transaction(async (tx) => {
+    await tx
+      .insert(spottedUsage)
+      .values({ scope: SPOTTED_SCOPE })
+      .onConflictDoNothing({ target: spottedUsage.scope });
+    const [usage] = await tx
+      .select()
+      .from(spottedUsage)
+      .where(eq(spottedUsage.scope, SPOTTED_SCOPE))
+      .limit(1)
+      .for('update');
+    if (!usage) return 'Spotted este ocupat momentan. Mai încearcă puțin mai târziu.';
+    if (usage.postCount >= GLOBAL_POST_LIMIT || usage.totalBytes >= GLOBAL_BYTE_LIMIT) {
+      return 'Spațiul Spotted este momentan plin.';
+    }
+
+    const now = new Date();
+    const windowExpired = usage.attemptWindowStartedAt.getTime() < now.getTime() - HOUR_MS;
+    const attempts = windowExpired ? 1 : usage.decodeAttempts + 1;
+    if (attempts > GLOBAL_DECODE_ATTEMPTS_PER_HOUR) {
+      return 'Spotted este ocupat momentan. Mai încearcă puțin mai târziu.';
+    }
+    await tx
+      .update(spottedUsage)
+      .set({
+        attemptWindowStartedAt: windowExpired ? now : usage.attemptWindowStartedAt,
+        decodeAttempts: attempts,
+        updatedAt: now,
+      })
+      .where(eq(spottedUsage.scope, SPOTTED_SCOPE));
+    return null;
+  });
+}
+
+/** A sighting is shared community data, never a browser-local demo slot. */
+export async function createSpottedPost(input: SpottedInput): Promise<SpottedResult> {
+  const user = await currentUser();
+  if (!user) return { ok: false, error: 'Trebuie să fii conectat.' };
+
+  let id: string;
+  try {
+    const since = new Date(Date.now() - HOUR_MS);
+    const [[recent], [lifetime]] = await Promise.all([
+      db
+        .select({ n: count() })
+        .from(spottedPosts)
+        .where(and(eq(spottedPosts.authorId, user.id), gte(spottedPosts.createdAt, since))),
+      db.select({ n: count() }).from(spottedPosts).where(eq(spottedPosts.authorId, user.id)),
+    ]);
+    if (Number(recent?.n ?? 0) >= USER_POSTS_PER_HOUR) {
+      throw new Error('Ai adăugat multe apariții. Mai încearcă într-o oră.');
+    }
+    if (Number(lifetime?.n ?? 0) >= USER_POSTS_LIFETIME) {
+      throw new Error('Ai ajuns la limita de apariții pentru acest cont.');
+    }
+
+    // This durable global budget is consumed before any attacker-controlled
+    // bytes reach Sharp. Invalid images still count as decoder attempts.
+    const decodeBudgetError = await reserveSpottedDecodeAttempt();
+    if (decodeBudgetError) throw new Error(decodeBudgetError);
+
+    const photo = await decodeSpottedImage(input.imageDataUrl);
+    const location = text(input.location)?.slice(0, 80) ?? null;
+    const caption = text(input.caption)?.slice(0, 280) ?? null;
+    id = shortId(12);
+
+    await db.transaction(async (tx) => {
+      // Serialize per-member quota checks and then lock the global counter.
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`spotted:${user.id}`}))`);
+      const now = new Date();
+      const lockedSince = new Date(now.getTime() - HOUR_MS);
+      const [lockedRecent] = await tx
+        .select({ n: count() })
+        .from(spottedPosts)
+        .where(
+          and(eq(spottedPosts.authorId, user.id), gte(spottedPosts.createdAt, lockedSince)),
+        );
+      const [lockedLifetime] = await tx
+        .select({ n: count() })
+        .from(spottedPosts)
+        .where(eq(spottedPosts.authorId, user.id));
+      if (Number(lockedRecent?.n ?? 0) >= USER_POSTS_PER_HOUR) {
+        throw new Error('Ai adăugat multe apariții. Mai încearcă într-o oră.');
+      }
+      if (Number(lockedLifetime?.n ?? 0) >= USER_POSTS_LIFETIME) {
+        throw new Error('Ai ajuns la limita de apariții pentru acest cont.');
+      }
+
+      const [usage] = await tx
+        .select()
+        .from(spottedUsage)
+        .where(eq(spottedUsage.scope, SPOTTED_SCOPE))
+        .limit(1)
+        .for('update');
+      if (!usage) throw new Error('Spotted este ocupat momentan. Mai încearcă puțin mai târziu.');
+
+      const postWindowExpired = usage.postWindowStartedAt.getTime() < now.getTime() - HOUR_MS;
+      const postWindowCount = postWindowExpired ? 1 : usage.postWindowCount + 1;
+      if (postWindowCount > GLOBAL_POSTS_PER_HOUR) {
+        throw new Error('Spotted este ocupat momentan. Mai încearcă puțin mai târziu.');
+      }
+      if (
+        usage.postCount + 1 > GLOBAL_POST_LIMIT ||
+        usage.totalBytes + photo.bytes.length > GLOBAL_BYTE_LIMIT
+      ) {
+        throw new Error('Spațiul Spotted este momentan plin.');
+      }
+
+      await tx.insert(spottedPosts).values({
+        id,
+        authorId: user.id,
+        image: photo.bytes,
+        imageType: photo.contentType,
+        location,
+        caption,
+      });
+      await tx
+        .update(spottedUsage)
+        .set({
+          postCount: usage.postCount + 1,
+          totalBytes: usage.totalBytes + photo.bytes.length,
+          postWindowStartedAt: postWindowExpired ? now : usage.postWindowStartedAt,
+          postWindowCount,
+          updatedAt: now,
+        })
+        .where(eq(spottedUsage.scope, SPOTTED_SCOPE));
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : '';
+    return {
+      ok: false,
+      error: SPOTTED_ERRORS.has(message)
+        ? message
+        : 'Nu am putut publica fotografia. Încearcă din nou.',
+    };
+  }
+
+  // Persistence is already committed. Cache invalidation failure must never
+  // tell the member that publishing failed and invite a duplicate retry.
+  try {
+    revalidatePath('/');
+  } catch (error) {
+    console.error('Spotted cache invalidation failed after commit.', error);
+  }
+  return { ok: true, id };
 }
 
 /**

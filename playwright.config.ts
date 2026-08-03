@@ -11,6 +11,7 @@ export default defineConfig({
   retries: 0,
   use: {
     baseURL,
+    ignoreHTTPSErrors: process.env.E2E_IGNORE_HTTPS_ERRORS === '1',
     locale: 'ro-RO',
     timezoneId: 'Europe/Bucharest',
     trace: 'retain-on-failure',

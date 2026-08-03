@@ -2,7 +2,7 @@ import 'server-only';
 import { and, asc, count, desc, eq, inArray } from 'drizzle-orm';
 import type { Car, ModCategory, ModGroup } from '@/lib/cars';
 import { db } from './index';
-import { cars, follows, mods, users, votes } from './schema';
+import { cars, follows, mods, spottedPosts, users, votes } from './schema';
 
 /** The order the profile and the edit form both show them in. */
 const MOD_ORDER: ModCategory[] = ['Motor', 'Suspensie', 'Jante', 'Exterior', 'Interior'];
@@ -185,4 +185,46 @@ export async function ownsCar(userId: string, carId: string): Promise<boolean> {
     .where(and(eq(cars.id, carId), eq(cars.ownerId, userId)))
     .limit(1);
   return Boolean(row);
+}
+
+export interface SpottedPost {
+  id: string;
+  author: string;
+  location: string | null;
+  caption: string | null;
+  createdAt: string;
+  imageUrl: string;
+}
+
+/** The feed carries metadata only. Image bytes have their own cacheable route. */
+export async function listSpottedPosts(): Promise<SpottedPost[]> {
+  const rows = await db
+    .select({
+      id: spottedPosts.id,
+      author: users.name,
+      location: spottedPosts.location,
+      caption: spottedPosts.caption,
+      createdAt: spottedPosts.createdAt,
+    })
+    .from(spottedPosts)
+    .innerJoin(users, eq(spottedPosts.authorId, users.id))
+    .orderBy(desc(spottedPosts.createdAt), desc(spottedPosts.id))
+    .limit(30);
+
+  return rows.map((post) => ({
+    ...post,
+    createdAt: post.createdAt.toISOString(),
+    imageUrl: `/api/spotted/${post.id}/image`,
+  }));
+}
+
+export async function getSpottedImage(
+  id: string,
+): Promise<{ image: Buffer; contentType: string } | null> {
+  const [row] = await db
+    .select({ image: spottedPosts.image, contentType: spottedPosts.imageType })
+    .from(spottedPosts)
+    .where(eq(spottedPosts.id, id))
+    .limit(1);
+  return row ?? null;
 }

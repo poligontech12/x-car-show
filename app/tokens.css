@@ -97,8 +97,12 @@
   --frame-w: 390px;
   --frame-h: 844px;
   --gutter: 20px;
-  --safe-top: 78px; /* status bar + the floating nav */
-  --safe-bottom: 24px;
+  /* Physical-device insets plus the floating chrome. `viewport-fit=cover`
+     makes the env() values meaningful on notched iPhones. */
+  --device-safe-top: env(safe-area-inset-top, 0px);
+  --device-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: calc(max(20px, var(--device-safe-top)) + 58px);
+  --safe-bottom: max(24px, var(--device-safe-bottom));
 }
 
 /* ── Type scale ──────────────────────────────────────────────

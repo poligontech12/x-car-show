@@ -1,7 +1,9 @@
 import { sql } from 'drizzle-orm';
 import {
+  bigint,
   boolean,
   check,
+  customType,
   index,
   integer,
   pgTable,
@@ -12,6 +14,12 @@ import {
 } from 'drizzle-orm/pg-core';
 import type { CarClass, ModCategory } from '@/lib/cars';
 import type { Role } from '@/lib/store';
+
+const bytea = customType<{ data: Buffer }>({
+  dataType() {
+    return 'bytea';
+  },
+});
 
 /**
  * Six tables and the show fits in them. Everything a person reads on a
@@ -162,6 +170,55 @@ export const photos = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [unique('photos_car_slot').on(t.carId, t.slot)],
+);
+
+/** Shared sightings. The image bytes live in Postgres so a deploy cannot
+ * erase them and every phone sees the same post; they are served separately
+ * from the feed payload by /api/spotted/:id/image. */
+export const spottedPosts = pgTable(
+  'spotted_posts',
+  {
+    id: text('id').primaryKey(),
+    authorId: text('author_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    image: bytea('image').notNull(),
+    imageType: text('image_type').notNull(),
+    location: text('location'),
+    caption: text('caption'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('spotted_posts_created_idx').on(t.createdAt),
+    index('spotted_posts_author_created_idx').on(t.authorId, t.createdAt),
+    check('spotted_posts_image_size', sql`octet_length(${t.image}) between 1 and 1000000`),
+    check('spotted_posts_image_type', sql`${t.imageType} = 'image/jpeg'`),
+  ],
+);
+
+/** One locked row keeps decoder and storage budgets durable across workers. */
+export const spottedUsage = pgTable(
+  'spotted_usage',
+  {
+    scope: text('scope').primaryKey(),
+    postCount: integer('post_count').notNull().default(0),
+    totalBytes: bigint('total_bytes', { mode: 'number' }).notNull().default(0),
+    attemptWindowStartedAt: timestamp('attempt_window_started_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    decodeAttempts: integer('decode_attempts').notNull().default(0),
+    postWindowStartedAt: timestamp('post_window_started_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    postWindowCount: integer('post_window_count').notNull().default(0),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    check('spotted_usage_post_count', sql`${t.postCount} >= 0`),
+    check('spotted_usage_total_bytes', sql`${t.totalBytes} >= 0`),
+    check('spotted_usage_decode_attempts', sql`${t.decodeAttempts} >= 0`),
+    check('spotted_usage_post_window_count', sql`${t.postWindowCount} >= 0`),
+  ],
 );
 
 /**
