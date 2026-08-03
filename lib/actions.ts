@@ -8,7 +8,7 @@ import { auth } from './auth';
 import type { CarClass, ModCategory, ModGroup } from './cars';
 import { db } from './db';
 import { cars, follows, mods, users, votes } from './db/schema';
-import { EVENT, votingOpen } from './event';
+import { EVENT, VOTE_LIMIT, votingOpen } from './event';
 
 /**
  * Everything a member can change goes through here. Each action reads the
@@ -169,11 +169,18 @@ export async function deleteCar(id: string): Promise<void> {
 }
 
 /**
- * One account, one vote, changeable until the deadline. The primary key on
- * `votes.voter_id` is what actually enforces "one" — this upsert simply
- * moves it, which also makes a vote queued offline safe to replay.
+ * Back a car, or take that backing away. Three per account, changeable
+ * until the deadline.
+ *
+ * The slot is what caps it: unique per voter and checked to be 1-3, so a
+ * fourth vote cannot be written even if this function were wrong. Picking
+ * the lowest free one keeps a released slot reusable rather than burning
+ * it, and the (voter, car) key means voting for the same car twice is one
+ * row — a ballot queued on a bad signal is safe to replay.
+ *
+ * Returns true when the vote was added, false when it was withdrawn.
  */
-export async function castVote(carId: string): Promise<void> {
+export async function toggleVote(carId: string): Promise<boolean> {
   const user = await requireUser();
   if (!votingOpen()) throw new Error(`Votul s-a închis la ${EVENT.votingCloses}.`);
 
@@ -185,15 +192,33 @@ export async function castVote(carId: string): Promise<void> {
   if (!car) throw new Error('Mașina asta nu există.');
   if (car.ownerId === user.id) throw new Error('Nu poți vota propria mașină.');
 
-  await db
-    .insert(votes)
-    .values({ voterId: user.id, carId })
-    .onConflictDoUpdate({
-      target: votes.voterId,
-      set: { carId, castAt: new Date() },
-    });
+  const added = await db.transaction(async (tx) => {
+    const mine = await tx
+      .select({ carId: votes.carId, slot: votes.slot })
+      .from(votes)
+      .where(eq(votes.voterId, user.id));
+
+    if (mine.some((v) => v.carId === carId)) {
+      await tx
+        .delete(votes)
+        .where(and(eq(votes.voterId, user.id), eq(votes.carId, carId)));
+      return false;
+    }
+
+    const used = new Set(mine.map((v) => v.slot));
+    const slot = [1, 2, 3].find((n) => !used.has(n));
+    if (!slot) {
+      throw new Error(
+        `Ai folosit toate cele ${VOTE_LIMIT} voturi. Retrage unul ca să votezi altă mașină.`,
+      );
+    }
+
+    await tx.insert(votes).values({ voterId: user.id, carId, slot });
+    return true;
+  });
 
   revalidatePath('/award');
+  return added;
 }
 
 export async function toggleFollow(carId: string): Promise<boolean> {

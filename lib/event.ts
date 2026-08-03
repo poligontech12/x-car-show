@@ -15,6 +15,13 @@ export const EVENT = {
   votingClosesAt: '2026-08-09T18:00:00+03:00',
 } as const;
 
+/**
+ * How many cars one account may vote for. Three spreads the field better
+ * than one — people back a favourite and two they would not have picked
+ * first — and the database enforces it through the vote slots.
+ */
+export const VOTE_LIMIT = 3;
+
 /** Voting is open until the moment above, and closed after it. */
 export const votingOpen = (now: Date = new Date()): boolean =>
   now.getTime() < new Date(EVENT.votingClosesAt).getTime();

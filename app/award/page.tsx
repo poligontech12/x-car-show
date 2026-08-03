@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { ScreenTitle, TitleAside } from '@/components/StickyHeader';
 import { displayModel, standings, votesCastLabel } from '@/lib/cars';
-import { EVENT } from '@/lib/event';
+import { EVENT, VOTE_LIMIT } from '@/lib/event';
 import { useStore } from '@/lib/store';
 import styles from './award.module.css';
 
@@ -18,16 +18,16 @@ function Trophy() {
 
 export default function AwardScreen() {
   const router = useRouter();
-  const { signedIn, hydrated, vote, castVote, cars, tally, myCars } = useStore();
+  const { signedIn, hydrated, votes, toggleVote, votesLeft, cars, tally, myCars } = useStore();
 
-  const rows = standings(cars, tally, vote);
-  const mine = new Set(myCars.map((c) => c.id));
+  const rows = standings(cars, tally, votes);
+  const owned = new Set(myCars.map((c) => c.id));
 
   const onRowClick = (carId: string) => {
-    if (!signedIn) return router.push('/auth?mode=register&role=vote');
+    if (!signedIn) return router.push('/auth?mode=register');
     // The server refuses it anyway; better not to offer it.
-    if (mine.has(carId)) return;
-    castVote(carId);
+    if (owned.has(carId)) return;
+    toggleVote(carId);
   };
 
   return (
@@ -39,7 +39,7 @@ export default function AwardScreen() {
         lines={['Mașina', 'show-ului']}
         aside={
           <>
-            <TitleAside>Un vot de persoană</TitleAside>
+            <TitleAside>{VOTE_LIMIT} voturi de persoană</TitleAside>
             <TitleAside gold>Se închide la {EVENT.votingCloses}</TitleAside>
           </>
         }
@@ -49,24 +49,42 @@ export default function AwardScreen() {
         <div className={`${styles.gate} a-up delay-400`}>
           <div className={styles.gateTitle}>Conectează-te ca să votezi.</div>
           <p className={styles.gateBody}>
-            Clasamentul e public. Un cont, un vot — ca să nu umple nimeni urna.
+            Clasamentul e public. Un cont, {VOTE_LIMIT} voturi — ca să nu umple nimeni urna.
           </p>
           <button
             type="button"
             className="btn btn--primary"
-            onClick={() => router.push('/auth?mode=register&role=vote')}
+            onClick={() => router.push('/auth?mode=register')}
           >
             Conectare sau cont nou
           </button>
         </div>
       )}
 
-      {hydrated && signedIn && vote && (
+      {hydrated && signedIn && (
         <div className={`${styles.mine} a-up delay-400`}>
           <span className={styles.mineDot} />
           <span>
-            Votul tău · <b>{displayModel(cars.find((c) => c.id === vote)!)}</b> · îl poți
-            schimba până la {EVENT.votingCloses}
+            {votes.length === 0 ? (
+              <>
+                Ai <b>{VOTE_LIMIT} voturi</b> · atinge mașinile care îți plac, până la{' '}
+                {EVENT.votingCloses}
+              </>
+            ) : (
+              <>
+                Voturile tale ·{' '}
+                <b>
+                  {votes
+                    .map((id) => cars.find((c) => c.id === id))
+                    .filter(Boolean)
+                    .map((c) => displayModel(c!))
+                    .join(', ')}
+                </b>
+                {votesLeft > 0
+                  ? ` · îți mai rămân ${votesLeft}`
+                  : ' · atinge din nou ca să retragi unul'}
+              </>
+            )}
           </span>
         </div>
       )}
@@ -80,7 +98,7 @@ export default function AwardScreen() {
             data-spot
             style={{ animationDelay: `${0.45 + i * 0.06}s` }}
             aria-pressed={r.mine}
-            disabled={mine.has(r.id)}
+            disabled={owned.has(r.id) || (signedIn && !r.mine && votesLeft === 0)}
             onClick={() => onRowClick(r.id)}
           >
             <span
@@ -106,7 +124,7 @@ export default function AwardScreen() {
 
       <p className={styles.foot}>
         {signedIn
-          ? 'Atinge un rând ca să votezi sau să îți schimbi votul. Participanții nu pot vota propria mașină.'
+          ? `Atinge un rând ca să votezi, din nou ca să retragi. ${VOTE_LIMIT} voturi de persoană; participanții nu pot vota propria mașină.`
           : votesCastLabel(tally)}
       </p>
     </div>

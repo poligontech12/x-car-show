@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-import { byId, displayModel } from '@/lib/cars';
-import { useStore, type Role } from '@/lib/store';
+import { displayModel } from '@/lib/cars';
+import { useStore } from '@/lib/store';
 import styles from './auth.module.css';
 
 type Mode = 'register' | 'signin' | 'account';
@@ -30,28 +30,15 @@ const COPY: Record<Mode, { label: string; title: string; sub: string; cta: strin
   },
 };
 
-const ROLES: { key: Role; title: string; sub: string }[] = [
-  {
-    key: 'car',
-    title: 'Expun o mașină',
-    sub: 'Îți înscrii proiectul, primești un stand și un cartonaș de parbriz tipărit. Votul e inclus.',
-  },
-  {
-    key: 'vote',
-    title: 'Votez și urmăresc',
-    sub: 'Un vot pentru mașina show-ului, plus fiecare proiect din listă.',
-  },
-];
-
 function AuthScreen() {
   const router = useRouter();
   const params = useSearchParams();
-  const { account, hydrated, vote, signIn, register, signOut, updateAccount } = useStore();
+  const { account, hydrated, votes, cars, signIn, register, signOut, updateAccount } = useStore();
 
   const [authMode, setAuthMode] = useState<'register' | 'signin'>(
     params.get('mode') === 'signin' ? 'signin' : 'register',
   );
-  const [role, setRole] = useState<Role>(params.get('role') === 'vote' ? 'vote' : 'car');
+  const headedForOnboarding = params.get('role') === 'car';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -80,14 +67,14 @@ function AuthScreen() {
     const failed =
       authMode === 'signin'
         ? await signIn(address, password)
-        : await register(address, password, name, role);
+        : await register(address, password, name);
     setBusy(false);
 
     if (failed) return setError(failed);
     if (authMode === 'signin') return router.push('/');
-    // Entrants go straight into registering the car they came here for;
-    // voters go to the thing they came here to do.
-    router.push(role === 'car' ? '/onboard' : '/award');
+    // Somebody who tapped "register a car" carries on to doing that;
+    // everybody else lands on the thing they came to look at.
+    router.push(headedForOnboarding ? '/onboard' : '/roster');
   };
 
   // Hold the frame until we know whether there is an account, so the
@@ -119,7 +106,16 @@ function AuthScreen() {
             <div className={styles.rows}>
               {[
                 ['Email', account.email],
-                ['Vot', vote ? displayModel(byId(vote)) : 'Nevotat'],
+                [
+                  'Voturi',
+                  votes.length
+                    ? votes
+                        .map((id) => cars.find((c) => c.id === id))
+                        .filter(Boolean)
+                        .map((c) => displayModel(c!))
+                        .join(', ')
+                    : 'Niciunul încă',
+                ],
               ].map(([k, v]) => (
                 <div key={k} className={styles.row}>
                   <div className={styles.rowKey}>{k}</div>
@@ -223,28 +219,6 @@ function AuthScreen() {
             >
               Deconectare
             </button>
-          </>
-        )}
-
-        {mode === 'register' && (
-          <>
-            <div className={`${styles.fieldLabel} ${styles.roleHead}`}>Sunt aici ca să</div>
-            {ROLES.map((r) => (
-              <button
-                key={r.key}
-                type="button"
-                className={`${styles.role} ${role === r.key ? styles.roleOn : ''}`}
-            data-spot
-                aria-pressed={role === r.key}
-                onClick={() => setRole(r.key)}
-              >
-                <span className={styles.roleDot} />
-                <span className={styles.roleBody}>
-                  <b>{r.title}</b>
-                  <span>{r.sub}</span>
-                </span>
-              </button>
-            ))}
           </>
         )}
 

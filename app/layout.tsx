@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Albert_Sans } from 'next/font/google';
 import { AppShell } from '@/components/AppShell';
 import { DevToolbar } from '@/components/DevToolbar';
-import { followsOf, listCars, voteOf, voteTally } from '@/lib/db/queries';
+import { followsOf, listCars, votesOf, voteTally } from '@/lib/db/queries';
 import { sessionUser } from '@/lib/session';
 import { type Account, StoreProvider } from '@/lib/store';
 import './globals.css';
@@ -35,10 +35,10 @@ export const viewport: Viewport = {
  */
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await sessionUser();
-  const [cars, tally, vote, following] = await Promise.all([
+  const [cars, tally, votes, following] = await Promise.all([
     listCars(),
     voteTally(),
-    user ? voteOf(user.id) : null,
+    user ? votesOf(user.id) : [],
     user ? followsOf(user.id) : {},
   ]);
 
@@ -60,7 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={albert.variable}
     >
       <body>
-        <StoreProvider initial={{ account, vote, following, cars, tally }}>
+        <StoreProvider initial={{ account, votes, following, cars, tally }}>
           <AppShell>{children}</AppShell>
         </StoreProvider>
         <DevToolbar />

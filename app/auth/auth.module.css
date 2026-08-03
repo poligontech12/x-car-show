@@ -116,65 +116,9 @@
   margin-top: 10px;
 }
 
-/* ── Role picker ─────────────────────────────────────────────
-   Two reasons to have an account. Pick one; it decides where
-   you land after registering. */
-
+/* Heads the group of fields that end up on the public profile. */
 .roleHead {
   margin-top: 30px;
-}
-
-.role {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  width: 100%;
-  margin-top: 10px;
-  padding: 17px 16px;
-  border-radius: var(--r-panel);
-  background: var(--glass);
-  border: 1px solid var(--rim);
-  backdrop-filter: blur(28px) saturate(180%);
-  box-shadow: var(--sheen), var(--lift-sm);
-  text-align: left;
-  transition: border-color 0.16s ease, background 0.16s ease;
-}
-
-.roleOn {
-  border-color: var(--red-edge);
-  background: var(--red-wash);
-}
-
-.roleDot {
-  width: 18px;
-  height: 18px;
-  margin-top: 3px;
-  flex: none;
-  border-radius: 999px;
-  border: 2px solid var(--rim-bright);
-  transition: border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
-}
-
-.roleOn .roleDot {
-  border-color: var(--red);
-  background: var(--red);
-  box-shadow: inset 0 0 0 3px var(--ink);
-}
-
-.roleBody b {
-  display: block;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 1.1;
-  letter-spacing: -0.035em;
-}
-
-.roleBody span {
-  display: block;
-  margin-top: 7px;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--paper-45);
 }
 
 /* ── Form ────────────────────────────────────────────────────── */

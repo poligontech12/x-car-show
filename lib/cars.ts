@@ -467,7 +467,7 @@ export interface Standing {
   pos: number;
   votes: number;
   pct: number;
-  /** The viewer's own vote. */
+  /** One of the viewer's own picks. */
   mine: boolean;
 }
 
@@ -479,7 +479,7 @@ export interface Standing {
 export function standings(
   cars: Car[],
   tally: Record<string, number>,
-  myVote: string | null,
+  myVotes: string[],
 ): Standing[] {
   const total = Object.values(tally).reduce((a, n) => a + n, 0);
 
@@ -494,11 +494,11 @@ export function standings(
       ...r,
       pos: i + 1,
       pct: total ? Math.round((r.votes / total) * 100) : 0,
-      mine: myVote === r.id,
+      mine: myVotes.includes(r.id),
     }));
 }
 
-/** How many ballots are in, said plainly. */
+/** How many votes are in, said plainly. */
 export const votesCastLabel = (tally: Record<string, number>): string => {
   const n = Object.values(tally).reduce((a, v) => a + v, 0);
   if (!n) return 'Niciun vot încă. Fii primul.';

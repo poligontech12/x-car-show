@@ -8,6 +8,13 @@
       "when": 1785763359881,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785771728242,
+      "tag": "0001_three_votes",
+      "breakpoints": true
     }
   ]
 }

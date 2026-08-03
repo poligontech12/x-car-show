@@ -141,7 +141,7 @@ export function PhoneNav() {
           style={{ marginTop: 16 }}
           onClick={() => {
             setOpen(false);
-            router.push(account ? '/auth' : '/auth?mode=register&role=car');
+            router.push(account ? '/auth' : '/auth?mode=register');
           }}
         >
           {account ? 'Contul meu' : 'Conectare'}

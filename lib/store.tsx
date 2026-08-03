@@ -15,11 +15,12 @@ import {
   registerCar,
   saveCar,
   saveProfile,
-  castVote as castVoteAction,
   toggleFollow as toggleFollowAction,
+  toggleVote as toggleVoteAction,
 } from './actions';
 import { authClient } from './auth-client';
 import type { Car } from './cars';
+import { VOTE_LIMIT } from './event';
 import { FEED_FILTERS, type FeedFilter } from './feed';
 
 /**
@@ -58,7 +59,8 @@ export interface OnboardingDraft {
 /** What the server hands the provider on every render. */
 export interface ServerState {
   account: Account | null;
-  vote: string | null;
+  /** Cars this account has backed. At most VOTE_LIMIT of them. */
+  votes: string[];
   following: Record<string, true>;
   cars: Car[];
   /** Votes per car id. The board is derived from this, never invented. */
@@ -82,15 +84,14 @@ interface Store extends UiState, ServerState {
 
   /** Resolve to an error message in Romanian, or null when it worked. */
   signIn: (email: string, password: string) => Promise<string | null>;
-  register: (
-    email: string,
-    password: string,
-    name: string,
-    role: Role,
-  ) => Promise<string | null>;
+  register: (email: string, password: string, name: string) => Promise<string | null>;
   signOut: () => Promise<void>;
 
-  castVote: (carId: string) => void;
+  /** Back a car, or withdraw. Silently ignored once all three are spent. */
+  toggleVote: (carId: string) => void;
+  hasVoted: (carId: string) => boolean;
+  /** How many of the three are still going spare. */
+  votesLeft: number;
   toggleFollow: (carId: string) => void;
   isFollowing: (carId: string) => boolean;
   setFeedFilter: (f: FeedFilter) => void;
@@ -150,7 +151,7 @@ export function StoreProvider({
    * they paint immediately and reconcile when the server answers. Null
    * means "no local opinion — show what the server sent".
    */
-  const [pendingVote, setPendingVote] = useState<string | null>(null);
+  const [pendingVotes, setPendingVotes] = useState<string[] | null>(null);
   const [pendingFollows, setPendingFollows] = useState<Record<string, boolean>>({});
   const [draftAccount, setDraftAccount] = useState<Partial<Account> | null>(null);
 
@@ -170,7 +171,7 @@ export function StoreProvider({
 
   // Fresh server data supersedes whatever we painted optimistically.
   useEffect(() => {
-    setPendingVote(null);
+    setPendingVotes(null);
     setPendingFollows({});
     setDraftAccount(null);
   }, [initial]);
@@ -188,7 +189,7 @@ export function StoreProvider({
     const account = initial.account
       ? { ...initial.account, ...(draftAccount ?? {}) }
       : null;
-    const vote = pendingVote ?? initial.vote;
+    const votes = pendingVotes ?? initial.votes;
 
     const following = { ...initial.following };
     for (const [id, on] of Object.entries(pendingFollows)) {
@@ -202,7 +203,7 @@ export function StoreProvider({
       ...ui,
       ...initial,
       account,
-      vote,
+      votes,
       following,
       myCars,
       hydrated: true,
@@ -215,7 +216,7 @@ export function StoreProvider({
         return null;
       },
 
-      register: async (email, password, name, role) => {
+      register: async (email, password, name) => {
         const { error } = await authClient.signUp.email({
           email: email.trim(),
           password,
@@ -226,9 +227,8 @@ export function StoreProvider({
             ? 'Există deja un cont cu e-mailul ăsta.'
             : 'Nu am putut crea contul. Verifică e-mailul și parola (minim 8 caractere).';
         }
-        // The role follows what they actually do — registering a car is
-        // what makes you an entrant, so there is nothing to set here.
-        void role;
+        // Nobody declares what they are here. Registering a car is what
+        // makes you an entrant; everyone else just votes.
         router.refresh();
         return null;
       },
@@ -239,12 +239,19 @@ export function StoreProvider({
         router.push('/');
       },
 
-      castVote: (carId) => {
-        setPendingVote(carId);
-        void castVoteAction(carId)
+      toggleVote: (carId) => {
+        const on = votes.includes(carId);
+        if (!on && votes.length >= VOTE_LIMIT) return;
+        // Paint it immediately; a phone on two bars should not wait to
+        // find out whether the tap registered.
+        setPendingVotes(on ? votes.filter((id) => id !== carId) : [...votes, carId]);
+        void toggleVoteAction(carId)
           .then(() => router.refresh())
-          .catch(() => setPendingVote(null));
+          .catch(() => setPendingVotes(null));
       },
+
+      hasVoted: (carId) => votes.includes(carId),
+      votesLeft: Math.max(VOTE_LIMIT - votes.length, 0),
 
       toggleFollow: (carId) => {
         const on = !following[carId];
@@ -333,7 +340,7 @@ export function StoreProvider({
       resetOnboarding: () => patchUi({ onboarding: EMPTY_DRAFT }),
       completeOnboarding: () => {},
     };
-  }, [initial, ui, pendingVote, pendingFollows, draftAccount, router, patchUi]);
+  }, [initial, ui, pendingVotes, pendingFollows, draftAccount, router, patchUi]);
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

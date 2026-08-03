@@ -163,9 +163,14 @@ export async function voteTally(): Promise<Record<string, number>> {
   return Object.fromEntries(rows.map((r) => [r.carId, Number(r.n)]));
 }
 
-export async function voteOf(userId: string): Promise<string | null> {
-  const [row] = await db.select({ carId: votes.carId }).from(votes).where(eq(votes.voterId, userId));
-  return row?.carId ?? null;
+/** The cars this member has backed, oldest slot first. */
+export async function votesOf(userId: string): Promise<string[]> {
+  const rows = await db
+    .select({ carId: votes.carId })
+    .from(votes)
+    .where(eq(votes.voterId, userId))
+    .orderBy(asc(votes.slot));
+  return rows.map((r) => r.carId);
 }
 
 export async function followsOf(userId: string): Promise<Record<string, true>> {

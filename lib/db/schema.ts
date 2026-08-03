@@ -1,5 +1,7 @@
+import { sql } from 'drizzle-orm';
 import {
   boolean,
+  check,
   index,
   integer,
   pgTable,
@@ -163,20 +165,34 @@ export const photos = pgTable(
 );
 
 /**
- * Car of the show. The primary key is the voter, not a surrogate id —
- * one account, one vote, enforced by the database rather than by app
- * code. It also makes a vote queued offline safe to replay: flushing
- * the same outbox twice is an upsert, not a second ballot.
+ * Car of the show. Three votes each, and both halves of that are the
+ * database's job rather than the app's:
+ *
+ * - the primary key is (voter, car), so voting for the same car twice is
+ *   the same row. A ballot queued on a bad signal is safe to replay.
+ * - each vote occupies a numbered slot, unique per voter and checked to
+ *   be 1, 2 or 3. Three rows per person is arithmetic, not a count the
+ *   app has to remember to run.
  */
-export const votes = pgTable('votes', {
-  voterId: text('voter_id')
-    .primaryKey()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  carId: text('car_id')
-    .notNull()
-    .references(() => cars.id, { onDelete: 'cascade' }),
-  castAt: timestamp('cast_at', { withTimezone: true }).notNull().defaultNow(),
-});
+export const votes = pgTable(
+  'votes',
+  {
+    voterId: text('voter_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    carId: text('car_id')
+      .notNull()
+      .references(() => cars.id, { onDelete: 'cascade' }),
+    slot: integer('slot').notNull(),
+    castAt: timestamp('cast_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.voterId, t.carId] }),
+    unique('votes_voter_slot').on(t.voterId, t.slot),
+    check('votes_slot_range', sql`${t.slot} between 1 and 3`),
+    index('votes_car_idx').on(t.carId),
+  ],
+);
 
 export const follows = pgTable(
   'follows',
