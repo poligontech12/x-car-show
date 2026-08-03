@@ -66,5 +66,5 @@ jobs:
 
             docker compose build app
             docker compose --profile tools run --rm migrate
-            docker compose up -d app caddy
+            docker compose up -d app
             docker image prune -f

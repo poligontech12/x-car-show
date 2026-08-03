@@ -1,6 +1,0 @@
-# Caddy fetches and renews the certificate on its own; the only thing it
-# needs is a hostname that actually resolves to this machine on 80/443.
-{$SITE_HOST} {
-	encode zstd gzip
-	reverse_proxy app:3000
-}

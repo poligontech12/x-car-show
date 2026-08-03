@@ -1,5 +1,6 @@
-# The whole show: a database, the app, and something in front doing TLS.
-# The same file runs on the office server and on any machine with Docker.
+# A database and the app. TLS and the hostname are handled by the proxy
+# already running on the server, so nothing here binds :80 or :443 — the
+# app is published on a local port for that proxy to forward to.
 
 services:
   db:
@@ -47,27 +48,15 @@ services:
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
     volumes:
       - uploads:/app/uploads
+    # Reachable only from the server itself, which is where the proxy is.
+    # If your proxy runs in Docker instead, drop the 127.0.0.1 prefix and
+    # put both on the same network rather than opening this to the world.
+    ports:
+      - '${APP_BIND:-127.0.0.1}:${APP_PORT:-3000}:3000'
     depends_on:
       db:
         condition: service_healthy
 
-  caddy:
-    image: caddy:2-alpine
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '443:443'
-    environment:
-      SITE_HOST: ${SITE_HOST:?set SITE_HOST in .env}
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
-    depends_on:
-      - app
-
 volumes:
   db-data:
   uploads:
-  caddy-data:
-  caddy-config:
