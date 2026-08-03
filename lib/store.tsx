@@ -257,8 +257,15 @@ export function StoreProvider({
 
       signOut: async () => {
         await authClient.signOut();
-        router.refresh();
-        router.push('/');
+        /**
+         * A full page load, not router.push. Next keeps a client-side cache
+         * of rendered pages, and pushing after signing out happily serves
+         * the copy it rendered while you were still signed in — the session
+         * is gone on the server but your initial is still in the nav, which
+         * reads as "it did not log me out". Reloading throws that cache and
+         * every scrap of client state away, which is what signing out means.
+         */
+        window.location.href = '/';
       },
 
       toggleVote: (carId) => {
