@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Deployment is not here. The server runs x-car-show-deploy.timer, which
+# polls this repository every two minutes and promotes a commit only after
+# it builds and passes its own health check. This workflow just gets that
+# same answer to you faster, and on pull requests where the timer never
+# looks.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: xcs
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: xcarshow
+        options: >-
+          --health-cmd "pg_isready -U xcs" --health-interval 5s
+          --health-timeout 5s --health-retries 10
+        ports: ['5432:5432']
+    env:
+      DATABASE_URL: postgres://xcs:test@localhost:5432/xcarshow
+      BETTER_AUTH_SECRET: test-secret-not-used-for-anything-real
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # The migrations have to apply to an empty database, not just to the
+      # one that happens to be on your laptop.
+      - run: npm run db:deploy
+      - run: npm run typecheck
+      - run: npm run build
+
+      # The server builds this image too; catching a broken Dockerfile here
+      # is cheaper than watching the timer roll back.
+      - run: docker build --build-arg NEXT_PUBLIC_SITE_URL=http://localhost:3000 -t x-car-show:ci .

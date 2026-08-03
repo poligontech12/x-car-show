@@ -1,9 +1,14 @@
 # Deploying X Car Show
 
-One Postgres and one Next.js server, published on a local port for the
-reverse proxy already running on the server to forward to. TLS and DNS are
-that proxy's job, not this stack's. Local development skips Docker
-entirely and talks to a Postgres installed with Homebrew.
+The server already deploys itself. `x-car-show-deploy.timer` polls GitHub
+`main` every two minutes, builds an immutable release, health-checks it on
+`127.0.0.1:3100`, and promotes it to port `3000` — rolling back to the
+previous container if anything fails.
+
+Nothing in this repository replaces that. What changed is that the app now
+needs a database, which means two things the pipeline does not do on its
+own: **Postgres has to be running beside it**, and **three environment
+variables have to reach the build and the container**.
 
 ## Local
 
@@ -17,9 +22,9 @@ npm run db:seed                   # the twelve demo builds — development only
 npm run dev
 ```
 
-`npm run db:seed` refuses to run against a database that already has cars
-in it, and refuses production outright. The demo roster is placeholder
-data and must never be shown to real attendees as real entries.
+`npm run db:seed` refuses a database that already has cars in it, and
+refuses production outright. The demo roster is placeholder data and must
+never be shown to real attendees as real entries.
 
 Poke at the data directly — that is the point of Postgres here:
 
@@ -27,72 +32,112 @@ Poke at the data directly — that is the point of Postgres here:
 psql -d xcarshow -c 'select id, model, no, stand from cars order by no'
 ```
 
-## The server
+## Postgres on the server
 
-Needs Docker, and `xcarshow.poligontech.ro` already terminating TLS at your
-proxy and forwarding to this machine.
+This runs once and then stays out of the way. It is deliberately **not**
+part of the deploy: the app container is replaced every time a commit
+lands, and the database must survive all of that.
 
 ```bash
-git clone <repo> xcarshow && cd xcarshow
+cd /opt/x-car-show          # anywhere outside the releases directory
 mkdir -p backups
-```
 
-Now create the `.env` file the stack reads. It is a plain text file in the
-project directory, three lines long. This writes it with fresh random
-secrets — paste the whole block:
-
-```bash
 cat > .env <<EOF
 POSTGRES_PASSWORD=$(openssl rand -base64 24)
-BETTER_AUTH_SECRET=$(openssl rand -base64 32)
-NEXT_PUBLIC_SITE_URL=https://xcarshow.poligontech.ro
 EOF
-```
 
-That is the whole configuration.
-
-| Variable | What it is |
-| --- | --- |
-| `POSTGRES_PASSWORD` | The database password. Nothing outside the stack sees it. |
-| `BETTER_AUTH_SECRET` | Signs session cookies. Changing it signs everybody out. |
-| `NEXT_PUBLIC_SITE_URL` | The public origin, baked into every printed QR code. |
-
-`.env` is gitignored and must stay that way — it never gets committed.
-
-Then bring it up:
-
-```bash
-docker compose --profile tools run --rm migrate
 docker compose up -d
 ```
 
-The app is now listening on `127.0.0.1:3000`. Point your proxy at that.
-Set `APP_PORT` in `.env` if 3000 is taken. If the proxy is itself a Docker
-container it cannot reach `127.0.0.1` — set `APP_BIND=0.0.0.0`, or better,
-put both on the same Docker network.
+That publishes Postgres on `172.17.0.1:5432` — the Docker bridge gateway,
+reachable by any container on the default bridge network, not reachable
+from the office LAN. Check it:
 
-`NEXT_PUBLIC_SITE_URL` is baked in at build time and is the URL encoded
-into every printed QR code. **Settle it before any card goes to print** —
-changing it afterwards silently invalidates every card already printed.
-It is also what tells Next which origin server actions may come from, so
-if it is wrong every save and vote fails in production while working fine
-on localhost.
+```bash
+docker compose ps
+docker compose exec db psql -U xcs -d xcarshow -c '\dt'
+```
 
-## Deploys
+If the app container runs on a user-defined network rather than the default
+bridge, add the `db` service to that network instead and use the host name
+`x-car-show-db` in `DATABASE_URL`.
 
-Pushing to `main` runs the `Deploy` workflow: it builds and migrates
-against a throwaway Postgres first, and only then SSHes to the server,
-dumps the database, migrates, and restarts. It needs four repository
-secrets — `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`, `DEPLOY_PATH` —
-and a `production` environment if you want the deploy to wait for a click.
+## The three variables
+
+| Variable | Where it is needed | What it is |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | **build** and container | The public origin, baked into every printed QR code |
+| `DATABASE_URL` | container only | `postgres://xcs:<POSTGRES_PASSWORD>@172.17.0.1:5432/xcarshow` |
+| `BETTER_AUTH_SECRET` | container only | `openssl rand -base64 32`. Changing it signs everybody out |
+
+`NEXT_PUBLIC_SITE_URL` is the awkward one, because it is needed **three
+times**: by `npm run build`, by `docker build` as `--build-arg`, and by the
+running container. Next inlines it at build time, so setting it only on the
+container is too late.
+
+A production build without it now **fails loudly** rather than defaulting
+to localhost:
+
+```
+Error: NEXT_PUBLIC_SITE_URL is not set.
+It is baked into this build and encoded into every printed QR code,
+so a production build will not guess at it.
+```
+
+That is deliberate. A wrong value is invisible — the app works, the cards
+look right, and every QR code points somewhere dead. It also tells Next
+which origin server actions may come from, so a wrong value means every
+save and vote fails in production while working perfectly on localhost.
+
+## Migrations
+
+The image applies them on start, before the server listens:
+
+```
+CMD ["sh", "-c", "node scripts/migrate.mjs && node server.js"]
+```
+
+So a migration that cannot apply exits non-zero, the new container never
+passes its health check on `127.0.0.1:3100`, and the pipeline keeps the
+previous container live. Nothing extra to run on deploy.
+
+One caveat worth knowing: a rollback restores the previous *container*, not
+the previous *schema*. Migrations that only add things are safe under that;
+one that drops or renames a column would leave the rolled-back code facing
+a schema it does not know. Keep them additive until after the show.
+
+## Checking a deploy
+
+These three must agree:
+
+```bash
+git --git-dir=/opt/x-car-show/source.git rev-parse main
+cat /opt/x-car-show/state/deployed-sha
+docker inspect x-car-show-live \
+  --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}'
+```
+
+Force a check now, and watch it:
+
+```bash
+systemctl start x-car-show-deploy.service
+journalctl -u x-car-show-deploy.service -f
+```
+
+If the app is up but every page 500s, it is almost always the database:
+
+```bash
+docker logs --tail 100 x-car-show-live
+```
 
 ## Backups
 
-The deploy takes one automatically. For show weekend, take them on a timer
-too, and copy them off the machine:
+Take them on a timer over show weekend, and copy them off the machine:
 
 ```bash
 docker compose exec -T db pg_dump -U xcs xcarshow > backups/$(date -u +%Y%m%dT%H%M%SZ).sql
 ```
 
-Restoring is `psql -U xcs xcarshow < backups/<file>.sql`.
+Restoring is `docker compose exec -T db psql -U xcs xcarshow < backups/<file>.sql`.
+
+The entry list is the one thing that cannot be recreated after the fact.
