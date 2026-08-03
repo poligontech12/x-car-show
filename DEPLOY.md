@@ -103,7 +103,15 @@ TRUSTED_ORIGINS=http://192.168.1.25:3000
 ```
 
 It is needed at build time as well as on the container, because Next
-inlines the server-action origin list into the build.
+inlines the server-action origin list into the build — so the deploy
+script has to pass it through as a build arg:
+
+```bash
+docker build --build-arg TRUSTED_ORIGINS="$TRUSTED_ORIGINS" ...
+```
+
+Setting it only on the container gets people signed in and then refuses
+them at registering a car, with the same "Invalid origin".
 
 ## Migrations
 

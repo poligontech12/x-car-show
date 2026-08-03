@@ -17,6 +17,11 @@ COPY . .
 # present here — it is the URL encoded into every printed QR code.
 ARG NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+# Next inlines the server-action origin list at build time, so the extra
+# addresses have to be here as well as on the container. Without this the
+# LAN address can sign you in and then refuse to register a car.
+ARG TRUSTED_ORIGINS
+ENV TRUSTED_ORIGINS=$TRUSTED_ORIGINS
 ENV NEXT_TELEMETRY_DISABLED=1
 # Never used to sign anything — the build has no business holding the real
 # secret, and without a value Better Auth warns once per page collected.
