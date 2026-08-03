@@ -38,9 +38,27 @@ async function uniqueHandle(input: string): Promise<string> {
   return `${base}.${Date.now().toString(36)}`;
 }
 
+/**
+ * Every address this app is legitimately reached at.
+ *
+ * Better Auth checks the Origin header against these and answers "Invalid
+ * origin" otherwise. The public domain is one of them, but the same server
+ * also answers on its LAN address, and a phone on the office wifi opening
+ * that one is not an attacker — it is the same app on a second doorway.
+ *
+ * TRUSTED_ORIGINS takes a comma-separated list for anything else.
+ */
+const trustedOrigins = [
+  process.env.NEXT_PUBLIC_SITE_URL,
+  ...(process.env.TRUSTED_ORIGINS?.split(',') ?? []),
+]
+  .map((o) => o?.trim().replace(/\/+$/, ''))
+  .filter((o): o is string => Boolean(o));
+
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.NEXT_PUBLIC_SITE_URL,
+  trustedOrigins,
 
   database: drizzleAdapter(db, {
     provider: 'pg',

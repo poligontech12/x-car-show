@@ -89,6 +89,22 @@ look right, and every QR code points somewhere dead. It also tells Next
 which origin server actions may come from, so a wrong value means every
 save and vote fails in production while working perfectly on localhost.
 
+### Reached at more than one address
+
+The app answers on its public domain and on `http://192.168.1.25:3000`
+inside the office. Better Auth checks the Origin header and Next checks
+it again for server actions, so an address neither of them knows about
+fails with **"Invalid origin"** — sign-up, sign-in, voting, all of it.
+
+List the extras in `TRUSTED_ORIGINS`, comma-separated, no trailing slash:
+
+```
+TRUSTED_ORIGINS=http://192.168.1.25:3000
+```
+
+It is needed at build time as well as on the container, because Next
+inlines the server-action origin list into the build.
+
 ## Migrations
 
 The image applies them on start, before the server listens:

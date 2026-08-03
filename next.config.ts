@@ -20,8 +20,28 @@ function siteUrl(phase: string): string | undefined {
   );
 }
 
+/**
+ * Hosts the app is legitimately reached at. The public domain plus
+ * anything in TRUSTED_ORIGINS — the same list Better Auth checks, so a
+ * doorway that can log you in can also register a car.
+ */
+function allowedHosts(url: string | undefined): string[] {
+  return [url, ...(process.env.TRUSTED_ORIGINS?.split(',') ?? [])]
+    .map((o) => o?.trim())
+    .filter((o): o is string => Boolean(o))
+    .flatMap((o) => {
+      try {
+        return [new URL(o).host];
+      } catch {
+        // Bare host, no scheme — usable as-is.
+        return [o.replace(/^https?:\/\//, '').replace(/\/+$/, '')];
+      }
+    });
+}
+
 export default (phase: string): NextConfig => {
   const url = siteUrl(phase);
+  const hosts = allowedHosts(url);
 
   return {
     reactStrictMode: true,
@@ -42,7 +62,7 @@ export default (phase: string): NextConfig => {
        * vote and registration fails in production while working perfectly
        * on localhost.
        */
-      ...(url ? { serverActions: { allowedOrigins: [new URL(url).host] } } : {}),
+      ...(hosts.length ? { serverActions: { allowedOrigins: hosts } } : {}),
     },
   };
 };
