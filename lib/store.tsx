@@ -211,22 +211,44 @@ export function StoreProvider({
 
       signIn: async (email, password) => {
         const { error } = await authClient.signIn.email({ email: email.trim(), password });
-        if (error) return 'E-mailul sau parola nu se potrivesc.';
+        if (error) {
+          // Only 401 means the credentials were wrong. Reporting anything
+          // else as "wrong password" sends people off retyping a password
+          // that was right all along.
+          return error.status === 401 || error.status === 403
+            ? 'E-mailul sau parola nu se potrivesc.'
+            : 'Nu am putut face conectarea. Încearcă din nou peste un moment.';
+        }
         router.refresh();
         return null;
       },
 
       register: async (email, password, name) => {
+        const address = email.trim();
         const { error } = await authClient.signUp.email({
-          email: email.trim(),
+          email: address,
           password,
-          name: name.trim() || email.trim().split('@')[0],
+          name: name.trim() || address.split('@')[0],
         });
+
         if (error) {
-          return /exist|taken|unique/i.test(error.message ?? '')
-            ? 'Există deja un cont cu e-mailul ăsta.'
-            : 'Nu am putut crea contul. Verifică e-mailul și parola (minim 8 caractere).';
+          /**
+           * This screen opens on "create account", so somebody coming back
+           * to sign in types their own email into it and gets told the
+           * account exists — which is true, unhelpful, and reads as a
+           * rejection. They gave us an email and a password: try them.
+           */
+          if (/exist/i.test(error.message ?? '') || error.code === 'USER_ALREADY_EXISTS') {
+            const retry = await authClient.signIn.email({ email: address, password });
+            if (!retry.error) {
+              router.refresh();
+              return null;
+            }
+            return 'Ai deja cont cu e-mailul ăsta, dar parola nu se potrivește.';
+          }
+          return 'Nu am putut crea contul. Verifică e-mailul și parola (minim 8 caractere).';
         }
+
         // Nobody declares what they are here. Registering a car is what
         // makes you an entrant; everyone else just votes.
         router.refresh();
