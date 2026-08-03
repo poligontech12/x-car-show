@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { displayModel } from '@/lib/cars';
 import { useStore } from '@/lib/store';
 import styles from './auth.module.css';
@@ -44,6 +44,21 @@ function AuthScreen() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+
+  /**
+   * The message appears in the footer, which on a phone sits behind the
+   * keyboard — so a rejected form reads as nothing happening at all.
+   * Dropping focus closes the keyboard; scrolling finishes the job.
+   */
+  const fail = (message: string) => {
+    setError(message);
+    (document.activeElement as HTMLElement | null)?.blur?.();
+  };
+
+  useEffect(() => {
+    if (error) errorRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [error]);
 
   // Signing out from the account screen should land you back in the feed,
   // not on a form you did not ask for.
@@ -59,8 +74,8 @@ function AuthScreen() {
   const submit = async () => {
     if (busy) return;
     const address = email.trim();
-    if (!address) return setError('Scrie-ți e-mailul.');
-    if (password.length < 8) return setError('Parola are minim 8 caractere.');
+    if (!address) return fail('Scrie-ți e-mailul.');
+    if (password.length < 8) return fail('Parola are minim 8 caractere.');
 
     setBusy(true);
     setError(null);
@@ -70,7 +85,7 @@ function AuthScreen() {
         : await register(address, password, name);
     setBusy(false);
 
-    if (failed) return setError(failed);
+    if (failed) return fail(failed);
     if (authMode === 'signin') return router.push('/');
     // Somebody who tapped "register a car" carries on to doing that;
     // everybody else lands on the thing they came to look at.
@@ -270,6 +285,9 @@ function AuthScreen() {
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && void submit()}
               />
+              {authMode === 'register' && (
+                <p className={styles.fieldNote}>Minim 8 caractere.</p>
+              )}
             </div>
 
             <button
@@ -289,7 +307,11 @@ function AuthScreen() {
 
       {isForm && (
         <div className={styles.footer}>
-          {error && <p className={styles.error}>{error}</p>}
+          {error && (
+            <p className={styles.error} ref={errorRef} role="alert">
+              {error}
+            </p>
+          )}
           <button
             type="button"
             className="btn btn--primary"
