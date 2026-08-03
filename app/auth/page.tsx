@@ -68,13 +68,6 @@ function AuthScreen() {
     if (error) errorRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [error]);
 
-  // Signing out from the account screen should land you back in the feed,
-  // not on a form you did not ask for.
-  const [justSignedOut, setJustSignedOut] = useState(false);
-  useEffect(() => {
-    if (justSignedOut) router.push('/');
-  }, [justSignedOut, router]);
-
   const mode: Mode = account ? 'account' : authMode;
   const copy = COPY[mode];
   const isForm = mode !== 'account';
@@ -236,11 +229,7 @@ function AuthScreen() {
             <button
               type="button"
               className={`btn btn--quiet ${styles.signOut}`}
-              onClick={() => {
-                void signOut();
-                setAuthMode('signin');
-                setJustSignedOut(true);
-              }}
+              onClick={() => void signOut()}
             >
               Deconectare
             </button>
@@ -261,6 +250,7 @@ function AuthScreen() {
                   placeholder="Andrei M."
                   autoComplete="name"
                   ref={nameRef}
+                  onInput={() => setError(null)}
                 />
               </div>
             )}
@@ -280,6 +270,7 @@ function AuthScreen() {
                 autoCorrect="off"
                 spellCheck={false}
                 ref={emailRef}
+                onInput={() => setError(null)}
               />
             </div>
 
@@ -297,6 +288,7 @@ function AuthScreen() {
                 autoCorrect="off"
                 spellCheck={false}
                 ref={passwordRef}
+                onInput={() => setError(null)}
                 onKeyDown={(e) => e.key === 'Enter' && void submit()}
               />
               {authMode === 'register' && (

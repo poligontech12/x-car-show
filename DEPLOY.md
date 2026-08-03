@@ -154,6 +154,26 @@ If the app is up but every page 500s, it is almost always the database:
 docker logs --tail 100 x-car-show-live
 ```
 
+### Mobile auth regression test
+
+The Playwright suite checks Pixel/Chromium and iPhone/WebKit behavior. Read-only
+validation runs are safe against any explicit target:
+
+```bash
+PLAYWRIGHT_BASE_URL=https://xcarshow.poligontech.ro npm run test:e2e
+```
+
+The logout journey creates a disposable account and is skipped unless writes
+are explicitly allowed:
+
+```bash
+PLAYWRIGHT_BASE_URL=https://xcarshow.poligontech.ro \
+E2E_ALLOW_WRITES=1 npm run test:e2e
+```
+
+Do not point the write-enabled run at a database where test accounts are not
+acceptable; the application does not yet provide an account-cleanup endpoint.
+
 ## Backups
 
 Take them on a timer over show weekend, and copy them off the machine:
