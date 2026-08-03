@@ -129,6 +129,13 @@ function readUi(): UiState {
   }
 }
 
+/**
+ * Rate limiting answers with a 429, which is not a wrong password. Saying
+ * it is sends people straight back to retry, and retrying is exactly what
+ * keeps the limit tripped.
+ */
+const TOO_MANY = 'Prea multe încercări. Așteaptă un minut și încearcă din nou.';
+
 /** Turn whatever a server action threw into something worth reading. */
 function message(e: unknown): string {
   const raw = e instanceof Error ? e.message : String(e);
@@ -215,9 +222,12 @@ export function StoreProvider({
           // Only 401 means the credentials were wrong. Reporting anything
           // else as "wrong password" sends people off retyping a password
           // that was right all along.
-          return error.status === 401 || error.status === 403
-            ? 'E-mailul sau parola nu se potrivesc.'
-            : 'Nu am putut face conectarea. Încearcă din nou peste un moment.';
+          if (error.status === 401 || error.status === 403) {
+            return 'E-mailul sau parola nu se potrivesc.';
+          }
+          if (error.status === 429) return TOO_MANY;
+          if (process.env.NODE_ENV !== 'production') console.error('sign-in failed', error);
+          return `Nu am putut face conectarea: ${error.message || error.status || 'motiv necunoscut'}`;
         }
         router.refresh();
         return null;
@@ -246,7 +256,21 @@ export function StoreProvider({
             }
             return 'Ai deja cont cu e-mailul ăsta, dar parola nu se potrivește.';
           }
-          return 'Nu am putut crea contul. Verifică e-mailul și parola (minim 8 caractere).';
+          /**
+           * A single catch-all message here cost days of guessing: the
+           * server said exactly what was wrong every time and this threw
+           * it away. Known causes get plain Romanian; anything else shows
+           * the server's own words rather than a shrug.
+           */
+          if (process.env.NODE_ENV !== 'production') console.error('sign-up failed', error);
+          if (error.status === 429) return TOO_MANY;
+          const code = error.code ?? '';
+          if (code === 'PASSWORD_TOO_SHORT') return 'Parola are minim 8 caractere.';
+          if (code === 'PASSWORD_TOO_LONG') return 'Parola e prea lungă.';
+          if (/email/i.test(error.message ?? '') && /invalid|valid/i.test(error.message ?? '')) {
+            return 'E-mailul nu pare valid. Verifică-l încă o dată.';
+          }
+          return `Nu am putut crea contul: ${error.message || code || 'motiv necunoscut'}`;
         }
 
         // Nobody declares what they are here. Registering a car is what

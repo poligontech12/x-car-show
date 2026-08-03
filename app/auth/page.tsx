@@ -275,6 +275,10 @@ function AuthScreen() {
                 type="email"
                 placeholder="you@example.com"
                 autoComplete="email"
+                inputMode="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 ref={emailRef}
               />
             </div>
@@ -289,6 +293,9 @@ function AuthScreen() {
                 type="password"
                 placeholder="••••••••"
                 autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 ref={passwordRef}
                 onKeyDown={(e) => e.key === 'Enter' && void submit()}
               />

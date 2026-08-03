@@ -80,6 +80,29 @@ export const auth = betterAuth({
     },
   },
 
+  /**
+   * The defaults lock people out at a car show.
+   *
+   * Rate limiting here is per IP, and on show day a field in Cajvana means
+   * one venue wifi or one saturated cell tower — a hundred and forty-two
+   * people arriving behind a handful of shared addresses. Under the stock
+   * limits the first few register and everybody behind them is told to try
+   * again later, on the one morning that cannot be repeated.
+   *
+   * These numbers still stop somebody grinding passwords (twenty tries a
+   * minute gets nowhere against an eight-character minimum) while leaving
+   * room for a whole paddock signing up from the same IP at once.
+   */
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 200,
+    customRules: {
+      '/sign-in/email': { window: 60, max: 20 },
+      '/sign-up/email': { window: 60, max: 20 },
+    },
+  },
+
   // Keeps people signed in across the weekend without a round trip on
   // every request — the vote screen reads the session constantly.
   session: {
