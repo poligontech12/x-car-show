@@ -11,11 +11,22 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 
-const url = process.env.DATABASE_URL;
-if (!url) {
-  console.error('DATABASE_URL is not set — refusing to start.');
+/**
+ * Checked here rather than deeper in, because this runs before the server
+ * listens: a container missing any of them fails its health check and the
+ * deploy rolls back, instead of serving sessions signed with a default
+ * secret that anybody could forge.
+ */
+const missing = ['DATABASE_URL', 'BETTER_AUTH_SECRET', 'NEXT_PUBLIC_SITE_URL'].filter(
+  (k) => !process.env[k] || process.env[k] === 'build-time-placeholder',
+);
+if (missing.length) {
+  console.error(`Refusing to start — not set on the container: ${missing.join(', ')}`);
+  console.error('On the show server these come from /etc/x-car-show.env via --env-file.');
   process.exit(1);
 }
+
+const url = process.env.DATABASE_URL;
 
 // max: 1 — migrations are serial, and a pool would contend on the lock.
 const sql = postgres(url, { max: 1 });

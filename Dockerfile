@@ -18,7 +18,12 @@ COPY . .
 ARG NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+# Never used to sign anything — the build has no business holding the real
+# secret, and without a value Better Auth warns once per page collected.
+ENV BETTER_AUTH_SECRET=build-time-placeholder
+# Next expects this directory even when a project has nothing static to
+# serve; the runner copies it, and a missing one fails the whole build.
+RUN mkdir -p public && npm run build
 
 # ── runner ──────────────────────────────────────────────────────────────
 FROM node:22-alpine AS runner
