@@ -39,12 +39,20 @@ function AuthScreen() {
     params.get('mode') === 'signin' ? 'signin' : 'register',
   );
   const headedForOnboarding = params.get('role') === 'car';
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const errorRef = useRef<HTMLParagraphElement>(null);
+  /**
+   * Uncontrolled on purpose. A controlled input is owned by React, and
+   * anything typed before hydration — someone starting to fill the form
+   * while the bundle is still arriving on mobile data, or a password
+   * manager filling it — is wiped the moment React takes over: the fields
+   * empty themselves, nothing is submitted, and no error explains why.
+   * Letting the DOM keep the value means what you see is what gets sent.
+   */
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   /**
    * The message appears in the footer, which on a phone sits behind the
@@ -73,7 +81,9 @@ function AuthScreen() {
 
   const submit = async () => {
     if (busy) return;
-    const address = email.trim();
+    const address = (emailRef.current?.value ?? '').trim();
+    const password = passwordRef.current?.value ?? '';
+    const name = nameRef.current?.value ?? '';
     if (!address) return fail('Scrie-ți e-mailul.');
     if (password.length < 8) return fail('Parola are minim 8 caractere.');
 
@@ -250,8 +260,7 @@ function AuthScreen() {
                   type="text"
                   placeholder="Andrei M."
                   autoComplete="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  ref={nameRef}
                 />
               </div>
             )}
@@ -266,8 +275,7 @@ function AuthScreen() {
                 type="email"
                 placeholder="you@example.com"
                 autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                ref={emailRef}
               />
             </div>
 
@@ -281,8 +289,7 @@ function AuthScreen() {
                 type="password"
                 placeholder="••••••••"
                 autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                ref={passwordRef}
                 onKeyDown={(e) => e.key === 'Enter' && void submit()}
               />
               {authMode === 'register' && (
