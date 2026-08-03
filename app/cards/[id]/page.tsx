@@ -12,6 +12,12 @@ import styles from '../cards.module.css';
 /** 87 design units square — the size the codes are drawn at on all three cards. */
 const QR_SIZE = 'calc(87 * var(--u))';
 
+/**
+ * Cards get printed while entries are still half-filled. An em dash reads
+ * as "not given"; a 0 reads as a measurement, and a wrong one.
+ */
+const orDash = (v: string | number | null | undefined) => (v ? String(v) : '—');
+
 export async function generateMetadata({
   params,
 }: {
@@ -32,7 +38,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
         <div className={styles.toolbarTitle}>
           <b>{headline(car)}</b>
           <span>
-            STAND {car.stand} · {EVENT.edition} · A5 LANDSCAPE, 210 × 148 MM
+            STAND {orDash(car.stand)} · {EVENT.edition} · A5 LANDSCAPE, 210 × 148 MM
           </span>
         </div>
         <PrintButton />
@@ -60,13 +66,13 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
           <div className={styles.plateBody}>
             <div className={styles.standCol}>
               <div className={styles.standLabel}>STAND</div>
-              <div className={styles.standNo}>{car.stand}</div>
+              <div className={styles.standNo}>{orDash(car.stand)}</div>
               <div className={styles.classTag}>{car.cls}</div>
             </div>
 
             <div className={styles.idCol}>
               <div className={styles.plateHeadline}>
-                {car.year} {car.make}
+                {[car.year || null, car.make].filter(Boolean).join(' ')}
                 <br />
                 {car.model}
               </div>
@@ -78,13 +84,13 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
                 <div className={styles.plateSpec}>
                   <div className={styles.plateSpecKey}>PUTERE</div>
                   <div className={styles.plateSpecValue}>
-                    {car.power}
-                    <i> CP</i>
+                    {orDash(car.power)}
+                    {car.power && <i> CP</i>}
                   </div>
                 </div>
                 <div className={styles.plateSpec}>
                   <div className={styles.plateSpecKey}>MOTOR</div>
-                  <div className={styles.plateSpecValue}>{car.engine.split(' ')[0]}</div>
+                  <div className={styles.plateSpecValue}>{orDash(car.engine.split(' ')[0])}</div>
                 </div>
                 <div className={styles.plateSpec}>
                   <div className={styles.plateSpecKey}>TRACȚIUNE</div>
@@ -120,7 +126,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
           <div className={styles.slipBody}>
             <div className={styles.entryCol}>
               <div className={styles.entryLabel}>ÎNSCRIERE №</div>
-              <div className={styles.entryNo}>{car.no}</div>
+              <div className={styles.entryNo}>{orDash(car.no)}</div>
               <div className="spacer" />
               <div className={styles.entryFoot}>
                 CLASĂ · {car.cls}
@@ -144,7 +150,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
               <div className={styles.slipRows}>
                 {[
                   ['MOTOR', car.engine],
-                  ['PUTERE', `${car.power} CP`],
+                  ['PUTERE', car.power ? `${car.power} CP` : '—'],
                   ['TRACȚIUNE', car.drive],
                   ['VOPSEA', car.paint],
                 ].map(([k, v]) => (
@@ -193,7 +199,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
                   {car.owner} · {car.town}
                 </span>
               </div>
-              <div className={styles.photoNo}>{car.no}</div>
+              <div className={styles.photoNo}>{orDash(car.no)}</div>
             </div>
           </div>
 
@@ -202,7 +208,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
             <div className={styles.photoSpecs}>
               {[
                 ['MOTOR', car.engine],
-                ['PUTERE', `${car.power} CP`],
+                ['PUTERE', car.power ? `${car.power} CP` : '—'],
                 ['CUPLU', `${car.tq} NM`],
                 ['TRACȚIUNE', car.drive],
                 ['GREUTATE', `${car.weight} KG`],

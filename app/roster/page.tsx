@@ -43,7 +43,7 @@ export default function RosterScreen() {
     >
       {cars.map((c) => (
         <Link key={c.id} href={`/car/${c.id}`} className={styles.panel}>
-          <ImageSlot id={`car-${c.id}`} hint={`${c.year} ${c.model}`} mode="inline" />
+          <ImageSlot id={`car-${c.id}`} hint={[c.year || null, c.model].filter(Boolean).join(' ')} mode="inline" />
           <span className="photo-scrim" />
           <span className="photo-veil" />
 
@@ -54,13 +54,14 @@ export default function RosterScreen() {
             <span className={styles.name}>
               <h2>{displayModel(c)}</h2>
               <span className={styles.spec}>
-                {c.make} · {c.power} CP
+                {[c.make, c.power && `${c.power} CP`].filter(Boolean).join(' · ')}
               </span>
               <span className={styles.owner}>
                 {c.owner} · {c.town}
               </span>
             </span>
-            <span className={styles.year}>{c.year}</span>
+            {/* A car registered this morning has no year yet; better blank than 0. */}
+            <span className={styles.year}>{c.year || ''}</span>
           </span>
 
         </Link>
