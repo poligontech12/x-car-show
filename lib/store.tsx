@@ -21,7 +21,6 @@ import {
 import { authClient } from './auth-client';
 import type { Car } from './cars';
 import { VOTE_LIMIT } from './event';
-import { FEED_FILTERS, type FeedFilter } from './feed';
 
 /**
  * The seam between the screens and the server. Everything durable — the
@@ -68,12 +67,11 @@ export interface ServerState {
 }
 
 interface UiState {
-  feedFilter: FeedFilter;
   onboarding: OnboardingDraft;
 }
 
 const EMPTY_DRAFT: OnboardingDraft = { name: '', year: '', power: 0, drive: 'RWD' };
-const INITIAL_UI: UiState = { feedFilter: 'Toate', onboarding: EMPTY_DRAFT };
+const INITIAL_UI: UiState = { onboarding: EMPTY_DRAFT };
 
 interface Store extends UiState, ServerState {
   /** Cars this account registered. Derived — ownership lives in the database. */
@@ -94,7 +92,6 @@ interface Store extends UiState, ServerState {
   votesLeft: number;
   toggleFollow: (carId: string) => void;
   isFollowing: (carId: string) => boolean;
-  setFeedFilter: (f: FeedFilter) => void;
 
   addCar: (car: Partial<Car>) => Promise<string>;
   updateCar: (id: string, patch: Partial<Car>) => Promise<void>;
@@ -108,20 +105,12 @@ interface Store extends UiState, ServerState {
 
 const StoreContext = createContext<Store | null>(null);
 
-/**
- * A filter that is no longer one of the options matches nothing and the
- * screen comes up empty, so fall back rather than trust what was stored.
- */
-const oneOf = <T,>(value: unknown, allowed: readonly T[], fallback: T): T =>
-  allowed.includes(value as T) ? (value as T) : fallback;
-
 function readUi(): UiState {
   try {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return INITIAL_UI;
     const parsed = JSON.parse(raw) as Partial<UiState>;
     return {
-      feedFilter: oneOf(parsed.feedFilter, FEED_FILTERS, 'Toate'),
       onboarding: { ...EMPTY_DRAFT, ...(parsed.onboarding ?? {}) },
     };
   } catch {
@@ -322,7 +311,6 @@ export function StoreProvider({
 
       isFollowing: (carId) => !!following[carId],
 
-      setFeedFilter: (feedFilter) => patchUi({ feedFilter }),
 
       addCar: async (car) => {
         const id = await registerCar({

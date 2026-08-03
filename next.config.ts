@@ -52,8 +52,7 @@ export default (phase: string): NextConfig => {
     // exactly where the marque sits.
     devIndicators: false,
     experimental: {
-      // TypeScript 7 dropped the compiler API Next reaches for by default;
-      // this routes the build's type check through `tsc` instead.
+      // Keep build-time checking on the same explicit `tsc` gate used in CI.
       useTypeScriptCli: true,
       /**
        * The app sits behind a proxy, so the origin it sees on a request is
@@ -62,7 +61,11 @@ export default (phase: string): NextConfig => {
        * vote and registration fails in production while working perfectly
        * on localhost.
        */
-      ...(hosts.length ? { serverActions: { allowedOrigins: hosts } } : {}),
+      serverActions: {
+        // Camera photos are compressed client-side and capped again on the server.
+        bodySizeLimit: '2mb',
+        ...(hosts.length ? { allowedOrigins: hosts } : {}),
+      },
     },
   };
 };

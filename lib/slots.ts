@@ -79,14 +79,19 @@ export function clearSlot(id: string) {
  * Downscale so the long edge is at most MAX_EDGE, then JPEG-encode.
  * Falls back to reading the file as-is if the browser cannot decode it.
  */
-export async function fileToDataUrl(file: File): Promise<string> {
+export async function fileToDataUrl(
+  file: File,
+  options: { maxEdge?: number; quality?: number; allowOriginalFallback?: boolean } = {},
+): Promise<string> {
   if (!file.type.startsWith('image/')) {
     throw new Error('Not an image');
   }
 
   try {
     const bitmap = await createImageBitmap(file);
-    const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+    const maxEdge = options.maxEdge ?? MAX_EDGE;
+    const quality = options.quality ?? QUALITY;
+    const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
     const w = Math.round(bitmap.width * scale);
     const h = Math.round(bitmap.height * scale);
 
@@ -98,8 +103,11 @@ export async function fileToDataUrl(file: File): Promise<string> {
     ctx.drawImage(bitmap, 0, 0, w, h);
     bitmap.close();
 
-    return canvas.toDataURL('image/jpeg', QUALITY);
-  } catch {
+    return canvas.toDataURL('image/jpeg', quality);
+  } catch (error) {
+    // Shared uploads must pass through the canvas: that strips camera EXIF
+    // metadata and guarantees a bounded JPEG rather than leaking the original.
+    if (options.allowOriginalFallback === false) throw error;
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(String(reader.result));

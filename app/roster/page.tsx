@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { ImageSlot } from '@/components/ImageSlot';
-import { ROSTER_TOTAL, displayModel } from '@/lib/cars';
+import { displayModel } from '@/lib/cars';
 import { useStore } from '@/lib/store';
 import { useCars } from '@/lib/useCars';
 import styles from './roster.module.css';
@@ -66,14 +66,6 @@ export default function RosterScreen() {
 
         </Link>
       ))}
-
-      {/* Only the first page is modelled; say so rather than just stopping. */}
-      <div className={styles.tail}>
-        <div className={styles.tailCount}>{Math.max(ROSTER_TOTAL - cars.length, 0)}</div>
-        <p className={styles.tailLabel}>
-          de mașini încă nu sunt în aplicație. Le adăugăm până pe 8 august.
-        </p>
-      </div>
 
       <div className={styles.rail} aria-hidden="true">
         {cars.map((c, i) => (

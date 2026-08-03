@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
+import { enforceCanonicalHttps } from '@/lib/canonical-url';
 import { displayModel } from '@/lib/cars';
 import { useStore } from '@/lib/store';
 import styles from './auth.module.css';
@@ -68,11 +69,27 @@ function AuthScreen() {
     if (error) errorRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [error]);
 
+  useEffect(() => {
+    if (
+      enforceCanonicalHttps(window.location, process.env.NEXT_PUBLIC_SITE_URL) === 'blocked'
+    ) {
+      setError('Conectarea este blocată pe o pagină nesecurizată. Deschide versiunea HTTPS.');
+    }
+  }, []);
+
   const mode: Mode = account ? 'account' : authMode;
   const copy = COPY[mode];
   const isForm = mode !== 'account';
 
   const submit = async () => {
+    // The public proxy currently serves plain HTTP instead of upgrading it.
+    // Never send credentials from that page, even if the automatic redirect
+    // has not completed yet.
+    const transport = enforceCanonicalHttps(window.location, process.env.NEXT_PUBLIC_SITE_URL);
+    if (transport === 'redirected') return;
+    if (transport === 'blocked') {
+      return fail('Conectarea este blocată pe o pagină nesecurizată. Deschide versiunea HTTPS.');
+    }
     if (busy) return;
     const address = (emailRef.current?.value ?? '').trim();
     const password = passwordRef.current?.value ?? '';

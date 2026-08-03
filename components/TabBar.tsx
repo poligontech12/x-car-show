@@ -2,19 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { PRIMARY_NAV } from '@/lib/navigation';
 import styles from './TabBar.module.css';
 
 /**
  * Four tabs, not five. Event day is gone — what was useful there
  * (the entry you scanned, the standings) lives in Scan and Award.
  */
-const TABS = [
-  { href: '/', label: 'Flux', glyph: 'feed' },
-  { href: '/roster', label: 'Înscriși', glyph: 'roster' },
-  { href: '/garage', label: 'Garaj', glyph: 'garage' },
-  { href: '/award', label: 'Premiu', glyph: 'award' },
-] as const;
-
 function Glyph({ name }: { name: string }) {
   switch (name) {
     case 'feed':
@@ -57,7 +51,7 @@ export function TabBar() {
 
   return (
     <nav className={styles.bar} aria-label="Navigare principală">
-      {TABS.map((t) => {
+      {PRIMARY_NAV.map((t) => {
         // Screens below a tab keep that tab lit: a car profile belongs to
         // the roster you opened it from, partners to the feed.
         const active =
