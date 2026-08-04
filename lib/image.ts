@@ -27,7 +27,10 @@ function imageError(): Error {
  * format. Every image a member uploads goes through here — a sighting on
  * the feed and a photograph on a car are the same problem.
  */
-export async function decodeUploadedImage(dataUrl: string): Promise<DecodedImage> {
+export async function decodeUploadedImage(
+  dataUrl: string,
+  options: { maxEdge?: number; square?: boolean; maxBytes?: number } = {},
+): Promise<DecodedImage> {
   const match = DATA_URL.exec(dataUrl);
   if (!match) throw new Error('Alege o fotografie JPEG, PNG sau WebP.');
 
@@ -54,20 +57,35 @@ export async function decodeUploadedImage(dataUrl: string): Promise<DecodedImage
       throw imageError();
     }
 
+    const edge = options.maxEdge ?? 1_600;
+    const ceiling = options.maxBytes ?? MAX_INPUT_BYTES;
+    /**
+     * A photograph keeps its shape; a face is cropped to the circle it
+     * will be drawn in, here rather than in CSS, so every avatar in the
+     * database is already the shape every screen wants.
+     */
+    const shape = options.square
+      ? ({ width: edge, height: edge, fit: 'cover', position: 'attention' } as const)
+      : ({ width: edge, height: edge, fit: 'inside', withoutEnlargement: true } as const);
+
     let encoded = await decoder
       .rotate()
-      .resize({ width: 1_600, height: 1_600, fit: 'inside', withoutEnlargement: true })
+      .resize(shape)
       .jpeg({ quality: 80, mozjpeg: true })
       .toBuffer({ resolveWithObject: true });
 
-    if (encoded.data.length > MAX_INPUT_BYTES) {
+    if (encoded.data.length > ceiling) {
       encoded = await sharp(input, { failOn: 'error', limitInputPixels: MAX_PIXELS })
         .rotate()
-        .resize({ width: 1_200, height: 1_200, fit: 'inside', withoutEnlargement: true })
+        .resize(
+          options.square
+            ? { ...shape, width: Math.round(edge * 0.75), height: Math.round(edge * 0.75) }
+            : { ...shape, width: 1_200, height: 1_200 },
+        )
         .jpeg({ quality: 68, mozjpeg: true })
         .toBuffer({ resolveWithObject: true });
     }
-    if (encoded.data.length > MAX_INPUT_BYTES) throw new Error('Fotografia este prea mare.');
+    if (encoded.data.length > ceiling) throw new Error('Fotografia este prea mare.');
 
     return {
       contentType: 'image/jpeg',

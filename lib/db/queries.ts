@@ -3,13 +3,20 @@ import { and, asc, count, desc, eq, inArray } from 'drizzle-orm';
 import type { Car, ModCategory, ModGroup } from '@/lib/cars';
 import { type CarPhoto, carPhotoUrl } from '@/lib/photos';
 import { db } from './index';
-import { carPhotos, cars, follows, mods, spottedPosts, users, votes } from './schema';
+import { carPhotos, cars, follows, mods, spottedPosts, userAvatars, users, votes } from './schema';
 
 /** The order the profile and the edit form both show them in. */
 const MOD_ORDER: ModCategory[] = ['Motor', 'Suspensie', 'Jante', 'Exterior', 'Interior'];
 
 type CarRow = typeof cars.$inferSelect;
-type OwnerRow = { name: string; town: string | null; handle: string; instagram: string | null; facebook: string | null };
+type OwnerRow = {
+  name: string;
+  town: string | null;
+  handle: string;
+  instagram: string | null;
+  facebook: string | null;
+  image: string | null;
+};
 
 /**
  * The screens were written against a flat `Car`, and they still are. The
@@ -51,6 +58,7 @@ function toCar(
     nickname: row.nickname ?? undefined,
     instagram: owner.instagram ?? undefined,
     facebook: owner.facebook ?? undefined,
+    ownerImage: owner.image ?? undefined,
     win: row.win,
     mods: groups,
     story: row.story ?? '',
@@ -176,6 +184,19 @@ export async function getCar(id: string): Promise<Car | null> {
   );
 }
 
+/** A member's own photograph, by the public name it is served under. */
+export async function getAvatarByHandle(
+  handle: string,
+): Promise<{ image: Buffer; contentType: string } | null> {
+  const [row] = await db
+    .select({ image: userAvatars.image, contentType: userAvatars.imageType })
+    .from(userAvatars)
+    .innerJoin(users, eq(users.id, userAvatars.userId))
+    .where(eq(users.handle, handle))
+    .limit(1);
+  return row ?? null;
+}
+
 /** One photograph's bytes, for the route that serves them. */
 export async function getCarPhoto(
   carId: string,
@@ -200,6 +221,7 @@ export interface OwnerProfile {
   handle: string;
   name: string;
   town: string;
+  image?: string;
   instagram?: string;
   facebook?: string;
   cars: Car[];
@@ -214,6 +236,7 @@ export async function ownerByHandle(handle: string): Promise<OwnerProfile | null
     town: owner.town ?? '',
     instagram: owner.instagram ?? undefined,
     facebook: owner.facebook ?? undefined,
+    image: owner.image ?? undefined,
     cars: await carsByOwnerId(owner.id),
   };
 }
@@ -254,6 +277,7 @@ export async function ownsCar(userId: string, carId: string): Promise<boolean> {
 export interface SpottedPost {
   id: string;
   author: string;
+  authorImage: string | null;
   location: string | null;
   caption: string | null;
   createdAt: string;
@@ -266,6 +290,7 @@ export async function listSpottedPosts(): Promise<SpottedPost[]> {
     .select({
       id: spottedPosts.id,
       author: users.name,
+      authorImage: users.image,
       location: spottedPosts.location,
       caption: spottedPosts.caption,
       createdAt: spottedPosts.createdAt,

@@ -213,6 +213,33 @@ export const carPhotos = pgTable(
   ],
 );
 
+/**
+ * A member's own face, stored the way every other picture here is: bytes
+ * in Postgres, served from its own cacheable route. One per account, so
+ * the account id is the key and replacing a photograph is the same row.
+ *
+ * `users.image` holds the URL to it, because that column is Better Auth's
+ * and rides along in the session — so every screen that already knows who
+ * you are knows what you look like without a second query.
+ */
+export const userAvatars = pgTable(
+  'user_avatars',
+  {
+    userId: text('user_id')
+      .primaryKey()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    image: bytea('image').notNull(),
+    imageType: text('image_type').notNull(),
+    width: integer('width').notNull(),
+    height: integer('height').notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    check('user_avatars_image_size', sql`octet_length(${t.image}) between 1 and 400000`),
+    check('user_avatars_image_type', sql`${t.imageType} = 'image/jpeg'`),
+  ],
+);
+
 /** Shared sightings. The image bytes live in Postgres so a deploy cannot
  * erase them and every phone sees the same post; they are served separately
  * from the feed payload by /api/spotted/:id/image. */

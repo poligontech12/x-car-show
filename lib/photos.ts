@@ -52,5 +52,15 @@ export const carPhotoUrl = (carId: string, position: number, version: number): s
 export const photoAt = (photos: CarPhoto[] | undefined, position: number): string | null =>
   photos?.find((p) => p.position === position)?.url ?? null;
 
+/**
+ * A member's own photograph. Keyed by handle rather than account id
+ * because the handle is already the public name for a person — it is what
+ * /owner/<handle> is built from and what gets printed on a card.
+ */
+export const AVATAR_EDGE = 512;
+
+export const avatarUrl = (handle: string, version: number): string =>
+  `/api/owners/${encodeURIComponent(handle)}/avatar?v=${version}`;
+
 /** The picture a car leads with wherever it appears as a single tile. */
 export const leadPhoto = (photos: CarPhoto[] | undefined): string | null => photoAt(photos, 0);

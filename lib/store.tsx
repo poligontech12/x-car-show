@@ -43,6 +43,8 @@ export interface Account {
   role: Role;
   /** Assigned at sign-up, printed on cards — shown, never edited. */
   handle: string;
+  /** Their own photograph, served from its own route. */
+  image?: string;
   town?: string;
   instagram?: string;
   facebook?: string;

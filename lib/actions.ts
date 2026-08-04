@@ -7,10 +7,20 @@ import { headers } from 'next/headers';
 import { auth } from './auth';
 import type { CarClass, ModCategory, ModGroup } from './cars';
 import { db } from './db';
-import { carPhotos, cars, follows, mods, spottedPosts, spottedUsage, users, votes } from './db/schema';
+import {
+  carPhotos,
+  cars,
+  follows,
+  mods,
+  spottedPosts,
+  spottedUsage,
+  userAvatars,
+  users,
+  votes,
+} from './db/schema';
 import { EVENT, VOTE_LIMIT, votingOpen } from './event';
 import { decodeUploadedImage } from './image';
-import { isCarPhotoPosition } from './photos';
+import { AVATAR_EDGE, avatarUrl, isCarPhotoPosition } from './photos';
 
 /**
  * Everything a member can change goes through here. Each action reads the
@@ -197,6 +207,7 @@ const PHOTO_ERRORS = new Set([
   'Alege o fotografie JPEG, PNG sau WebP.',
   'Fotografia nu poate fi citită.',
   'Fotografia este prea mare.',
+  'Contul tău nu are încă un nume public.',
 ]);
 
 function photoFailure(error: unknown): PhotoResult {
@@ -522,6 +533,106 @@ export async function toggleFollow(carId: string): Promise<boolean> {
   return removed.length === 0;
 }
 
+/**
+ * The session is served from a signed cookie for five minutes so the vote
+ * screen is not asking the database who you are on every render. Anything
+ * that writes to the `users` row does it behind Better Auth's back, so
+ * without this every screen keeps reading the account as it was until the
+ * cache ages out — the edit snaps back on the next render, and a save
+ * that worked looks like one that silently failed.
+ *
+ * Re-reading with the cache disabled rewrites the cookie from the row we
+ * just wrote. One query, and only when the account actually changed.
+ */
+async function refreshSessionCache(): Promise<void> {
+  await auth.api.getSession({
+    headers: await headers(),
+    query: { disableCookieCache: true },
+  });
+}
+
+/**
+ * A member's own photograph. Cropped square on the way in, because it is
+ * drawn in a circle everywhere it appears, and small — a face beside a
+ * name never needs the budget a car gets.
+ */
+export async function saveAvatar(imageDataUrl: string): Promise<PhotoResult> {
+  try {
+    const user = await requireUser();
+    const handle = (user as { handle?: string }).handle;
+    if (!handle) throw new Error('Contul tău nu are încă un nume public.');
+
+    const photo = await decodeUploadedImage(imageDataUrl, {
+      maxEdge: AVATAR_EDGE,
+      square: true,
+      maxBytes: 400_000,
+    });
+
+    const now = new Date();
+    await db.transaction(async (tx) => {
+      await tx
+        .insert(userAvatars)
+        .values({
+          userId: user.id,
+          image: photo.bytes,
+          imageType: photo.contentType,
+          width: photo.width,
+          height: photo.height,
+          updatedAt: now,
+        })
+        .onConflictDoUpdate({
+          target: userAvatars.userId,
+          set: {
+            image: photo.bytes,
+            imageType: photo.contentType,
+            width: photo.width,
+            height: photo.height,
+            updatedAt: now,
+          },
+        });
+      // Better Auth's own column, so the URL rides along in the session
+      // and every screen that knows who you are can draw you.
+      await tx
+        .update(users)
+        .set({ image: avatarUrl(handle, now.getTime()), updatedAt: now })
+        .where(eq(users.id, user.id));
+    });
+  } catch (error) {
+    return photoFailure(error);
+  }
+
+  await refreshSessionCache();
+  revalidateAccount();
+  return { ok: true };
+}
+
+export async function deleteAvatar(): Promise<PhotoResult> {
+  try {
+    const user = await requireUser();
+    await db.transaction(async (tx) => {
+      await tx.delete(userAvatars).where(eq(userAvatars.userId, user.id));
+      await tx
+        .update(users)
+        .set({ image: null, updatedAt: new Date() })
+        .where(eq(users.id, user.id));
+    });
+  } catch (error) {
+    return photoFailure(error);
+  }
+
+  await refreshSessionCache();
+  revalidateAccount();
+  return { ok: true };
+}
+
+/** Wherever a person's name and face are drawn beside each other. */
+function revalidateAccount() {
+  revalidatePath('/auth');
+  revalidatePath('/roster');
+  revalidatePath('/garage');
+  revalidatePath('/');
+}
+
 export interface ProfileInput {
   name?: string;
   town?: string;
@@ -544,22 +655,7 @@ export async function saveProfile(input: ProfileInput): Promise<void> {
     })
     .where(eq(users.id, user.id));
 
-  /**
-   * The session is served from a signed cookie for five minutes so the
-   * vote screen is not asking the database who you are on every render.
-   * That cookie was written before this edit, and the row above was
-   * changed behind Better Auth's back — so every screen would keep
-   * reading the profile as it was until the cache aged out, the field
-   * would snap back to its old value on the next render, and a save that
-   * worked would look like one that silently failed.
-   *
-   * Re-reading with the cache disabled refreshes the cookie from the row
-   * we just wrote. It is one query, and only when a profile is saved.
-   */
-  await auth.api.getSession({
-    headers: await headers(),
-    query: { disableCookieCache: true },
-  });
+  await refreshSessionCache();
 
   revalidatePath('/auth');
   revalidatePath('/roster');

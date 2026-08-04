@@ -1,0 +1,75 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.well {
+  position: relative;
+  flex: 0 0 auto;
+  width: 76px;
+  height: 76px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--slot);
+  border: 1px solid var(--rim);
+  font-size: 76px; /* the fallback initial sizes off this */
+}
+
+.busy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: rgba(5, 5, 6, 0.72);
+  backdrop-filter: blur(4px);
+  font-size: 10px;
+  color: var(--paper-45);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.note {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--paper-45);
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.remove {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  color: var(--paper-45);
+  cursor: pointer;
+}
+
+.remove:hover {
+  color: var(--red);
+}
+
+.error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #ff8a82;
+}
+
+.file {
+  display: none;
+}

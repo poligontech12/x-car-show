@@ -48,6 +48,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         email: user.email,
         role: user.role === 'car' ? 'car' : 'vote',
         handle: user.handle ?? '',
+        image: user.image ?? undefined,
         town: user.town ?? undefined,
         instagram: user.instagram ?? undefined,
         facebook: user.facebook ?? undefined,

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { Avatar } from '@/components/Avatar';
 import { ImageSlot } from '@/components/ImageSlot';
 import { displayModel, ownerOf, socialUrl } from '@/lib/cars';
 import { leadPhoto } from '@/lib/photos';
@@ -37,7 +38,7 @@ export default function OwnerScreen() {
   return (
     <div className={styles.screen}>
       <div className={`${styles.head} a-up delay-200`}>
-        <div className={styles.avatar} />
+        <Avatar src={owner.image} name={owner.name} className={styles.avatar} />
         <h1 className={styles.name}>{owner.name || 'Fără nume'}</h1>
         <p className={styles.meta}>
           {[owner.handle && `@${owner.handle}`, owner.town].filter(Boolean).join(' · ')}

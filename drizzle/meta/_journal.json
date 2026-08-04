@@ -29,6 +29,13 @@
       "when": 1785803840216,
       "tag": "0003_car_photos",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1785866826890,
+      "tag": "0004_user_avatars",
+      "breakpoints": true
     }
   ]
 }

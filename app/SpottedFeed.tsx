@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+import { Avatar } from '@/components/Avatar';
 import { createSpottedPost } from '@/lib/actions';
 import type { SpottedPost } from '@/lib/db/queries';
 import { MAX_UPLOAD_DATA_URL, fileToDataUrl } from '@/lib/photo-file';
@@ -191,7 +192,7 @@ export function SpottedFeed({ posts }: { posts: SpottedPost[] }) {
                 <img src={post.imageUrl} alt={post.caption || `Mașină văzută de ${post.author}`} />
                 <span className="photo-veil" />
                 <div className={styles.postMeta}>
-                  <div className={styles.avatar}>{post.author.trim().charAt(0).toUpperCase()}</div>
+                  <Avatar src={post.authorImage} name={post.author} className={styles.avatar} />
                   <div className={styles.postByline}>
                     <b>{post.author}</b>
                     <span>{post.location ? `SPOTTED · ${post.location}` : 'SPOTTED'}</span>

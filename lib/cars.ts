@@ -41,6 +41,8 @@ export interface Car {
   followers: string;
   /** What the owner calls it. Printed on the card under the headline. */
   nickname?: string;
+  /** The owner's own photograph, if they have added one. */
+  ownerImage?: string;
   /** Where the owner sends people. Handles, not URLs — we build the link. */
   instagram?: string;
   facebook?: string;
@@ -544,6 +546,7 @@ export interface OwnerProfile {
   handle: string;
   name: string;
   town: string;
+  image?: string;
   instagram?: string;
   facebook?: string;
   cars: Car[];
@@ -557,6 +560,7 @@ export function ownerOf(handle: string, all: Car[]): OwnerProfile | null {
     handle,
     name: first.owner,
     town: first.town,
+    image: first.ownerImage,
     instagram: first.instagram,
     facebook: first.facebook,
     cars,

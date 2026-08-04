@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
+import { AvatarPicker } from '@/components/AvatarPicker';
 import { enforceCanonicalHttps } from '@/lib/canonical-url';
 import { displayModel } from '@/lib/cars';
 import { useStore } from '@/lib/store';
@@ -162,6 +163,10 @@ function AuthScreen() {
             {/* Everything below is what other people see on your cars and
                 on your profile, so it is edited here and nowhere else. */}
             <div className={`${styles.fieldLabel} ${styles.roleHead}`}>Profilul public</div>
+
+            <div className={styles.field}>
+              <AvatarPicker src={account.image} name={account.name} />
+            </div>
 
             <div className={styles.field}>
               <label className={styles.fieldLabel} htmlFor="acc-name">

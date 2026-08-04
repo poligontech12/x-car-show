@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { socialUrl } from '@/lib/cars';
+import { Avatar } from '@/components/Avatar';
 import { CarPhotoSlot } from '@/components/CarPhotoSlot';
 import { displayModel, modCount } from '@/lib/cars';
 import { CAR_PHOTO_HINTS, CAR_PHOTO_LIMIT, photoAt } from '@/lib/photos';
@@ -251,7 +252,7 @@ export function CarProfile({ id }: { id: string }) {
       )}
 
       <div className={styles.owner}>
-        <div className={styles.ownerAvatar} />
+        <Avatar src={car.ownerImage} name={car.owner || "?"} className={styles.ownerAvatar} />
         <div className={styles.ownerBody}>
           <b>{car.owner || 'Fără nume'}</b>
           <span>{[car.handle && `@${car.handle}`, car.town].filter(Boolean).join(' · ')}</span>
