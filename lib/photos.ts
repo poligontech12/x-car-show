@@ -15,9 +15,12 @@
 export const CAR_PHOTO_LIMIT = 6;
 
 /**
- * Say what photo belongs in the slot, never "drop an image". The first
- * three are what registration asks for; the rest are what an owner fills
- * in later, so they get looser as they go.
+ * Say what photo belongs in the slot, never "drop an image". They get
+ * looser as they go: the first is the one every screen leads with, the
+ * last is whatever the owner thinks is worth showing.
+ *
+ * Registration offers all six and the car page offers the same six — one
+ * number, so nobody has to be told where the other three went.
  */
 export const CAR_PHOTO_HINTS: readonly string[] = [
   'Poza principală — 3/4 față',
@@ -27,9 +30,6 @@ export const CAR_PHOTO_HINTS: readonly string[] = [
   'Jante și gardă',
   'Alegerea ta',
 ];
-
-/** What registration asks for up front. The rest are added on the car. */
-export const ONBOARD_PHOTO_COUNT = 3;
 
 export interface CarPhoto {
   position: number;

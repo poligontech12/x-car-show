@@ -184,6 +184,12 @@
   border: 1px solid var(--rim);
 }
 
+/* Five wells under the main one do not divide by two. Rather than leave
+   the last one stranded in the left column, let it run the full width. */
+.pairSlot:last-child:nth-child(odd) {
+  grid-column: span 2;
+}
+
 /* ── Step 4 · the description ────────────────────────────────── */
 
 .story {

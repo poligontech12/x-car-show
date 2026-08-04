@@ -9,14 +9,17 @@ import { saveCarPhoto } from '@/lib/actions';
 import { EVENT } from '@/lib/event';
 import { BLANK_CAR, SITE_ORIGIN } from '@/lib/cars';
 import { prepareCarPhoto } from '@/lib/photo-file';
-import { CAR_PHOTO_HINTS, ONBOARD_PHOTO_COUNT } from '@/lib/photos';
+import { CAR_PHOTO_HINTS, CAR_PHOTO_LIMIT } from '@/lib/photos';
 import { errorMessage, useStore, type Drive } from '@/lib/store';
 import styles from './onboard.module.css';
 
 const STEPS = [
   ['Ce mașină e?', 'Marca și modelul. Dacă nu e în listă, scrie-o oricum — lista doar ajută.'],
   ['Câți cai are?', 'Aproximativ e în regulă. Nu verifică nimeni fișa de dyno.'],
-  ['Trei poze.', 'Una principală, două detalii. Poți adăuga mai multe mai târziu.'],
+  [
+    'Pozele.',
+    'Una principală și încă cinci, dacă le ai. Lasă goale câte vrei — le poți adăuga oricând pe pagina mașinii.',
+  ],
   ['Descriere', 'Ce ar trebui să știe lumea despre mașină.'],
   ['Ești înscris.', 'Cartonaș pregătit. Ne vedem pe 8 august.'],
 ] as const;
@@ -63,7 +66,7 @@ export default function OnboardScreen() {
    * moment there is a car to attach them to.
    */
   const [photos, setPhotos] = useState<(string | null)[]>(() =>
-    Array<string | null>(ONBOARD_PHOTO_COUNT).fill(null),
+    Array<string | null>(CAR_PHOTO_LIMIT).fill(null),
   );
   const [preparing, setPreparing] = useState<number | null>(null);
   /** Reported on the well it happened in, not somewhere else on the step. */
@@ -276,7 +279,7 @@ export default function OnboardScreen() {
               />
             </div>
             <div className={styles.pair}>
-              {Array.from({ length: ONBOARD_PHOTO_COUNT - 1 }, (_, i) => i + 1).map((slot) => (
+              {Array.from({ length: CAR_PHOTO_LIMIT - 1 }, (_, i) => i + 1).map((slot) => (
                 <div key={slot} className={styles.pairSlot}>
                   <ImageSlot
                     src={photos[slot]}

@@ -52,7 +52,10 @@ test('a car registered with photos opens showing them, everywhere', async ({ pag
   await page.getByRole('button', { name: 'Continuă' }).click();
   await page.getByRole('button', { name: 'Continuă' }).click();
 
-  await expect(page.getByRole('heading', { name: 'Trei poze.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Pozele.' })).toBeVisible();
+  // Registration offers the same six the car page does, not a smaller set
+  // you have to discover was smaller.
+  await expect(page.locator('input[type="file"]')).toHaveCount(6);
   await page.locator('input[type="file"]').first().setInputFiles({
     name: 'hero.png',
     mimeType: 'image/png',
