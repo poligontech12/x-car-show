@@ -544,6 +544,23 @@ export async function saveProfile(input: ProfileInput): Promise<void> {
     })
     .where(eq(users.id, user.id));
 
+  /**
+   * The session is served from a signed cookie for five minutes so the
+   * vote screen is not asking the database who you are on every render.
+   * That cookie was written before this edit, and the row above was
+   * changed behind Better Auth's back — so every screen would keep
+   * reading the profile as it was until the cache aged out, the field
+   * would snap back to its old value on the next render, and a save that
+   * worked would look like one that silently failed.
+   *
+   * Re-reading with the cache disabled refreshes the cookie from the row
+   * we just wrote. It is one query, and only when a profile is saved.
+   */
+  await auth.api.getSession({
+    headers: await headers(),
+    query: { disableCookieCache: true },
+  });
+
   revalidatePath('/auth');
   revalidatePath('/roster');
 }
