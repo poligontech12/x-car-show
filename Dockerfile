@@ -7,8 +7,6 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 # ── builder ─────────────────────────────────────────────────────────────
-# Also the image the `migrate` service runs from: it is the only stage
-# that has drizzle-kit and tsx.
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -29,6 +27,30 @@ ENV BETTER_AUTH_SECRET=build-time-placeholder
 # Next expects this directory even when a project has nothing static to
 # serve; the runner copies it, and a missing one fails the whole build.
 RUN mkdir -p public && npm run build
+
+# ── seed ────────────────────────────────────────────────────────────────
+# Filling a demo environment, and deliberately not the builder stage.
+# Seeding needs the source, the dev dependencies and the photographs; it
+# has no use for a compiled application. Skipping `next build` makes this
+# seconds rather than minutes and, more to the point, means seeding does
+# not demand a build-time NEXT_PUBLIC_SITE_URL it will never read.
+#
+# Never the last stage in this file: `docker build .` with no --target
+# builds whatever comes last, and that has to stay the runner.
+#
+#   docker build --target seed -t xcs-seed .
+#   docker run --rm --network <net> -e DATABASE_URL=... xcs-seed
+#
+# See DEPLOY.md — it pulls the URL off the running container so the
+# password never has to be typed.
+FROM node:22-alpine AS seed
+WORKDIR /app
+# NODE_ENV is deliberately left unset. The seed refuses a database when it
+# is `production`, and baking a value in here would quietly disarm the one
+# guard standing between this image and the real thing.
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+CMD ["npm", "run", "db:seed"]
 
 # ── runner ──────────────────────────────────────────────────────────────
 FROM node:22-alpine AS runner

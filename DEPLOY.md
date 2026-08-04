@@ -61,24 +61,26 @@ unless `SEED_ANYWAY=1` says otherwise. Keep that guard on the real thing.
 ## Seeding the demo environment
 
 The deployed image cannot seed itself, on purpose: the runner stage
-carries the migrator and nothing else, so a production container has no
-seed script, no `tsx` and no demo photographs in it.
+carries the migrator and nothing else, so a serving container has no seed
+script, no `tsx` and no demo photographs in it.
 
-The **builder** stage has all three. Seed a deployed environment by
-running the seed out of that stage against the database beside it — from
-wherever the deploy already checks the repo out:
-
-```bash
-docker build --target builder -t xcs-seed .
-```
+The `seed` stage in the Dockerfile has all three, and skips `next build`
+because seeding has no use for a compiled application — it takes seconds
+and needs no build-time site URL. From a checkout of this repository on
+the machine:
 
 ```bash
-docker run --rm -e DATABASE_URL="postgres://xcs:PASSWORD@172.17.0.1:5432/xcarshow" -e SEED_RESET=1 xcs-seed npm run db:seed
+docker build --target seed -t xcs-seed .
 ```
 
-`172.17.0.1` is where `docker-compose.yml` publishes Postgres, reachable
-from any container on the default bridge. `PASSWORD` is the
-`POSTGRES_PASSWORD` in `/opt/x-car-show/.env`.
+Point it at the same database and network the live container uses, read
+off the container itself so no password has to be typed or stored:
+
+```bash
+NET=$(docker inspect x-car-show-live --format '{{range $k,$v := .NetworkSettings.Networks}}{{$k}} {{end}}' | awk '{print $1}')
+DB_URL=$(docker inspect x-car-show-live --format '{{range .Config.Env}}{{println .}}{{end}}' | grep '^DATABASE_URL=' | cut -d= -f2-)
+docker run --rm --network "$NET" -e DATABASE_URL="$DB_URL" -e SEED_RESET=1 xcs-seed
+```
 
 `SEED_RESET=1` wipes every account first, which is what you want on a
 demo box being reset between showings and never what you want anywhere
