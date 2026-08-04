@@ -92,6 +92,12 @@ interface Store extends UiState, ServerState {
   votesLeft: number;
   toggleFollow: (carId: string) => void;
   isFollowing: (carId: string) => boolean;
+  /**
+   * How far ahead of the server a follow we painted optimistically is:
+   * +1, -1, or 0 once the server's own count has caught up. Screens add
+   * this to the count they were given rather than guessing at it.
+   */
+  followerDelta: (carId: string) => number;
 
   addCar: (car: Partial<Car>) => Promise<string>;
   updateCar: (id: string, patch: Partial<Car>) => Promise<void>;
@@ -310,6 +316,18 @@ export function StoreProvider({
       },
 
       isFollowing: (carId) => !!following[carId],
+
+      /**
+       * Only while our opinion and the server's differ. Adding one for
+       * every follow you hold double-counts it the moment the refresh
+       * lands, because the count we were handed already includes you —
+       * which is how following a car with nobody on it read as two.
+       */
+      followerDelta: (carId) => {
+        const pending = pendingFollows[carId];
+        if (pending === undefined || pending === !!initial.following[carId]) return 0;
+        return pending ? 1 : -1;
+      },
 
 
       addCar: async (car) => {

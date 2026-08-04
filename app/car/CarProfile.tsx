@@ -49,7 +49,7 @@ function Stat({
  * the owner is a card at the foot of it, never the other way round.
  */
 export function CarProfile({ id }: { id: string }) {
-  const { isFollowing, toggleFollow, hydrated } = useStore();
+  const { isFollowing, toggleFollow, followerDelta, hydrated } = useStore();
   const car = useCar(id);
   const owns = useOwnsCar(id);
   const all = useCars();
@@ -79,7 +79,10 @@ export function CarProfile({ id }: { id: string }) {
   const garage = car.handle
     ? all.filter((o) => o.handle === car.handle && o.id !== car.id)
     : [];
-  const followers = following ? Number(car.followers) + 1 : Number(car.followers);
+  // The count came from the database and already counts everyone who
+  // follows, this reader included; only a tap the server has not answered
+  // yet needs adding on top.
+  const followers = Number(car.followers) + followerDelta(car.id);
 
   /**
    * The owner gets every well, so there is always somewhere to put the
