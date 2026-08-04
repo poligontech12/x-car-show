@@ -137,8 +137,12 @@ interface Credit {
 /**
  * Real photographs, if `npm run demo:photos` has fetched any. They are
  * openly licensed pictures of other people's cars from Wikimedia Commons,
- * with their provenance in demo-photos/CREDITS.md — see that file before
- * showing any of this to anybody. Without them the generated fields below
+ * with their provenance in demo-photos/credits.json, which travels with
+ * them, and in CREDITS.md beside it, which is the readable version — see
+ * one of the two before showing any of this to anybody. Note that the
+ * .md is stripped from container images and the .json is not, so the
+ * credit data reaches every environment the photographs do.
+ * Without the photographs the generated fields below
  * stand in, which is the honest default: a database nobody has fetched
  * anything for should look like one.
  */
@@ -373,8 +377,9 @@ async function main() {
     console.log(
       `\n${fromCommons} of those photographs are openly licensed pictures of other\n` +
         `people's cars from Wikimedia Commons, standing in for a placeholder\n` +
-        `roster. Authors and licences: demo-photos/CREDITS.md. Credit them if\n` +
-        `you show this anywhere, and never present this roster as real entries.`,
+        `roster. Authors and licences travel beside them in credits.json, and\n` +
+        `read more easily in demo-photos/CREDITS.md in the repository. Credit\n` +
+        `them if you show this anywhere, and never pass this off as real entries.`,
     );
   } else {
     console.log('\nPhotographs are generated colour fields. `npm run demo:photos` fetches real ones.');
