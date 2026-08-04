@@ -152,8 +152,13 @@ export const mods = pgTable(
 );
 
 /**
- * Uploaded photos. `slot` matches the ImageSlot id on the page, so a
- * car keeps its hero and its gallery order without a separate join.
+ * Dead, and kept only because dropping it is not an additive migration.
+ *
+ * It stored a `path` to a file nothing ever wrote, and no code ever read
+ * the table — `car_photos` below replaced it. DEPLOY.md asks for additive
+ * migrations until after the show, because a rollback restores the
+ * container and not the schema, so the DROP waits until then. Nothing
+ * queries this; leaving it costs an empty table.
  */
 export const photos = pgTable(
   'photos',
@@ -170,6 +175,42 @@ export const photos = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [unique('photos_car_slot').on(t.carId, t.slot)],
+);
+
+/**
+ * A car's photographs, stored the way a sighting is: bytes in Postgres,
+ * served from their own cacheable route. Photography is the product, so
+ * a car's pictures have to survive a deploy, reach a visitor who has
+ * never touched this browser, and outlive the phone they were taken on.
+ *
+ * `position` is the slot. Every screen numbers them the same way — 0 is
+ * the picture that leads the profile, the roster deck and the printed
+ * card — and the range check is what caps a car at six rather than a
+ * count the app has to remember to run.
+ */
+export const carPhotos = pgTable(
+  'car_photos',
+  {
+    id: text('id').primaryKey(),
+    carId: text('car_id')
+      .notNull()
+      .references(() => cars.id, { onDelete: 'cascade' }),
+    position: integer('position').notNull(),
+    image: bytea('image').notNull(),
+    imageType: text('image_type').notNull(),
+    width: integer('width').notNull(),
+    height: integer('height').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    /** Stamped into the image URL, so replacing a photo busts its cache. */
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    unique('car_photos_car_position').on(t.carId, t.position),
+    index('car_photos_car_idx').on(t.carId),
+    check('car_photos_position_range', sql`${t.position} between 0 and 5`),
+    check('car_photos_image_size', sql`octet_length(${t.image}) between 1 and 1000000`),
+    check('car_photos_image_type', sql`${t.imageType} = 'image/jpeg'`),
+  ],
 );
 
 /** Shared sightings. The image bytes live in Postgres so a deploy cannot

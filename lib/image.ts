@@ -5,7 +5,7 @@ const MAX_PIXELS = 12_000_000;
 const MAX_DIMENSION = 4_096;
 const DATA_URL = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/]+={0,2})$/;
 
-export interface SpottedImage {
+export interface DecodedImage {
   contentType: 'image/jpeg';
   bytes: Buffer;
   width: number;
@@ -22,8 +22,12 @@ function imageError(): Error {
   return new Error('Fotografia nu poate fi citită.');
 }
 
-/** Decode with libvips, cap pixels, strip metadata, and persist one safe format. */
-export async function decodeSpottedImage(dataUrl: string): Promise<SpottedImage> {
+/**
+ * Decode with libvips, cap pixels, strip metadata, and persist one safe
+ * format. Every image a member uploads goes through here — a sighting on
+ * the feed and a photograph on a car are the same problem.
+ */
+export async function decodeUploadedImage(dataUrl: string): Promise<DecodedImage> {
   const match = DATA_URL.exec(dataUrl);
   if (!match) throw new Error('Alege o fotografie JPEG, PNG sau WebP.');
 

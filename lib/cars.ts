@@ -7,6 +7,8 @@
  * trade writes them; everything a person reads as a sentence is Romanian.
  */
 
+import type { CarPhoto } from './photos';
+
 export type CarClass = 'JDM' | 'Germane' | 'Muscle' | 'Clasice' | 'Stance' | 'Off-road';
 
 export type ModCategory = 'Motor' | 'Suspensie' | 'Jante' | 'Exterior' | 'Interior';
@@ -44,6 +46,11 @@ export interface Car {
   facebook?: string;
   /** True for an entry a member registered themselves, rather than seed data. */
   mine?: boolean;
+  /**
+   * Uploaded photographs, by slot. Absent on the modelled builds below,
+   * which have never had any — the screens show an empty well for those.
+   */
+  photos?: CarPhoto[];
   /** Year this car took car of the show, if it ever has. */
   win: string | null;
   mods: ModGroup[];

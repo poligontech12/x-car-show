@@ -7,9 +7,10 @@ import { headers } from 'next/headers';
 import { auth } from './auth';
 import type { CarClass, ModCategory, ModGroup } from './cars';
 import { db } from './db';
-import { cars, follows, mods, spottedPosts, spottedUsage, users, votes } from './db/schema';
+import { carPhotos, cars, follows, mods, spottedPosts, spottedUsage, users, votes } from './db/schema';
 import { EVENT, VOTE_LIMIT, votingOpen } from './event';
-import { decodeSpottedImage } from './spotted-image';
+import { decodeUploadedImage } from './image';
+import { isCarPhotoPosition } from './photos';
 
 /**
  * Everything a member can change goes through here. Each action reads the
@@ -141,14 +142,23 @@ export async function registerCar(input: CarInput): Promise<string> {
   return id;
 }
 
-export async function saveCar(id: string, input: CarInput): Promise<void> {
+/**
+ * Everything that changes a car goes through this first. The id comes
+ * from the client and says nothing about who is sending it; the session
+ * is the only thing that does.
+ */
+async function requireOwnedCar(carId: string): Promise<void> {
   const user = await requireUser();
   const [owned] = await db
     .select({ id: cars.id })
     .from(cars)
-    .where(and(eq(cars.id, id), eq(cars.ownerId, user.id)))
+    .where(and(eq(cars.id, carId), eq(cars.ownerId, user.id)))
     .limit(1);
   if (!owned) throw new Error('Poți schimba doar mașinile pe care le-ai înscris tu.');
+}
+
+export async function saveCar(id: string, input: CarInput): Promise<void> {
+  await requireOwnedCar(id);
 
   await db.transaction(async (tx) => {
     await tx
@@ -175,6 +185,107 @@ export async function deleteCar(id: string): Promise<void> {
   revalidatePath('/roster');
   revalidatePath('/garage');
   revalidatePath('/award');
+}
+
+export type PhotoResult = { ok: true } | { ok: false; error: string };
+
+/** Said plainly to the person holding the phone; anything else is a shrug. */
+const PHOTO_ERRORS = new Set([
+  'Trebuie să fii conectat.',
+  'Poți schimba doar mașinile pe care le-ai înscris tu.',
+  'Locul ăsta de poză nu există.',
+  'Alege o fotografie JPEG, PNG sau WebP.',
+  'Fotografia nu poate fi citită.',
+  'Fotografia este prea mare.',
+]);
+
+function photoFailure(error: unknown): PhotoResult {
+  const message = error instanceof Error ? error.message : '';
+  return {
+    ok: false,
+    error: PHOTO_ERRORS.has(message) ? message : 'Nu am putut salva fotografia. Încearcă din nou.',
+  };
+}
+
+/** A car's photo shows up on all of these, so all of them go stale at once. */
+function revalidateCarPhoto(carId: string) {
+  revalidatePath(`/car/${carId}`);
+  revalidatePath(`/cards/${carId}`);
+  revalidatePath('/roster');
+  revalidatePath('/garage');
+  revalidatePath('/cards');
+}
+
+/**
+ * Put a photograph in one of the car's six slots, replacing whatever was
+ * there. Ownership is checked before the bytes reach the decoder: sharp
+ * is the expensive half of this, and only someone who registered the car
+ * should be able to spend it.
+ */
+export async function saveCarPhoto(
+  carId: string,
+  position: number,
+  imageDataUrl: string,
+): Promise<PhotoResult> {
+  try {
+    await requireOwnedCar(carId);
+    if (!isCarPhotoPosition(position)) throw new Error('Locul ăsta de poză nu există.');
+
+    const photo = await decodeUploadedImage(imageDataUrl);
+    await db
+      .insert(carPhotos)
+      .values({
+        id: shortId(12),
+        carId,
+        position,
+        image: photo.bytes,
+        imageType: photo.contentType,
+        width: photo.width,
+        height: photo.height,
+      })
+      // The slot is the identity, so replacing a photo is the same row —
+      // a retry on a bad signal cannot leave two pictures in one well.
+      .onConflictDoUpdate({
+        target: [carPhotos.carId, carPhotos.position],
+        set: {
+          image: photo.bytes,
+          imageType: photo.contentType,
+          width: photo.width,
+          height: photo.height,
+          updatedAt: new Date(),
+        },
+      });
+  } catch (error) {
+    return photoFailure(error);
+  }
+
+  try {
+    revalidateCarPhoto(carId);
+  } catch (error) {
+    // The photo is committed. A cache failure must not read as a failed
+    // upload and invite the member to send the same bytes again.
+    console.error('Car photo cache invalidation failed after commit.', error);
+  }
+  return { ok: true };
+}
+
+export async function deleteCarPhoto(carId: string, position: number): Promise<PhotoResult> {
+  try {
+    await requireOwnedCar(carId);
+    if (!isCarPhotoPosition(position)) throw new Error('Locul ăsta de poză nu există.');
+    await db
+      .delete(carPhotos)
+      .where(and(eq(carPhotos.carId, carId), eq(carPhotos.position, position)));
+  } catch (error) {
+    return photoFailure(error);
+  }
+
+  try {
+    revalidateCarPhoto(carId);
+  } catch (error) {
+    console.error('Car photo cache invalidation failed after commit.', error);
+  }
+  return { ok: true };
 }
 
 export interface SpottedInput {
@@ -259,7 +370,7 @@ export async function createSpottedPost(input: SpottedInput): Promise<SpottedRes
     const decodeBudgetError = await reserveSpottedDecodeAttempt();
     if (decodeBudgetError) throw new Error(decodeBudgetError);
 
-    const photo = await decodeSpottedImage(input.imageDataUrl);
+    const photo = await decodeUploadedImage(input.imageDataUrl);
     const location = text(input.location)?.slice(0, 80) ?? null;
     const caption = text(input.caption)?.slice(0, 280) ?? null;
     id = shortId(12);

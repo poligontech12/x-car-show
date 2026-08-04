@@ -17,9 +17,10 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000. Photography is the product, so **every image
-area is a live drop target** — drag a photo onto any placeholder and it sticks
-across reloads.
+Then open http://localhost:3000. Photography is the product, so **a car's own
+photo wells are live drop targets** for whoever registered it — drag a photo
+onto one and it goes to the server, where every other visitor sees it too.
+Six per car; everywhere else a car appears, its picture is shown, not edited.
 
 **The interface is in Romanian.** Part names, engine codes and manufacturer
 paint names stay as the trade writes them; everything a person reads as a
@@ -52,11 +53,14 @@ components/
   AppShell          the 390x844 frame, device chrome, scroll vs fill
   PhoneNav          the fixed nav and the full-screen menu overlay
   TabBar            the floating glass tab pill
-  ImageSlot         drop-target photo wells
+  ImageSlot         the photo well itself — shows, drops, reports the file
+  CarPhotoSlot      a well bound to one of a car's six slots on the server
 lib/
   cars.ts           the twelve modelled builds, plus standings
   store.tsx         account, vote, follows, filters — persisted to localStorage
-  slots.ts          photo slots: downscale, encode, persist
+  photos.ts         the slot numbering every screen agrees on, and photo URLs
+  photo-file.ts     camera file to upload: downscale, strip EXIF, encode
+  image.ts          the server side of that: decode, cap, re-encode with libvips
   useCountUp.ts     display numbers count in on a cubic ease-out
 design/             the original canvas and the app it embeds, for reference
 ```
@@ -105,8 +109,10 @@ the actions there, and no screen touches storage directly. Specifically:
 
 - The password field is never read and never stored. It exists so the flow reads true.
 - Scanning is simulated — tapping the viewfinder stands in for a successful card read.
-- Photos never leave the phone. They are downscaled to 1600px and JPEG-encoded before
-  being stored, because localStorage gives us about 5 MB in total.
+- Photos are downscaled to 1600px and JPEG-encoded on the device before upload — a
+  phone photo off the camera is 4 MB and the canvas round-trip also strips its EXIF.
+  The server decodes them again with libvips, caps the pixels and stores the bytes in
+  Postgres; they are served from `/api/cars/:id/photo/:slot` and `/api/spotted/:id/image`.
 - Vote tallies are seeded constants in `lib/cars.ts`; your own vote is added on read.
 
 ## Where this departs from the canvas
@@ -127,8 +133,8 @@ Small, deliberate changes, all of them the canvas's intent applied to working co
 - **Follows are per car**, not one flag for whichever car you are looking at.
 - **A new account starts with no vote cast.** The canvas prototype seeded one.
 - **The build story is a real textarea** with a live counter, not a static placeholder.
-- **Photos that are also links** get a small corner control to browse, so tapping the
-  photo opens the car instead of opening a file picker.
+- **A car's photos are edited on the car**, not from the roster deck or a garage row.
+  Those show the picture and stay links; one screen owns the editing.
 - **Derived, not typed:** paddock comes from the stand letter, the mod count from the
   mod list, and the open modification group from the first group on the car (which
   is suspension on the bagged Passat, not engine).

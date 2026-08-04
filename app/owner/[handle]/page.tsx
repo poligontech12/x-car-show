@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { ImageSlot } from '@/components/ImageSlot';
 import { displayModel, ownerOf, socialUrl } from '@/lib/cars';
+import { leadPhoto } from '@/lib/photos';
 import { useStore } from '@/lib/store';
 import { useCars } from '@/lib/useCars';
 import styles from './owner.module.css';
@@ -84,7 +85,7 @@ export default function OwnerScreen() {
             style={{ animationDelay: `${0.35 + i * 0.07}s` }}
           >
             <span className={styles.thumb}>
-              <ImageSlot id={`hero-${c.id}-0`} hint={displayModel(c)} mode="inline" />
+              <ImageSlot src={leadPhoto(c.photos)} hint={displayModel(c)} mode="inline" readOnly />
             </span>
             <span className={styles.rowBody}>
               <b>{displayModel(c) || 'Fără nume'}</b>

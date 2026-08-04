@@ -5,8 +5,11 @@ import { useMemo, useState } from 'react';
 import { DigitDial } from '@/components/DigitDial';
 import { ImageSlot } from '@/components/ImageSlot';
 import { QrCodeClient } from '@/components/QrCodeClient';
+import { saveCarPhoto } from '@/lib/actions';
 import { EVENT } from '@/lib/event';
 import { BLANK_CAR, SITE_ORIGIN } from '@/lib/cars';
+import { prepareCarPhoto } from '@/lib/photo-file';
+import { CAR_PHOTO_HINTS, ONBOARD_PHOTO_COUNT } from '@/lib/photos';
 import { errorMessage, useStore, type Drive } from '@/lib/store';
 import styles from './onboard.module.css';
 
@@ -52,6 +55,41 @@ export default function OnboardScreen() {
   const [step, setStep] = useState(0);
   const [story, setStory] = useState('');
 
+  /**
+   * The photographs wait here until the car has an id. They used to be
+   * written under fixed keys — `ob-hero` and friends — that no car page
+   * ever read, so three photos were picked at registration and three
+   * photos were lost. Held in this component, they go to the server the
+   * moment there is a car to attach them to.
+   */
+  const [photos, setPhotos] = useState<(string | null)[]>(() =>
+    Array<string | null>(ONBOARD_PHOTO_COUNT).fill(null),
+  );
+  const [preparing, setPreparing] = useState<number | null>(null);
+  /** Reported on the well it happened in, not somewhere else on the step. */
+  const [photoError, setPhotoError] = useState<{ slot: number; message: string } | null>(null);
+
+  const setPhoto = (slot: number, dataUrl: string | null) =>
+    setPhotos((current) => current.map((v, i) => (i === slot ? dataUrl : v)));
+
+  const holdPhoto = async (slot: number, file: File) => {
+    setPhotoError(null);
+    setPreparing(slot);
+    try {
+      setPhoto(slot, await prepareCarPhoto(file));
+    } catch (cause) {
+      setPhotoError({
+        slot,
+        message:
+          cause instanceof Error && cause.message.includes('mare')
+            ? cause.message
+            : 'Nu am putut pregăti fotografia. Alege un JPEG, PNG sau WebP.',
+      });
+    } finally {
+      setPreparing(null);
+    }
+  };
+
   const [title, sub] = STEPS[Math.min(step, 4)];
   const done = step >= 4;
 
@@ -77,21 +115,38 @@ export default function OnboardScreen() {
       // The draft carries what the four steps could ask for without
       // becoming a chore; everything else is filled in on the car itself.
       const [make, ...rest] = onboarding.name.trim().split(/\s+/);
+      let id: string;
       try {
-      const id = await addCar({
-        ...BLANK_CAR,
-        make: make ?? '',
-        model: rest.join(' ') || (make ?? 'Mașina mea'),
-        year: Number(onboarding.year) || 0,
-        power: onboarding.power ? String(onboarding.power) : '',
-        drive: onboarding.drive,
-      });
-      resetOnboarding();
-      router.push(`/car/${id}`);
+        id = await addCar({
+          ...BLANK_CAR,
+          make: make ?? '',
+          model: rest.join(' ') || (make ?? 'Mașina mea'),
+          year: Number(onboarding.year) || 0,
+          power: onboarding.power ? String(onboarding.power) : '',
+          drive: onboarding.drive,
+          story,
+        });
       } catch (e) {
         setSaving(false);
         setFailed(errorMessage(e));
+        return;
       }
+
+      /**
+       * Past this line the car exists, so nothing here may send anyone
+       * back to the button that registered it — they would end up with
+       * two entries. A photo that will not upload is left to the car
+       * page, where the empty well is both the report and the retry.
+       */
+      await Promise.allSettled(
+        photos.flatMap((dataUrl, slot) =>
+          dataUrl ? [saveCarPhoto(id, slot, dataUrl)] : [],
+        ),
+      );
+
+      resetOnboarding();
+      router.refresh();
+      router.push(`/car/${id}`);
       return;
     }
     if (step === 3) completeOnboarding();
@@ -211,15 +266,28 @@ export default function OnboardScreen() {
         {step === 2 && (
           <>
             <div className={styles.heroSlot}>
-              <ImageSlot id="ob-hero" hint="Poza principală — 3/4 față" />
+              <ImageSlot
+                src={photos[0]}
+                hint={CAR_PHOTO_HINTS[0]}
+                busy={preparing === 0}
+                error={photoError?.slot === 0 ? photoError.message : null}
+                onFile={(file) => void holdPhoto(0, file)}
+                onClear={() => setPhoto(0, null)}
+              />
             </div>
             <div className={styles.pair}>
-              <div className={styles.pairSlot}>
-                <ImageSlot id="ob-2" hint="Compartiment motor" />
-              </div>
-              <div className={styles.pairSlot}>
-                <ImageSlot id="ob-3" hint="Interior / detaliu" />
-              </div>
+              {Array.from({ length: ONBOARD_PHOTO_COUNT - 1 }, (_, i) => i + 1).map((slot) => (
+                <div key={slot} className={styles.pairSlot}>
+                  <ImageSlot
+                    src={photos[slot]}
+                    hint={CAR_PHOTO_HINTS[slot]}
+                    busy={preparing === slot}
+                    error={photoError?.slot === slot ? photoError.message : null}
+                    onFile={(file) => void holdPhoto(slot, file)}
+                    onClear={() => setPhoto(slot, null)}
+                  />
+                </div>
+              ))}
             </div>
           </>
         )}

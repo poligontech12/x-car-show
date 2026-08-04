@@ -3,14 +3,20 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { socialUrl } from '@/lib/cars';
-import { ImageSlot } from '@/components/ImageSlot';
+import { CarPhotoSlot } from '@/components/CarPhotoSlot';
 import { displayModel, modCount } from '@/lib/cars';
+import { CAR_PHOTO_HINTS, CAR_PHOTO_LIMIT, photoAt } from '@/lib/photos';
 import { useCar, useCars, useOwnsCar } from '@/lib/useCars';
 import { useCountUp } from '@/lib/useCountUp';
 import { useStore } from '@/lib/store';
 import styles from './car.module.css';
 
-const HERO_HINTS = ['Pune poza principală', 'Pune compartimentul motor', 'Pune un detaliu'];
+/**
+ * Six wells. A visitor scrolls past the ones nobody filled; the owner
+ * sees them as an invitation, and this is the only screen that offers
+ * one — every other place a car appears is showing, not editing.
+ */
+const SLOTS = Array.from({ length: CAR_PHOTO_LIMIT }, (_, i) => i);
 
 /** Power leads in gold; the other two fall away behind it. */
 function Stat({
@@ -75,6 +81,15 @@ export function CarProfile({ id }: { id: string }) {
     : [];
   const followers = following ? Number(car.followers) + 1 : Number(car.followers);
 
+  /**
+   * The owner gets every well, so there is always somewhere to put the
+   * next photograph. A visitor gets the pictures that exist — and a
+   * single empty well when there are none, because a car nobody has
+   * photographed should look unphotographed, not broken.
+   */
+  const filled = SLOTS.filter((i) => photoAt(car.photos, i));
+  const frames = owns ? SLOTS : filled.length ? filled : [0];
+
   return (
     <div className={styles.screen}>
       <div className={styles.hero}>
@@ -86,9 +101,15 @@ export function CarProfile({ id }: { id: string }) {
             if (i !== hero) setHero(i);
           }}
         >
-          {HERO_HINTS.map((hint, i) => (
-            <div key={i} className={styles.frame}>
-              <ImageSlot id={`hero-${car.id}-${i}`} hint={hint} />
+          {frames.map((slot) => (
+            <div key={slot} className={styles.frame}>
+              <CarPhotoSlot
+                carId={car.id}
+                position={slot}
+                src={photoAt(car.photos, slot)}
+                hint={CAR_PHOTO_HINTS[slot]}
+                canEdit={owns}
+              />
             </div>
           ))}
         </div>
@@ -98,11 +119,13 @@ export function CarProfile({ id }: { id: string }) {
         <div className="photo-veil" style={{ zIndex: 3 }} />
         <div className={styles.heroBottom} />
 
-        <div className={styles.dots} aria-hidden="true">
-          {HERO_HINTS.map((_, i) => (
-            <i key={i} data-on={i === hero} />
-          ))}
-        </div>
+        {frames.length > 1 && (
+          <div className={styles.dots} aria-hidden="true">
+            {frames.map((slot, i) => (
+              <i key={slot} data-on={i === hero} />
+            ))}
+          </div>
+        )}
       </div>
 
       <div className={styles.masthead}>

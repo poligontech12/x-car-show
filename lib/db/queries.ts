@@ -1,8 +1,9 @@
 import 'server-only';
 import { and, asc, count, desc, eq, inArray } from 'drizzle-orm';
 import type { Car, ModCategory, ModGroup } from '@/lib/cars';
+import { type CarPhoto, carPhotoUrl } from '@/lib/photos';
 import { db } from './index';
-import { cars, follows, mods, spottedPosts, users, votes } from './schema';
+import { carPhotos, cars, follows, mods, spottedPosts, users, votes } from './schema';
 
 /** The order the profile and the edit form both show them in. */
 const MOD_ORDER: ModCategory[] = ['Motor', 'Suspensie', 'Jante', 'Exterior', 'Interior'];
@@ -18,10 +19,17 @@ type OwnerRow = { name: string; town: string | null; handle: string; instagram: 
  * A figure nobody filled in comes back as an empty string, never "0" —
  * the profile hides blank stats and would otherwise print a hard zero.
  */
-function toCar(row: CarRow, owner: OwnerRow, groups: ModGroup[], followers: number): Car {
+function toCar(
+  row: CarRow,
+  owner: OwnerRow,
+  groups: ModGroup[],
+  followers: number,
+  photos: CarPhoto[],
+): Car {
   const num = (v: number | null) => (v == null ? '' : String(v));
   return {
     id: row.id,
+    photos,
     no: row.no ?? '',
     year: row.year ?? 0,
     make: row.make,
@@ -64,6 +72,35 @@ function groupMods(rows: { category: ModCategory; item: string }[]): ModGroup[] 
 }
 
 /**
+ * Slots and stamps, never the bytes. A roster of 142 cars carrying six
+ * JPEGs each would be a hundred megabytes of payload; the pictures have
+ * their own cacheable route and this only says which ones exist.
+ */
+async function photosByCarIds(ids: string[]): Promise<Map<string, CarPhoto[]>> {
+  if (!ids.length) return new Map();
+  const rows = await db
+    .select({
+      carId: carPhotos.carId,
+      position: carPhotos.position,
+      updatedAt: carPhotos.updatedAt,
+    })
+    .from(carPhotos)
+    .where(inArray(carPhotos.carId, ids))
+    .orderBy(asc(carPhotos.position));
+
+  const by = new Map<string, CarPhoto[]>();
+  for (const row of rows) {
+    const list = by.get(row.carId) ?? [];
+    list.push({
+      position: row.position,
+      url: carPhotoUrl(row.carId, row.position, row.updatedAt.getTime()),
+    });
+    by.set(row.carId, list);
+  }
+  return by;
+}
+
+/**
  * Every entry, newest first. Three queries rather than one join so the
  * mods and follower counts do not multiply the car rows — at 142 cars
  * that is cheaper than de-duplicating a cartesian product.
@@ -78,7 +115,7 @@ export async function listCars(): Promise<Car[]> {
   if (!rows.length) return [];
   const ids = rows.map((r) => r.car.id);
 
-  const [modRows, followRows] = await Promise.all([
+  const [modRows, followRows, photosByCar] = await Promise.all([
     db
       .select({ carId: mods.carId, category: mods.category, item: mods.item })
       .from(mods)
@@ -89,6 +126,7 @@ export async function listCars(): Promise<Car[]> {
       .from(follows)
       .where(inArray(follows.carId, ids))
       .groupBy(follows.carId),
+    photosByCarIds(ids),
   ]);
 
   const modsByCar = new Map<string, { category: ModCategory; item: string }[]>();
@@ -100,7 +138,13 @@ export async function listCars(): Promise<Car[]> {
   const followsByCar = new Map(followRows.map((f) => [f.carId, Number(f.n)]));
 
   return rows.map((r) =>
-    toCar(r.car, r.owner, groupMods(modsByCar.get(r.car.id) ?? []), followsByCar.get(r.car.id) ?? 0),
+    toCar(
+      r.car,
+      r.owner,
+      groupMods(modsByCar.get(r.car.id) ?? []),
+      followsByCar.get(r.car.id) ?? 0,
+      photosByCar.get(r.car.id) ?? [],
+    ),
   );
 }
 
@@ -113,16 +157,36 @@ export async function getCar(id: string): Promise<Car | null> {
     .limit(1);
   if (!row) return null;
 
-  const [modRows, [followRow]] = await Promise.all([
+  const [modRows, [followRow], photosByCar] = await Promise.all([
     db
       .select({ category: mods.category, item: mods.item })
       .from(mods)
       .where(eq(mods.carId, id))
       .orderBy(asc(mods.position)),
     db.select({ n: count() }).from(follows).where(eq(follows.carId, id)),
+    photosByCarIds([id]),
   ]);
 
-  return toCar(row.car, row.owner, groupMods(modRows), Number(followRow?.n ?? 0));
+  return toCar(
+    row.car,
+    row.owner,
+    groupMods(modRows),
+    Number(followRow?.n ?? 0),
+    photosByCar.get(id) ?? [],
+  );
+}
+
+/** One photograph's bytes, for the route that serves them. */
+export async function getCarPhoto(
+  carId: string,
+  position: number,
+): Promise<{ image: Buffer; contentType: string } | null> {
+  const [row] = await db
+    .select({ image: carPhotos.image, contentType: carPhotos.imageType })
+    .from(carPhotos)
+    .where(and(eq(carPhotos.carId, carId), eq(carPhotos.position, position)))
+    .limit(1);
+  return row ?? null;
 }
 
 export async function carsByOwnerId(ownerId: string): Promise<Car[]> {

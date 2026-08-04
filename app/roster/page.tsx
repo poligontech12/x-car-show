@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { ImageSlot } from '@/components/ImageSlot';
 import { displayModel } from '@/lib/cars';
+import { leadPhoto } from '@/lib/photos';
 import { useStore } from '@/lib/store';
 import { useCars } from '@/lib/useCars';
 import styles from './roster.module.css';
@@ -43,7 +44,14 @@ export default function RosterScreen() {
     >
       {cars.map((c) => (
         <Link key={c.id} href={`/car/${c.id}`} className={styles.panel}>
-          <ImageSlot id={`car-${c.id}`} hint={[c.year || null, c.model].filter(Boolean).join(' ')} mode="inline" />
+          {/* The deck shows the picture the owner leads with; it is edited
+              on the car itself, never from inside a link to it. */}
+          <ImageSlot
+            src={leadPhoto(c.photos)}
+            hint={[c.year || null, c.model].filter(Boolean).join(' ')}
+            mode="inline"
+            readOnly
+          />
           <span className="photo-scrim" />
           <span className="photo-veil" />
 

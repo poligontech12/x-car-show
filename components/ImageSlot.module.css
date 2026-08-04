@@ -138,6 +138,25 @@
   color: var(--red);
 }
 
+/* Sits along the foot of the well, where a failed upload is next to the
+   thing that failed rather than somewhere else on the page. */
+.error {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  margin: 0;
+  padding: 9px 12px;
+  background: var(--glass-dark);
+  backdrop-filter: blur(16px) saturate(160%);
+  border-top: 1px solid var(--rim);
+  color: #ff8a82;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: center;
+}
+
 .file {
   display: none;
 }

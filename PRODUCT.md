@@ -73,10 +73,13 @@ four-step car registration, and partners — plus a print surface at `/cards`.
 - The feed is deliberately thin: follows, no likes, no comments.
 - Meets are **not** a feature. A meet card was designed and deliberately cut.
 
-**Technical, current:** Next.js App Router, TypeScript, CSS Modules. There is no
-backend yet — account, vote, follows and filters live in `lib/store.tsx` behind
-actions no screen reaches around, persisted to `localStorage`. Photos never
-leave the device.
+**Technical, current:** Next.js App Router, TypeScript, CSS Modules. Accounts,
+entries, votes, follows, sightings and car photographs are in Postgres behind
+server actions no screen reaches around; `lib/store.tsx` holds only what matters
+to one browser, such as the half-finished registration draft. Uploaded images
+are stored as bytes and served from their own cacheable routes — a car keeps its
+photographs across a deploy, a new phone, and a visitor who has never opened the
+app before.
 
 **Undecided — do not invent an answer:**
 
@@ -106,9 +109,10 @@ names, handles, towns and build stories; the six partner workshops in
 entrants at a real event. Do not add more invented entrants, sponsors,
 testimonials or counts.
 
-**Absent:** there is no photography. Every image area in the app is an empty
-drop slot the owner fills. The design leans on photography heavily, so it is
-under-represented in any screenshot taken today.
+**Absent:** there is no photography of our own. A car carries up to six
+photographs and the owner supplies all of them, so every image area starts as an
+empty well. The design leans on photography heavily, so it is under-represented
+in any screenshot taken today.
 
 **Source of record:** the design canvas the product was specified from lives in
 `design/X Car Show.dc.html`. Read it for what the app *is*; its visual language

@@ -5,11 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { createSpottedPost } from '@/lib/actions';
 import type { SpottedPost } from '@/lib/db/queries';
-import { fileToDataUrl } from '@/lib/slots';
+import { MAX_UPLOAD_DATA_URL, fileToDataUrl } from '@/lib/photo-file';
 import { useStore } from '@/lib/store';
 import styles from './feed.module.css';
-
-const MAX_DATA_URL_LENGTH = 1_340_000;
 
 function postedAt(value: string): string {
   return new Intl.DateTimeFormat('ro-RO', {
@@ -54,7 +52,7 @@ export function SpottedFeed({ posts }: { posts: SpottedPost[] }) {
         quality: 0.72,
         allowOriginalFallback: false,
       });
-      if (dataUrl.length > MAX_DATA_URL_LENGTH) throw new Error('Fotografia este prea mare.');
+      if (dataUrl.length > MAX_UPLOAD_DATA_URL) throw new Error('Fotografia este prea mare.');
       setImageDataUrl(dataUrl);
     } catch (cause) {
       setError(cause instanceof Error && cause.message.includes('mare')

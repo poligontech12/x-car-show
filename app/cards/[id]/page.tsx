@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ImageSlot } from '@/components/ImageSlot';
 import { QrCode } from '@/components/QrCode';
 import { SITE_HOST, carUrl, headline, modCount, paddockOf } from '@/lib/cars';
+import { leadPhoto } from '@/lib/photos';
 import { getCar } from '@/lib/db/queries';
 import { EVENT } from '@/lib/event';
 import { PrintButton } from '../PrintButton';
@@ -189,7 +190,7 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
         </div>
         <div className={`${styles.card} ${styles.dark}`}>
           <div className={styles.photoBand}>
-            <ImageSlot id={`hero-${car.id}-0`} hint="Pune poza principală a mașinii" />
+            <ImageSlot src={leadPhoto(car.photos)} hint={headline(car)} readOnly />
             <div className={styles.photoScrim} />
             <div className={styles.photoBadge}>{EVENT.edition}</div>
             <div className={styles.photoCaption}>

@@ -1,12 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { clearSlot, fileToDataUrl, readSlot, subscribeSlot, writeSlot } from '@/lib/slots';
+import { useCallback, useRef, useState } from 'react';
 import styles from './ImageSlot.module.css';
 
 interface Props {
-  /** Persistence key. Every slot on a page needs a distinct one. */
-  id: string;
+  /** The photograph, or null for an empty well. */
+  src: string | null;
   /** Empty-state caption — say what photo belongs here, not "drop an image". */
   hint?: string;
   /**
@@ -15,57 +14,61 @@ interface Props {
    * that are also links. Tapping the photo then opens the car, as it should.
    */
   mode?: 'fill' | 'inline';
+  /**
+   * A photograph belongs to whoever registered the car. Everyone else
+   * sees it, and sees an empty well where there is none, but is offered
+   * nothing to tap — the server would refuse them anyway, and a control
+   * that always fails is worse than no control.
+   */
+  readOnly?: boolean;
+  busy?: boolean;
+  error?: string | null;
+  onFile?: (file: File) => void;
+  onClear?: () => void;
   className?: string;
 }
 
 /**
- * A user-fillable image area. Drag a photo onto it, or tap to browse.
- * The photo persists across reloads; there is no upload, nothing leaves
- * the phone.
+ * A photo well. Drag a picture onto it, or tap to browse — the shell is
+ * the same whether the picture is being uploaded, already stored, or
+ * simply being looked at by a visitor. Where the bytes go is the
+ * caller's business; this only shows the well and reports the file.
  */
-export function ImageSlot({ id, hint = 'Pune o poză', mode = 'fill', className }: Props) {
-  const [src, setSrc] = useState<string | null>(null);
+export function ImageSlot({
+  src,
+  hint = 'Pune o poză',
+  mode = 'fill',
+  readOnly = false,
+  busy = false,
+  error = null,
+  onFile,
+  onClear,
+  className,
+}: Props) {
   const [over, setOver] = useState(false);
-  const [busy, setBusy] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   /** Nested dragenter/dragleave pairs fire constantly; count them instead. */
   const depth = useRef(0);
 
-  useEffect(() => {
-    setSrc(readSlot(id));
-    return subscribeSlot(id, setSrc);
-  }, [id]);
-
   const accept = useCallback(
-    async (file: File | undefined | null) => {
-      if (!file) return;
-      setBusy(true);
-      try {
-        writeSlot(id, await fileToDataUrl(file));
-      } catch {
-        // Not an image, or the browser could not decode it. Leave the
-        // slot as it was rather than showing a broken tile.
-      } finally {
-        setBusy(false);
-      }
+    (file: File | undefined | null) => {
+      if (!file || readOnly) return;
+      onFile?.(file);
     },
-    [id],
+    [onFile, readOnly],
   );
 
   const browse = () => input.current?.click();
+  const editable = !readOnly && !busy;
   const fill = mode === 'fill';
+  const tappable = fill && editable;
 
   return (
     <div
-      className={[
-        styles.slot,
-        over ? styles.over : '',
-        fill ? styles.tappable : '',
-        className,
-      ]
+      className={[styles.slot, over ? styles.over : '', tappable ? styles.tappable : '', className]
         .filter(Boolean)
         .join(' ')}
-      {...(fill
+      {...(tappable
         ? {
             role: 'button' as const,
             tabIndex: 0,
@@ -79,26 +82,30 @@ export function ImageSlot({ id, hint = 'Pune o poză', mode = 'fill', className 
             },
           }
         : {})}
-      onDragEnter={(e) => {
-        e.preventDefault();
-        depth.current += 1;
-        setOver(true);
-      }}
-      onDragOver={(e) => e.preventDefault()}
-      onDragLeave={() => {
-        depth.current -= 1;
-        if (depth.current <= 0) {
-          depth.current = 0;
-          setOver(false);
-        }
-      }}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        depth.current = 0;
-        setOver(false);
-        void accept(e.dataTransfer.files?.[0]);
-      }}
+      {...(editable
+        ? {
+            onDragEnter: (e: React.DragEvent) => {
+              e.preventDefault();
+              depth.current += 1;
+              setOver(true);
+            },
+            onDragOver: (e: React.DragEvent) => e.preventDefault(),
+            onDragLeave: () => {
+              depth.current -= 1;
+              if (depth.current <= 0) {
+                depth.current = 0;
+                setOver(false);
+              }
+            },
+            onDrop: (e: React.DragEvent) => {
+              e.preventDefault();
+              e.stopPropagation();
+              depth.current = 0;
+              setOver(false);
+              accept(e.dataTransfer.files?.[0]);
+            },
+          }
+        : {})}
     >
       {src ? (
         <img className={styles.img} src={src} alt={hint} draggable={false} />
@@ -117,23 +124,25 @@ export function ImageSlot({ id, hint = 'Pune o poză', mode = 'fill', className 
             <circle cx="15.5" cy="5" r="1.75" stroke="currentColor" />
           </svg>
           <div className={styles.cap}>{hint}</div>
-          {fill && <div className={styles.sub}>TRAGE O POZĂ SAU ATINGE</div>}
+          {tappable && <div className={styles.sub}>TRAGE O POZĂ SAU ATINGE</div>}
         </div>
       )}
 
-      <div className={styles.ring} />
+      {/* The dashed ring says "this is yours to fill", which is nothing a
+          photograph needs said over it. */}
+      {!src && <div className={styles.ring} />}
 
-      {busy && <div className={styles.busy}>SE PROCESEAZĂ</div>}
+      {busy && <div className={styles.busy}>SE ÎNCARCĂ</div>}
 
       {/* One control, top-right: browse while empty, clear once filled. */}
-      {!busy && (src || !fill) && (
+      {editable && (src || !fill) && (
         <button
           type="button"
           className={`${styles.corner} ${src ? '' : styles.cornerAlways}`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (src) clearSlot(id);
+            if (src) onClear?.();
             else browse();
           }}
         >
@@ -141,16 +150,25 @@ export function ImageSlot({ id, hint = 'Pune o poză', mode = 'fill', className 
         </button>
       )}
 
-      <input
-        ref={input}
-        className={styles.file}
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          void accept(e.target.files?.[0]);
-          e.target.value = '';
-        }}
-      />
+      {error && (
+        <p className={styles.error} role="alert">
+          {error}
+        </p>
+      )}
+
+      {!readOnly && (
+        <input
+          ref={input}
+          className={styles.file}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          disabled={busy}
+          onChange={(e) => {
+            accept(e.target.files?.[0]);
+            e.target.value = '';
+          }}
+        />
+      )}
     </div>
   );
 }
