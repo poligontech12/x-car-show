@@ -26,6 +26,39 @@ npm run dev
 refuses production outright. The demo roster is placeholder data and must
 never be shown to real attendees as real entries.
 
+It seeds a show rather than a table of rows: photographs on the cars,
+sightings on the feed, and real follow and vote rows so every count the
+app shows is one it counted. Every demo owner shares one password,
+printed when the seed finishes, so the half of the app only an owner sees
+can be shown at all:
+
+```bash
+SEED_RESET=1 npm run db:seed    # wipe every account first, then fill
+```
+
+`SEED_RESET` deletes every account and everything hanging off one. It
+refuses production, but it will not ask twice on a database you care
+about — take a `pg_dump` first.
+
+## Demo photographs
+
+`demo-photos/` holds 71 openly licensed photographs from Wikimedia
+Commons, committed so any environment seeds the same show without
+depending on Commons being reachable. `npm run demo:photos` re-fetches
+them; without the folder the seed falls back to generated colour fields.
+
+They are 1200px because the app draws inside a 390pt phone frame and
+nothing can show them larger. **They are other people's cars.**
+`demo-photos/CREDITS.md` names every author and licence, and the CC BY
+and CC BY-SA ones want that credit anywhere the image appears —
+including a screenshot in a slide.
+
+The roster they dress is placeholder data. Seeding it into anything the
+public can reach means showing invented entrants, with real photographs
+attached, as if they were the real entry list. PRODUCT.md forbids that,
+which is why `npm run db:seed` refuses production and why the override is
+named `SEED_ANYWAY` rather than something you would type by accident.
+
 Poke at the data directly — that is the point of Postgres here:
 
 ```bash

@@ -1,0 +1,641 @@
+[
+  {
+    "carId": "s14",
+    "file": "s14-0.jpg",
+    "title": "File:Nissan 200SX S14a Black Stock.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Nissan_200SX_S14a_Black_Stock.JPG",
+    "author": "Moi-même (myself)",
+    "licence": "CC BY-SA 3.0",
+    "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  {
+    "carId": "s14",
+    "file": "s14-1.jpg",
+    "title": "File:Nissan Silvia K's SE (S14) left.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Nissan_Silvia_K%27s_SE_(S14)_left.JPG",
+    "author": "Tokumeigakarinoaoshima",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "s14",
+    "file": "s14-2.jpg",
+    "title": "File:Nissan E-S14 Silvia (22112713370).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Nissan_E-S14_Silvia_(22112713370).jpg",
+    "author": "先従隗始",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "s14",
+    "file": "s14-3.jpg",
+    "title": "File:S14 03.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:S14_03.jpg",
+    "author": "Jacksonpuaminghow",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "s14",
+    "file": "s14-4.jpg",
+    "title": "File:S14 01.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:S14_01.jpg",
+    "author": "Jacksonpuaminghow",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "s14",
+    "file": "s14-5.jpg",
+    "title": "File:S14 02.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:S14_02.jpg",
+    "author": "Jacksonpuaminghow",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "sup",
+    "file": "sup-0.jpg",
+    "title": "File:Supra a80 krk.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Supra_a80_krk.JPG",
+    "author": "Pitak",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "sup",
+    "file": "sup-1.jpg",
+    "title": "File:Toyota Supra SZ (A80) front.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Toyota_Supra_SZ_(A80)_front.jpg",
+    "author": "Tokumeigakarinoaoshima",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "sup",
+    "file": "sup-2.jpg",
+    "title": "File:Toyota Supra SZ (A80) rear.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Toyota_Supra_SZ_(A80)_rear.jpg",
+    "author": "Tokumeigakarinoaoshima",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "sup",
+    "file": "sup-3.jpg",
+    "title": "File:Toyota Supra (A80) front.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Toyota_Supra_(A80)_front.JPG",
+    "author": "Tokumeigakarinoaoshima",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "sup",
+    "file": "sup-4.jpg",
+    "title": "File:Tuned Toyota Supra (A80) front.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Tuned_Toyota_Supra_(A80)_front.JPG",
+    "author": "Tokumeigakarinoaoshima",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "sup",
+    "file": "sup-5.jpg",
+    "title": "File:Tuned Toyota Supra (A80) rear.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Tuned_Toyota_Supra_(A80)_rear.JPG",
+    "author": "Tokumeigakarinoaoshima",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "e30",
+    "file": "e30-0.jpg",
+    "title": "File:BMW-E30-coupe.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:BMW-E30-coupe.jpg",
+    "author": "IFCAR",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "e30",
+    "file": "e30-1.jpg",
+    "title": "File:BMW 325i Coupe E30.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:BMW_325i_Coupe_E30.JPG",
+    "author": "Bull-Doser",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "e30",
+    "file": "e30-2.jpg",
+    "title": "File:BMW 3-Series Coupe E30.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:BMW_3-Series_Coupe_E30.JPG",
+    "author": "Bull-Doser",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "e30",
+    "file": "e30-3.jpg",
+    "title": "File:BMW 3-Series E30 Coupe (Orange Julep '10).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:BMW_3-Series_E30_Coupe_(Orange_Julep_%2710).jpg",
+    "author": "Bull-Doser",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "e30",
+    "file": "e30-4.jpg",
+    "title": "File:E30 coupe M Technic PL.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:E30_coupe_M_Technic_PL.JPG",
+    "author": "Beemwej",
+    "licence": "CC BY 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/3.0"
+  },
+  {
+    "carId": "e30",
+    "file": "e30-5.jpg",
+    "title": "File:3 e30 coupe PL.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:3_e30_coupe_PL.JPG",
+    "author": "Beemwej",
+    "licence": "CC BY 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/3.0"
+  },
+  {
+    "carId": "g2",
+    "file": "g2-0.jpg",
+    "title": "File:Golf2 g60ltd front.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Golf2_g60ltd_front.JPG",
+    "author": "ItsGrimUpNorth at English Wikipedia",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "g2",
+    "file": "g2-1.jpg",
+    "title": "File:Golf II 16V engine.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Golf_II_16V_engine.jpg",
+    "author": "Helena from Yorkshire",
+    "licence": "CC BY-SA 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  {
+    "carId": "g2",
+    "file": "g2-2.jpg",
+    "title": "File:Golf2 16v bay.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Golf2_16v_bay.jpg",
+    "author": "ItsGrimUpNorth at English Wikipedia",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "g2",
+    "file": "g2-3.jpg",
+    "title": "File:Volkswagen GTI Mk2 3-door.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Volkswagen_GTI_Mk2_3-door.jpg",
+    "author": "IFCAR",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "g2",
+    "file": "g2-4.jpg",
+    "title": "File:Golf2 16v showcar.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Golf2_16v_showcar.JPG",
+    "author": "ItsGrimUpNorth at English Wikipedia",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "g2",
+    "file": "g2-5.jpg",
+    "title": "File:83 Golf MK1 (4502694931).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:83_Golf_MK1_(4502694931).jpg",
+    "author": "Phil Sangwell from United Kingdom",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "d13",
+    "file": "d13-0.jpg",
+    "title": "File:Dacia 1300.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Dacia_1300.JPG",
+    "author": "dacia24.de",
+    "licence": "CC BY-SA 3.0",
+    "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  {
+    "carId": "d13",
+    "file": "d13-1.jpg",
+    "title": "File:Dacia 1300 Estate England.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Dacia_1300_Estate_England.jpg",
+    "author": "Charles01",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "d13",
+    "file": "d13-2.jpg",
+    "title": "File:Dacia 1300 1977 Bulldogtreffen 2012.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Dacia_1300_1977_Bulldogtreffen_2012.JPG",
+    "author": "Gwafton",
+    "licence": "CC BY-SA 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+  },
+  {
+    "carId": "d13",
+    "file": "d13-3.jpg",
+    "title": "File:Dacia-1300-20150503-logo.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Dacia-1300-20150503-logo.jpg",
+    "author": "Abrimaal",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "d13",
+    "file": "d13-4.jpg",
+    "title": "File:1971 Dacia 1300 Taxi (2).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:1971_Dacia_1300_Taxi_(2).jpg",
+    "author": "TrainSimFan",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "d13",
+    "file": "d13-5.jpg",
+    "title": "File:Dacia 1300 in Luhačovice.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Dacia_1300_in_Luha%C4%8Dovice.jpg",
+    "author": "Pudelek",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "aro",
+    "file": "aro-0.jpg",
+    "title": "File:OMMMA 2011 Impressionen (6109050031).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:OMMMA_2011_Impressionen_(6109050031).jpg",
+    "author": "Torsten Maue",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "aro",
+    "file": "aro-1.jpg",
+    "title": "File:Proboscis monkey (Nasalis larvatus) composite.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Proboscis_monkey_(Nasalis_larvatus)_composite.jpg",
+    "author": "Charles J. Sharp",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "aro",
+    "file": "aro-2.jpg",
+    "title": "File:ARO 243.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:ARO_243.jpg",
+    "author": "JOHN LLOYD",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "aro",
+    "file": "aro-3.jpg",
+    "title": "File:একজন মাদ্রাসার ছাত্র বায়তুল মকারাম মসজিদে নামাজ আদায় করছে.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:%E0%A6%8F%E0%A6%95%E0%A6%9C%E0%A6%A8_%E0%A6%AE%E0%A6%BE%E0%A6%A6%E0%A7%8D%E0%A6%B0%E0%A6%BE%E0%A6%B8%E0%A6%BE%E0%A6%B0_%E0%A6%9B%E0%A6%BE%E0%A6%A4%E0%A7%8D%E0%A6%B0_%E0%A6%AC%E0%A6%BE%E0%A6%AF%E0%A6%BC%E0%A6%A4%E0%A7%81%E0%A6%B2_%E0%A6%AE%E0%A6%95%E0%A6%BE%E0%A6%B0%E0%A6%BE%E0%A6%AE_%E0%A6%AE%E0%A6%B8%E0%A6%9C%E0%A6%BF%E0%A6%A6%E0%A7%87_%E0%A6%A8%E0%A6%BE%E0%A6%AE%E0%A6%BE%E0%A6%9C_%E0%A6%86%E0%A6%A6%E0%A6%BE%E0%A6%AF%E0%A6%BC_%E0%A6%95%E0%A6%B0%E0%A6%9B%E0%A7%87.jpg",
+    "author": "Sultan Ahmed Niloy",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "aro",
+    "file": "aro-4.jpg",
+    "title": "File:CH.SZ.Stoos Fronalpstock Sequence Rescue-Helicopter REGA 16K 16x9-R.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:CH.SZ.Stoos_Fronalpstock_Sequence_Rescue-Helicopter_REGA_16K_16x9-R.jpg",
+    "author": "Roy Egloff",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "aro",
+    "file": "aro-5.jpg",
+    "title": "File:Aro Transport Valori.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Aro_Transport_Valori.jpg",
+    "author": "ROCostiTheBunnyCZ",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "mus",
+    "file": "mus-0.jpg",
+    "title": "File:Ford Mustang GT Fastback 1968.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Ford_Mustang_GT_Fastback_1968.jpg",
+    "author": "Sicnag",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "mus",
+    "file": "mus-1.jpg",
+    "title": "File:Ford Mustang Cobra Jet Fastback 1968.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Ford_Mustang_Cobra_Jet_Fastback_1968.jpg",
+    "author": "Sicnag",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "mus",
+    "file": "mus-2.jpg",
+    "title": "File:Ford Mustang GT Fastback 1968 (2).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Ford_Mustang_GT_Fastback_1968_(2).jpg",
+    "author": "Sicnag",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "mus",
+    "file": "mus-3.jpg",
+    "title": "File:Ford Mustang Bullitt Replica GT Fastback 1968.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Ford_Mustang_Bullitt_Replica_GT_Fastback_1968.jpg",
+    "author": "Sicnag",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "mus",
+    "file": "mus-4.jpg",
+    "title": "File:Ford Mustang 1968 Fastback Blown Dragster Engine Mustang Meet FOF 17April2010 (14630012752).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Ford_Mustang_1968_Fastback_Blown_Dragster_Engine_Mustang_Meet_FOF_17April2010_(14630012752).jpg",
+    "author": "Valder137",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "mus",
+    "file": "mus-5.jpg",
+    "title": "File:Ford Mustang 1968 Fastback Wolverine AboveRear Mustang Meet FOF 17April2010 (14628354934).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Ford_Mustang_1968_Fastback_Wolverine_AboveRear_Mustang_Meet_FOF_17April2010_(14628354934).jpg",
+    "author": "Valder137",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "pas",
+    "file": "pas-0.jpg",
+    "title": "File:Volkswagen Passat B5.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Volkswagen_Passat_B5.jpg",
+    "author": "Andrew van dellen at English Wikipedia",
+    "licence": "CC BY-SA 3.0",
+    "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  {
+    "carId": "pas",
+    "file": "pas-1.jpg",
+    "title": "File:Volkswagen-Passat-B5-sedan.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Volkswagen-Passat-B5-sedan.jpg",
+    "author": "IFCAR",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "pas",
+    "file": "pas-2.jpg",
+    "title": "File:VW Passat B5 front 20080816.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:VW_Passat_B5_front_20080816.jpg",
+    "author": "Rudolf Stricker",
+    "licence": "Attribution",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "pas",
+    "file": "pas-3.jpg",
+    "title": "File:VW Passat B5 rear 20080816.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:VW_Passat_B5_rear_20080816.jpg",
+    "author": "Rudolf Stricker",
+    "licence": "Attribution",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "pas",
+    "file": "pas-4.jpg",
+    "title": "File:VW Passat B5 front 20080818.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:VW_Passat_B5_front_20080818.jpg",
+    "author": "Rudolf Stricker",
+    "licence": "Attribution",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "pas",
+    "file": "pas-5.jpg",
+    "title": "File:VW Passat B5 rear 20080818.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:VW_Passat_B5_rear_20080818.jpg",
+    "author": "Rudolf Stricker",
+    "licence": "Attribution",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "evo",
+    "file": "evo-0.jpg",
+    "title": "File:Mitsubishi Lancer Evolution VIII - 001.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Mitsubishi_Lancer_Evolution_VIII_-_001.jpg",
+    "author": "Jason Lawrence",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "evo",
+    "file": "evo-1.jpg",
+    "title": "File:Evo rush Mitsubishi Lancer Evolution VIII, Bangladesh. (31726686854).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Evo_rush_Mitsubishi_Lancer_Evolution_VIII,_Bangladesh._(31726686854).jpg",
+    "author": "Shadman Samee from Dhaka, Bangladesh",
+    "licence": "CC BY-SA 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  {
+    "carId": "evo",
+    "file": "evo-2.jpg",
+    "title": "File:Mitsubishi Lancer Evolution VIII (42258803594).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Mitsubishi_Lancer_Evolution_VIII_(42258803594).jpg",
+    "author": "FotoSleuth",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "evo",
+    "file": "evo-3.jpg",
+    "title": "File:Mitsubishi Lancer Evolution VIII rear.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Mitsubishi_Lancer_Evolution_VIII_rear.jpg",
+    "author": "Dennis Elzinga",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "evo",
+    "file": "evo-4.jpg",
+    "title": "File:Mitsubishi Lancer Evolution VIII 1.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Mitsubishi_Lancer_Evolution_VIII_1.jpg",
+    "author": "Calreyn88",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "evo",
+    "file": "evo-5.jpg",
+    "title": "File:Mitsubishi Lancer Evolution VIII 2.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Mitsubishi_Lancer_Evolution_VIII_2.jpg",
+    "author": "Calreyn88",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "s2",
+    "file": "s2-0.jpg",
+    "title": "File:Audi S2 green.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Audi_S2_green.jpg",
+    "author": "Dbanes at English Wikipedia",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "s2",
+    "file": "s2-1.jpg",
+    "title": "File:Audi S2 Wikipedia.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Audi_S2_Wikipedia.JPG",
+    "author": "No machine-readable author provided. Christoph-th assumed (based on copyright claims).",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "s2",
+    "file": "s2-2.jpg",
+    "title": "File:Audi S2 1992.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Audi_S2_1992.JPG",
+    "author": "Christoph-th",
+    "licence": "Public domain",
+    "licenceUrl": ""
+  },
+  {
+    "carId": "s2",
+    "file": "s2-3.jpg",
+    "title": "File:Rally Piaseczno 2012, OS Lesznowola, nr 11 01.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Rally_Piaseczno_2012,_OS_Lesznowola,_nr_11_01.jpg",
+    "author": "When reusing, please credit me as author: Adam Kliczek, http://memoriesstay.com (CC-BY-SA-3.0) If you use my image on your website, please send me an email with webpage adress. Contact me at: adam.kliczekgmail.com pl en +/− pl en +/−",
+    "licence": "CC BY-SA 3.0 pl",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0/pl/deed.en"
+  },
+  {
+    "carId": "s2",
+    "file": "s2-4.jpg",
+    "title": "File:Rally Piaseczno 2012, OS Lesznowola, nr 11 02.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Rally_Piaseczno_2012,_OS_Lesznowola,_nr_11_02.jpg",
+    "author": "When reusing, please credit me as author: Adam Kliczek, http://memoriesstay.com (CC-BY-SA-3.0) If you use my image on your website, please send me an email with webpage adress. Contact me at: adam.kliczekgmail.com pl en +/− pl en +/−",
+    "licence": "CC BY-SA 3.0 pl",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0/pl/deed.en"
+  },
+  {
+    "carId": "s2",
+    "file": "s2-5.jpg",
+    "title": "File:Audi S2 2007 001.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Audi_S2_2007_001.jpg",
+    "author": "Bernd Sieker",
+    "licence": "CC BY-SA 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  {
+    "carId": "cam",
+    "file": "cam-0.jpg",
+    "title": "File:1977 Chevrolet Camaro Type LT HIP.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:1977_Chevrolet_Camaro_Type_LT_HIP.jpg",
+    "author": "Hip",
+    "licence": "CC BY 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/3.0"
+  },
+  {
+    "carId": "cam",
+    "file": "cam-1.jpg",
+    "title": "File:Chevrolet Camaro Type LT 1.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Chevrolet_Camaro_Type_LT_1.JPG",
+    "author": "Brücke-Osteuropa",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "cam",
+    "file": "cam-2.jpg",
+    "title": "File:Chevrolet Camaro Type LT 2.JPG",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Chevrolet_Camaro_Type_LT_2.JPG",
+    "author": "Brücke-Osteuropa",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  },
+  {
+    "carId": "cam",
+    "file": "cam-3.jpg",
+    "title": "File:Azalea Festival 2013 - Second-generation Chevrolet Camaro.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Azalea_Festival_2013_-_Second-generation_Chevrolet_Camaro.jpg",
+    "author": "Michael Rivera",
+    "licence": "CC BY-SA 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+  },
+  {
+    "carId": "cam",
+    "file": "cam-4.jpg",
+    "title": "File:Chevrolet Camaro (4198070228).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Chevrolet_Camaro_(4198070228).jpg",
+    "author": "dave_7 from Lethbridge, Canada",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "cam",
+    "file": "cam-5.jpg",
+    "title": "File:Chevrolet Camaro Type LT 1974 (6287902610).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Chevrolet_Camaro_Type_LT_1974_(6287902610).jpg",
+    "author": "order_242 from Chile",
+    "licence": "CC BY-SA 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+  },
+  {
+    "carId": "ek4",
+    "file": "ek4-0.jpg",
+    "title": "File:1996 Honda Civic (EK) GLi hatchback (24586633559).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:1996_Honda_Civic_(EK)_GLi_hatchback_(24586633559).jpg",
+    "author": "Jeremy from Sydney, Australia",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "ek4",
+    "file": "ek4-1.jpg",
+    "title": "File:1996 Honda Civic (EK) GLi hatchback (24836306052).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:1996_Honda_Civic_(EK)_GLi_hatchback_(24836306052).jpg",
+    "author": "Jeremy from Sydney, Australia",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "ek4",
+    "file": "ek4-2.jpg",
+    "title": "File:Honda Civic EK hatch (20221211).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Honda_Civic_EK_hatch_(20221211).jpg",
+    "author": "Ethan Llamas",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  {
+    "carId": "ek4",
+    "file": "ek4-3.jpg",
+    "title": "File:1998 Honda Civic EJ-EK.jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:1998_Honda_Civic_EJ-EK.jpg",
+    "author": "Rutger van der Maar",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  },
+  {
+    "carId": "ek4",
+    "file": "ek4-4.jpg",
+    "title": "File:1998 Honda Civic EJ-EK (cropped).jpg",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:1998_Honda_Civic_EJ-EK_(cropped).jpg",
+    "author": "Rutger van der Maar",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  }
+]
