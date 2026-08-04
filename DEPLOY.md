@@ -53,11 +53,41 @@ nothing can show them larger. **They are other people's cars.**
 and CC BY-SA ones want that credit anywhere the image appears —
 including a screenshot in a slide.
 
-The roster they dress is placeholder data. Seeding it into anything the
-public can reach means showing invented entrants, with real photographs
-attached, as if they were the real entry list. PRODUCT.md forbids that,
-which is why `npm run db:seed` refuses production and why the override is
-named `SEED_ANYWAY` rather than something you would type by accident.
+The roster they dress is placeholder data — invented entrants with real
+photographs attached. That is what a demo environment is for, and it is
+also why `npm run db:seed` refuses a database with `NODE_ENV=production`
+unless `SEED_ANYWAY=1` says otherwise. Keep that guard on the real thing.
+
+## Seeding the demo environment
+
+The deployed image cannot seed itself, on purpose: the runner stage
+carries the migrator and nothing else, so a production container has no
+seed script, no `tsx` and no demo photographs in it.
+
+The **builder** stage has all three. Seed a deployed environment by
+running the seed out of that stage against the database beside it — from
+wherever the deploy already checks the repo out:
+
+```bash
+docker build --target builder -t xcs-seed .
+```
+
+```bash
+docker run --rm -e DATABASE_URL="postgres://xcs:PASSWORD@172.17.0.1:5432/xcarshow" -e SEED_RESET=1 xcs-seed npm run db:seed
+```
+
+`172.17.0.1` is where `docker-compose.yml` publishes Postgres, reachable
+from any container on the default bridge. `PASSWORD` is the
+`POSTGRES_PASSWORD` in `/opt/x-car-show/.env`.
+
+`SEED_RESET=1` wipes every account first, which is what you want on a
+demo box being reset between showings and never what you want anywhere
+else — without it the seed leaves an already-populated database alone
+rather than mixing demo entrants into it.
+
+It prints the shared demo password when it finishes. Sign in as any owner
+(`andrei.s14@exemplu.invalid`) to show the half of the app that only an
+owner sees — the six photo wells, editing a car, the printed card.
 
 Poke at the data directly — that is the point of Postgres here:
 
