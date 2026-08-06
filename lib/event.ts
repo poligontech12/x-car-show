@@ -1,7 +1,16 @@
 /** The show itself. One meet a year, plus whatever happens in between. */
 
+/**
+ * Which running of the show this is. Kept on its own because the cards
+ * carry the marque as a logotype and only need the number beside it —
+ * writing "X CAR SHOW 03" next to a lockup that already says X CAR SHOW
+ * says it twice.
+ */
+const EDITION_NO = '03';
+
 export const EVENT = {
-  edition: 'X CAR SHOW 04',
+  editionNo: EDITION_NO,
+  edition: `X CAR SHOW ${EDITION_NO}`,
   place: 'CAJVANA',
   county: 'SUCEAVA',
   dateShort: 'CAJVANA · 8–9 AUG 2026',
