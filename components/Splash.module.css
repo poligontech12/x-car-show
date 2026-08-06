@@ -48,9 +48,9 @@
    show's own marque in visual weight — the event is the headline on this
    screen, the credit is the signature. */
 .logo {
-  display: block;
   width: 124px;
-  height: auto;
+  aspect-ratio: 3 / 1;
+  background: url('/poligontech.svg') center / contain no-repeat;
   opacity: 0.82;
 }
 

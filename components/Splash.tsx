@@ -44,10 +44,14 @@ export function Splash() {
       <Mark className={styles.mark} />
       <div className={styles.credit}>
         <span>DEZVOLTAT DE</span>
-        {/* The mark is drawn in white already, so it needs no colour of
-            its own here — which is the only reason a second logo can sit
-            on this screen without breaking the one-red rule. */}
-        <img src="/poligontech.svg" alt="" className={styles.logo} />
+        {/*
+          A background rather than an <img>, because it is decoration on a
+          screen that is already aria-hidden — and because a real <img>
+          here becomes the first image in the document on every page. That
+          is what a link preview reaches for when a car gets shared, and
+          the answer to "what is this link" should be the car.
+        */}
+        <div className={styles.logo} role="img" aria-label="Poligon Tech" />
       </div>
     </div>
   );
