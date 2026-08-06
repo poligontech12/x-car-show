@@ -1,0 +1,45 @@
+/* The marque: a red X with the wordmark stacked beside it. No plate —
+   the letterform carries the red on its own, which keeps it reading as
+   type on a field rather than as a badge.
+
+   Everything is sized in `em` off the X, so a caller sets one font-size
+   and the whole lockup follows it: 32px in the nav, a card's own `--u`
+   units on print stock. */
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28em;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.x {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 1em;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: var(--red);
+}
+
+/* A logotype, so it keeps its caps where the rest of the interface
+   does not. Two lines, set tight against the X. */
+.word {
+  display: flex;
+  flex-direction: column;
+}
+
+.word b {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.39em;
+  line-height: 1.02;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+}
+
+/* Paper stock. White type on off-white is not type. */
+.light .word b {
+  color: #0b0b0c;
+}

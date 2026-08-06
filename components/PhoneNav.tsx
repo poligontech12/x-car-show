@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { EVENT } from '@/lib/event';
 import { PRIMARY_NAV } from '@/lib/navigation';
 import { useStore } from '@/lib/store';
+import { Mark } from './Mark';
 import styles from './PhoneNav.module.css';
 
 /**
@@ -56,13 +57,7 @@ export function PhoneNav() {
           </button>
         ) : (
           <Link href="/" className={styles.mark} aria-label="X Car Show — acasă">
-            <span className={styles.markX} aria-hidden="true">
-              X
-            </span>
-            <span className={styles.markWord} aria-hidden="true">
-              <b>CAR</b>
-              <b>SHOW</b>
-            </span>
+            <Mark />
           </Link>
         )}
 

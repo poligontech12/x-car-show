@@ -19,37 +19,12 @@
   pointer-events: auto;
 }
 
-/* The marque: a red X with the wordmark stacked beside it. No plate —
-   the letterform carries the red on its own, which keeps the nav
-   reading as type on a black field rather than as a badge. */
+/* The marque itself lives in <Mark>, so the printed cards carry the
+   same lockup. This only gives it a tap target. */
 .mark {
   display: flex;
   align-items: center;
-  gap: 9px;
   height: 44px;
-}
-
-.markX {
-  font-weight: 800;
-  font-size: 32px;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--red);
-}
-
-/* A logotype, so it keeps its caps where the rest of the interface
-   does not. Two lines, set tight against the X. */
-.markWord {
-  display: flex;
-  flex-direction: column;
-}
-
-.markWord b {
-  font-weight: 700;
-  font-size: 12.5px;
-  line-height: 1.02;
-  letter-spacing: 0.02em;
-  color: var(--paper);
 }
 
 .right {
