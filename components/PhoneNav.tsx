@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { EVENT } from '@/lib/event';
-import { PRIMARY_NAV } from '@/lib/navigation';
+import { FEED } from '@/lib/navigation';
 import { useStore } from '@/lib/store';
 import { Mark } from './Mark';
 import styles from './PhoneNav.module.css';
@@ -15,7 +15,7 @@ import styles from './PhoneNav.module.css';
  * every visit.
  */
 const LINKS = [
-  { href: PRIMARY_NAV[0].href, label: PRIMARY_NAV[0].label },
+  { href: FEED.href, label: FEED.label },
   { href: '/roster', label: 'Înscriși' },
   { href: '/garage', label: 'Garajul meu' },
   { href: '/award', label: 'Mașina show-ului' },
