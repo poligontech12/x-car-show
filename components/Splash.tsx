@@ -44,7 +44,10 @@ export function Splash() {
       <Mark className={styles.mark} />
       <div className={styles.credit}>
         <span>DEZVOLTAT DE</span>
-        <b>POLIGON TECH</b>
+        {/* The mark is drawn in white already, so it needs no colour of
+            its own here — which is the only reason a second logo can sit
+            on this screen without breaking the one-red rule. */}
+        <img src="/poligontech.svg" alt="" className={styles.logo} />
       </div>
     </div>
   );

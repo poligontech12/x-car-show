@@ -44,12 +44,14 @@
   color: var(--paper-28);
 }
 
-.credit b {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 13.5px;
-  letter-spacing: 0.09em;
-  color: var(--paper-70);
+/* 1500 x 500, so the height follows the width at 3:1. Kept under the
+   show's own marque in visual weight — the event is the headline on this
+   screen, the credit is the signature. */
+.logo {
+  display: block;
+  width: 124px;
+  height: auto;
+  opacity: 0.82;
 }
 
 @media (prefers-reduced-motion: reduce) {

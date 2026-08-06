@@ -264,9 +264,10 @@ function AuthScreen() {
               <em>→</em>
             </Link>
 
-            <p className={styles.credit}>
-              DEZVOLTAT DE <b>POLIGON TECH</b>
-            </p>
+            <div className={styles.credit}>
+              <span>DEZVOLTAT DE</span>
+              <img src="/poligontech.svg" alt="Poligon Tech" className={styles.creditLogo} />
+            </div>
           </>
         )}
 
