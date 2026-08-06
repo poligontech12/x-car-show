@@ -54,6 +54,16 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
         <Link href="/cards" className={styles.toolbarLink}>
           TOATE ÎNSCRIERILE
         </Link>
+
+        {/* The page asks for a borderless A5, but the browser's own print
+            dialog wins on both counts and ships with margins on and the
+            URL in the header. No stylesheet can reach those, so say it
+            here, next to the button that opens the dialog. */}
+        <p className={styles.printHint}>
+          În fereastra de printare alege <b>Margini: Fără</b> și debifează{' '}
+          <b>Antet și subsol</b>, altfel imprimanta adaugă marginile ei și scrie adresa
+          paginii peste cartonaș.
+        </p>
       </div>
 
       <div className={styles.deck}>

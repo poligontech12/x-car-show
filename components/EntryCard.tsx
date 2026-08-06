@@ -1,5 +1,5 @@
 import type { Car } from '@/lib/cars';
-import { SITE_HOST, headline, paddockOf } from '@/lib/cars';
+import { SITE_HOST, headline } from '@/lib/cars';
 import { EVENT } from '@/lib/event';
 import { Mark } from './Mark';
 import styles from './EntryCard.module.css';
@@ -41,21 +41,6 @@ export function EntryCard({ car, qr }: Props) {
         <div className={styles.scanCol}>
           <div className={styles.scanLabel}>SCANEAZĂ</div>
           <div className={styles.scanCode}>{qr}</div>
-          {/* Reads as one sentence with the code sitting in the middle of
-              it: SCANEAZĂ ▮▮ PENTRU LISTA DE MODIFICĂRI… */}
-          <p className={styles.scanNote}>
-            PENTRU LISTA DE MODIFICĂRI,
-            <br />
-            POVESTEA ȘI REȚELELE
-            <br />
-            PROPRIETARULUI.
-          </p>
-          <div className="spacer" />
-          <div className={styles.scanFoot}>
-            CLASĂ · {car.cls}
-            <br />
-            PADOC {orDash(paddockOf(car))}
-          </div>
         </div>
 
         <div className={styles.col}>
@@ -76,7 +61,6 @@ export function EntryCard({ car, qr }: Props) {
                 ['MOTOR', car.engine],
                 ['PUTERE', car.power ? `${car.power} CP` : '—'],
                 ['TRACȚIUNE', car.drive],
-                ['VOPSEA', car.paint],
               ] as [string, string][]
             ).map(([k, v]) => (
               <div key={k} className={styles.row}>

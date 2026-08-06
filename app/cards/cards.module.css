@@ -78,6 +78,22 @@
   border-color: var(--red-lift);
 }
 
+/* The one thing a stylesheet cannot fix: the print dialog's own
+   margins and its URL header. Said next to the button that opens it. */
+.printHint {
+  flex: 1 1 100%;
+  margin: -2px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--paper-45);
+  text-wrap: pretty;
+}
+
+.printHint b {
+  font-weight: 600;
+  color: var(--paper-70);
+}
+
 /* The query container <EntryCard> measures its unit against, so a phone
    gets the whole card scaled down instead of an A5 sheet cropped at both
    edges. See `--u` in EntryCard.module.css. */
@@ -164,7 +180,8 @@
     background: #fff;
   }
 
-  .toolbar {
+  .toolbar,
+  .printHint {
     display: none;
   }
 
