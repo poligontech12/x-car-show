@@ -111,7 +111,7 @@ function ShareEntry({ url, title }: { url: string; title: string }) {
 
 export default function OnboardScreen() {
   const router = useRouter();
-  const { account, onboarding, patchOnboarding, resetOnboarding, completeOnboarding, addCar } =
+  const { account, hydrated, onboarding, patchOnboarding, resetOnboarding, completeOnboarding, addCar } =
     useStore();
 
   const [step, setStep] = useState(0);
@@ -183,6 +183,56 @@ export default function OnboardScreen() {
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
 
+  // ── Hooks end here. Everything below may return early. ──
+
+  if (!hydrated) return <div className={styles.screen} />;
+
+  /**
+   * You cannot register a car you have nowhere to put.
+   *
+   * This screen used to open for anyone, take four steps of answers, and
+   * then fail on the write with the server's own error where the Romanian
+   * one belongs. The garage has always said this properly; say it here,
+   * before the typing rather than after it.
+   */
+  if (!account) {
+    return (
+      <div className={styles.screen}>
+        <div className={styles.top}>
+          <div className={styles.topRow}>
+            <button
+              type="button"
+              className="icon-btn"
+              aria-label="Închide"
+              onClick={() => router.push('/')}
+            >
+              ×
+            </button>
+            <div className={styles.label}>Înscrie o mașină</div>
+          </div>
+        </div>
+
+        <div className={styles.body}>
+          <h1 className={styles.title}>Ai nevoie de un cont.</h1>
+          <p className={styles.sub}>
+            Mașina se înscrie pe numele tău, așa că întâi facem contul. Durează un minut,
+            și pe urmă poți înscrie oricâte mașini vrei.
+          </p>
+        </div>
+
+        <div className={styles.footer}>
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={() => router.push('/auth?mode=register&role=car')}
+          >
+            Creează contul
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const next = async () => {
     if (done) {
       router.push(card ? `/car/${card.id}` : '/roster');
@@ -207,11 +257,14 @@ export default function OnboardScreen() {
     setFailed(null);
     // The draft carries what the four steps could ask for without
     // becoming a chore; everything else is filled in on the car itself.
-    const [make, ...rest] = onboarding.name.trim().split(/\s+/);
+    const [first, ...rest] = onboarding.name.trim().split(/\s+/);
     const draft = {
       ...BLANK_CAR,
-      make: make ?? '',
-      model: rest.join(' ') || (make ?? 'Mașina mea'),
+      // One word is a name, not a make and a model. Falling back to the
+      // make for the model printed "Nissan Nissan" on the roster, the
+      // profile, and the card that goes on the windscreen.
+      make: rest.length ? first : '',
+      model: rest.length ? rest.join(' ') : first || 'Mașina mea',
       year: Number(onboarding.year) || 0,
       power: onboarding.power ? String(onboarding.power) : '',
       drive: onboarding.drive,

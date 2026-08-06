@@ -448,7 +448,13 @@ export const byId = (id: string | undefined): Car => CARS.find((c) => c.id === i
 export const displayModel = (c: Car): string =>
   /^[0-9]/.test(c.model) ? `${c.make} ${c.model}` : c.model;
 
-export const headline = (c: Car): string => `${c.year} ${c.make} ${c.model}`;
+/**
+ * Joined rather than interpolated, because any of the three can be
+ * missing: a car registered under one word has no make, and one nobody
+ * has dated has no year — and `${0} ${''} Nissan` reads as "0  Nissan".
+ */
+export const headline = (c: Car): string =>
+  [c.year || null, c.make, c.model].filter(Boolean).join(' ');
 
 export const modCount = (c: Car): number => c.mods.reduce((a, g) => a + g.items.length, 0);
 
