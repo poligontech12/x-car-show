@@ -1,10 +1,10 @@
 /* ─────────────────────────────────────────────────────────────
-   THE PRINTED WINDSHIELD CARD · A5 LANDSCAPE, 210 × 148 MM
+   THE PRINT SHEET
 
-   The cards are drawn once, in the 520 x 366 px proportions of the
-   design, and `--u` decides what one of those units is worth: a CSS
-   pixel on screen, and 210mm/520 on paper. Nothing is re-measured
-   for print, so the two can never drift apart.
+   One card per entry, drawn by <EntryCard> — the same component the
+   end of registration hands the entrant, so what gets printed and
+   what gets shared cannot drift apart. The card owns its own
+   measurements; this file is the page around it.
    ───────────────────────────────────────────────────────────── */
 
 .page {
@@ -59,34 +59,33 @@
   border-color: var(--rim-bright);
 }
 
+/* Getting the card off the screen is the only thing this page is for,
+   so it is the one solid control on it — the rest are ways out. */
+.print {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--red);
+  border: 1px solid var(--red);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #fff;
+  transition: background 0.14s ease, border-color 0.14s ease;
+}
+
+.print:hover {
+  background: var(--red-lift);
+  border-color: var(--red-lift);
+}
+
+/* The query container <EntryCard> measures its unit against, so a phone
+   gets the whole card scaled down instead of an A5 sheet cropped at both
+   edges. See `--u` in EntryCard.module.css. */
 .deck {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 34px;
-}
-
-.caption {
-  width: 520px;
-  max-width: 100%;
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-  margin-bottom: -22px;
-}
-
-.captionTag {
-  font-weight: 600;
-  font-size: 11px;
-  padding: 4px 9px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--red);
-}
-
-.caption span {
-  font-size: 12px;
-  color: var(--paper-45);
+  container-type: inline-size;
 }
 
 /* ── Index — the marshal's print list ────────────────────────── */
@@ -148,483 +147,10 @@
   color: var(--red);
 }
 
-/* ── The card ────────────────────────────────────────────────── */
-
-.card {
-  --u: 1px;
-  width: calc(520 * var(--u));
-  height: calc(366 * var(--u));
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.dark {
-  background: var(--ink);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: var(--paper);
-}
-
-/* Paper stock. Ink-light on purpose — a marshal prints 142 of these. */
-.light {
-  background: #f4f3ef;
-  color: #0b0b0c;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
-}
-
-/* ── 1g · Spec plate — stand number leads ────────────────────── */
-
-.band {
-  flex: none;
-  background: var(--red);
-  padding: calc(12 * var(--u)) calc(20 * var(--u));
-  display: flex;
-  align-items: center;
-  gap: calc(12 * var(--u));
-}
-
-.bandTitle {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(24 * var(--u));
-  letter-spacing: -0.025em;
-  color: #fff;
-}
-
-.bandDate {
-  font-family: var(--font-sans);
-  font-size: calc(10 * var(--u));
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.plateBody {
-  flex: 1;
-  display: flex;
-  padding: calc(20 * var(--u));
-  gap: calc(20 * var(--u));
-  min-height: 0;
-}
-
-.standCol {
-  flex: none;
-  width: calc(130 * var(--u));
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
-  padding-right: calc(18 * var(--u));
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.standLabel {
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.08em;
-  color: var(--paper-28);
-}
-
-/* The number a marshal reads from ten metres away. Sized to hold a
-   four-character stand (A-14, B-07) on one line inside the column —
-   it must never wrap, or it stops reading as one number. */
-.standNo {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(48 * var(--u));
-  line-height: 0.86;
-  letter-spacing: -0.035em;
-  white-space: nowrap;
-  margin-top: calc(8 * var(--u));
-}
-
-.classTag {
-  background: var(--red);
-  color: #fff;
-  padding: calc(4 * var(--u)) calc(9 * var(--u));
-  font-family: var(--font-sans);
-  font-size: calc(10 * var(--u));
-  letter-spacing: 0.045em;
-  margin-top: calc(16 * var(--u));
-}
-
-.idCol {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.plateHeadline {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(34 * var(--u));
-  line-height: 0.92;
-}
-
-.plateNick {
-  font-family: var(--font-sans);
-  font-size: calc(11 * var(--u));
-  letter-spacing: 0.08em;
-  color: var(--red);
-  margin-top: calc(9 * var(--u));
-}
-
-.plateSpecs {
-  display: flex;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  padding-top: calc(12 * var(--u));
-}
-
-.plateSpec {
-  flex: 1;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  padding-left: calc(14 * var(--u));
-}
-
-.plateSpec:first-child {
-  padding-left: 0;
-}
-
-.plateSpec:last-child {
-  flex: none;
-  border-right: 0;
-}
-
-.plateSpecKey {
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.06em;
-  color: var(--paper-28);
-}
-
-/* Three cells share 221 units. The longest engine code in the roster
-   (SR20DET) fills that row at 19, so the value sits at 17 to keep a
-   hairline of air either side of the dividers. */
-.plateSpecValue {
-  font-family: var(--font-sans);
-  font-size: calc(16 * var(--u));
-  white-space: nowrap;
-  margin-top: calc(4 * var(--u));
-}
-
-.plateSpecValue i {
-  font-style: normal;
-  font-size: calc(10 * var(--u));
-  color: var(--paper-28);
-}
-
-.qrCol {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(8 * var(--u));
-}
-
-.qrCaption {
-  font-family: var(--font-sans);
-  font-size: calc(8 * var(--u));
-  letter-spacing: 0.04em;
-  color: var(--paper-28);
-  text-align: center;
-  line-height: 1.5;
-}
-
-.plateFoot {
-  flex: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding: calc(10 * var(--u)) calc(20 * var(--u));
-  display: flex;
-  gap: calc(12 * var(--u));
-  align-items: center;
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.03em;
-}
-
-.plateFoot b {
-  font-weight: 400;
-  flex: 1;
-  color: var(--paper-45);
-}
-
-.plateFoot span {
-  color: rgba(242, 242, 240, 0.28);
-}
-
-/* ── 1h · Scrutineering slip — paper stock ───────────────────── */
-
-.slipBody {
-  flex: 1;
-  display: flex;
-  min-height: 0;
-}
-
-.entryCol {
-  flex: none;
-  width: calc(196 * var(--u));
-  border-right: 2px solid var(--red);
-  padding: calc(20 * var(--u));
-  display: flex;
-  flex-direction: column;
-}
-
-.entryLabel {
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.08em;
-  color: rgba(11, 11, 12, 0.45);
-}
-
-.entryNo {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(132 * var(--u));
-  line-height: 0.78;
-  letter-spacing: -0.02em;
-  margin-top: calc(4 * var(--u));
-}
-
-.entryFoot {
-  font-family: var(--font-sans);
-  font-size: calc(10 * var(--u));
-  letter-spacing: 0.045em;
-  line-height: 1.6;
-  border-top: 1px solid rgba(11, 11, 12, 0.2);
-  padding-top: calc(9 * var(--u));
-}
-
-.slipCol {
-  flex: 1;
-  padding: calc(20 * var(--u));
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.slipMark {
-  display: flex;
-  align-items: center;
-  gap: calc(9 * var(--u));
-}
-
-.slipMark i {
-  width: calc(20 * var(--u));
-  height: calc(20 * var(--u));
-  flex: none;
-  background: var(--red);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-style: normal;
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(15 * var(--u));
-  color: #fff;
-}
-
-.slipMark span {
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.05em;
-  color: rgba(11, 11, 12, 0.55);
-}
-
-.slipHeadline {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(29 * var(--u));
-  line-height: 0.95;
-  margin-top: calc(16 * var(--u));
-}
-
-.slipOwner {
-  font-family: var(--font-sans);
-  font-size: calc(10 * var(--u));
-  letter-spacing: 0.04em;
-  color: rgba(11, 11, 12, 0.5);
-  margin-top: calc(7 * var(--u));
-}
-
-.slipRows {
-  margin-top: calc(16 * var(--u));
-}
-
-/* Dotted leaders, like a form somebody filled in by hand. */
-.slipRow {
-  display: flex;
-  align-items: baseline;
-  gap: calc(8 * var(--u));
-  padding: calc(5 * var(--u)) 0;
-  border-bottom: 1px dotted rgba(11, 11, 12, 0.25);
-}
-
-.slipRow b {
-  font-weight: 400;
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.04em;
-  color: rgba(11, 11, 12, 0.5);
-}
-
-.slipRow span {
-  font-family: var(--font-sans);
-  font-size: calc(11 * var(--u));
-}
-
-.slipScan {
-  display: flex;
-  align-items: flex-end;
-  gap: calc(12 * var(--u));
-}
-
-.slipScan p {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  line-height: 1.6;
-  letter-spacing: 0.1em;
-  color: rgba(11, 11, 12, 0.6);
-  padding-bottom: calc(2 * var(--u));
-}
-
-.slipFoot {
-  flex: none;
-  background: var(--ink);
-  padding: calc(9 * var(--u)) calc(20 * var(--u));
-  display: flex;
-  gap: calc(12 * var(--u));
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.04em;
-}
-
-.slipFoot b {
-  font-weight: 400;
-  flex: 1;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.slipFoot span {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* ── 1i · Photo plate — the car on the card ──────────────────── */
-
-.photoBand {
-  position: relative;
-  flex: none;
-  height: calc(168 * var(--u));
-  background: var(--slot);
-}
-
-.photoScrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(8, 8, 9, 0.92) 0%, rgba(8, 8, 9, 0) 60%);
-  pointer-events: none;
-}
-
-.photoBadge {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: var(--red);
-  color: #fff;
-  padding: calc(7 * var(--u)) calc(12 * var(--u));
-  font-family: var(--font-sans);
-  font-size: calc(10 * var(--u));
-  letter-spacing: 0.045em;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.photoCaption {
-  position: absolute;
-  left: calc(18 * var(--u));
-  right: calc(18 * var(--u));
-  bottom: calc(12 * var(--u));
-  display: flex;
-  align-items: flex-end;
-  gap: calc(14 * var(--u));
-  pointer-events: none;
-}
-
-.photoCaption b {
-  display: block;
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(30 * var(--u));
-  line-height: 0.92;
-}
-
-.photoCaption span {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: calc(10 * var(--u));
-  letter-spacing: 0.045em;
-  color: rgba(242, 242, 240, 0.6);
-  margin-top: calc(6 * var(--u));
-}
-
-.photoNo {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: calc(52 * var(--u));
-  line-height: 0.8;
-  color: var(--red);
-}
-
-.photoBody {
-  flex: 1;
-  display: flex;
-  padding: calc(16 * var(--u)) calc(18 * var(--u));
-  gap: calc(18 * var(--u));
-  min-height: 0;
-}
-
-.photoSpecs {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 calc(18 * var(--u));
-  align-content: start;
-}
-
-.photoSpec {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: calc(7 * var(--u)) 0;
-}
-
-.photoSpec b {
-  display: block;
-  font-weight: 400;
-  font-family: var(--font-sans);
-  font-size: calc(8 * var(--u));
-  letter-spacing: 0.045em;
-  color: rgba(242, 242, 240, 0.36);
-}
-
-.photoSpec span {
-  display: block;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: calc(16 * var(--u));
-  margin-top: calc(2 * var(--u));
-}
-
-.photoFoot {
-  flex: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding: calc(9 * var(--u)) calc(18 * var(--u));
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.03em;
-  color: rgba(242, 242, 240, 0.35);
-}
-
 /* ── Print ───────────────────────────────────────────────────
-   One card per A5 sheet, bled to the edges. */
+   The card bleeds to the edges of one A5 sheet; everything that was
+   only ever chrome around it comes off. The card's own sizing lives
+   with the card. */
 
 @media print {
   @page {
@@ -638,36 +164,14 @@
     background: #fff;
   }
 
-  .toolbar,
-  .caption {
+  .toolbar {
     display: none;
   }
 
+  /* Containment is what let the card scale on a phone; it has no
+     business deciding how a sheet breaks across pages. */
   .deck {
     display: block;
-  }
-
-  .card {
-    --u: calc(210mm / 520);
-    border: 0;
-    box-shadow: none;
-    break-inside: avoid;
-    break-after: page;
-  }
-
-  .card:last-child {
-    break-after: auto;
-  }
-
-  /* Backgrounds are the design — a card printed without them is blank. */
-  .dark,
-  .light,
-  .band,
-  .classTag,
-  .slipFoot,
-  .photoBadge,
-  .photoBand {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    container-type: normal;
   }
 }

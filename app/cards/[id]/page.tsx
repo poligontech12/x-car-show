@@ -1,17 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ImageSlot } from '@/components/ImageSlot';
+import { EntryCard } from '@/components/EntryCard';
 import { QrCode } from '@/components/QrCode';
-import { SITE_HOST, carUrl, headline, modCount, paddockOf } from '@/lib/cars';
-import { leadPhoto } from '@/lib/photos';
+import { carUrl, headline } from '@/lib/cars';
 import { getCar } from '@/lib/db/queries';
 import { EVENT } from '@/lib/event';
 import { PrintButton } from '../PrintButton';
 import styles from '../cards.module.css';
-
-/** 87 design units square — the size the codes are drawn at on all three cards. */
-const QR_SIZE = 'calc(87 * var(--u))';
 
 /**
  * Cards get printed while entries are still half-filled. An em dash reads
@@ -25,9 +21,18 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const car = await getCar((await params).id);
-  return { title: car ? `${headline(car)} — cartonașe de parbriz` : 'Cartonașe de parbriz' };
+  return { title: car ? `${headline(car)} — cartonaș de parbriz` : 'Cartonaș de parbriz' };
 }
 
+/**
+ * One car, one card, one thing to do with it.
+ *
+ * This page used to carry three designs at once — a black spec plate and
+ * a photo plate beside the paper one — because it was where the card was
+ * being chosen. It is chosen: the paper card is what goes on the car and
+ * what the entrant is handed at registration, so the alternates are gone
+ * rather than left here to be printed by mistake.
+ */
 export default async function CardsScreen({ params }: { params: Promise<{ id: string }> }) {
   const car = await getCar((await params).id);
   if (!car) notFound();
@@ -52,181 +57,10 @@ export default async function CardsScreen({ params }: { params: Promise<{ id: st
       </div>
 
       <div className={styles.deck}>
-        {/* ── 1g · Spec plate — black stock, stand number leads ── */}
-        <div className={styles.caption}>
-          <span className={styles.captionTag}>1g</span>
-          <span>Plăcuță de specificații — carton negru, numărul de stand conduce.</span>
-        </div>
-        <div className={`${styles.card} ${styles.dark}`}>
-          <div className={styles.band}>
-            <div className={styles.bandTitle}>{EVENT.edition}</div>
-            <div className="spacer" />
-            <div className={styles.bandDate}>{EVENT.dateNumeric}</div>
-          </div>
-
-          <div className={styles.plateBody}>
-            <div className={styles.standCol}>
-              <div className={styles.standLabel}>STAND</div>
-              <div className={styles.standNo}>{orDash(car.stand)}</div>
-              <div className={styles.classTag}>{car.cls}</div>
-            </div>
-
-            <div className={styles.idCol}>
-              <div className={styles.plateHeadline}>
-                {[car.year || null, car.make].filter(Boolean).join(' ')}
-                <br />
-                {car.model}
-              </div>
-              <div className={styles.plateNick}>
-                {car.nickname ? `“${car.nickname}”` : car.paint}
-              </div>
-              <div className="spacer" />
-              <div className={styles.plateSpecs}>
-                <div className={styles.plateSpec}>
-                  <div className={styles.plateSpecKey}>PUTERE</div>
-                  <div className={styles.plateSpecValue}>
-                    {orDash(car.power)}
-                    {car.power && <i> CP</i>}
-                  </div>
-                </div>
-                <div className={styles.plateSpec}>
-                  <div className={styles.plateSpecKey}>MOTOR</div>
-                  <div className={styles.plateSpecValue}>{orDash(car.engine.split(' ')[0])}</div>
-                </div>
-                <div className={styles.plateSpec}>
-                  <div className={styles.plateSpecKey}>TRACȚIUNE</div>
-                  <div className={styles.plateSpecValue}>{car.drive}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.qrCol}>
-              <QrCode value={url} size={QR_SIZE} dark="#F2F2F0" light="#0B0B0C" />
-              <div className={styles.qrCaption}>
-                SCANEAZĂ
-                <br />
-                PROIECTUL
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.plateFoot}>
-            <b>
-              {car.owner} · @{car.handle} · {car.town}
-            </b>
-            <span>LASĂ PE PARBRIZ</span>
-          </div>
-        </div>
-
-        {/* ── 1h · Scrutineering slip — paper stock, ink-light ── */}
-        <div className={styles.caption}>
-          <span className={styles.captionTag}>1h</span>
-          <span>Fișă de verificare — hârtie, puțină cerneală, se citește de la zece pași.</span>
-        </div>
-        <div className={`${styles.card} ${styles.light}`}>
-          <div className={styles.slipBody}>
-            <div className={styles.entryCol}>
-              <div className={styles.entryLabel}>ÎNSCRIERE №</div>
-              <div className={styles.entryNo}>{orDash(car.no)}</div>
-              <div className="spacer" />
-              <div className={styles.entryFoot}>
-                CLASĂ · {car.cls}
-                <br />
-                PADOC {paddockOf(car)}
-              </div>
-            </div>
-
-            <div className={styles.slipCol}>
-              <div className={styles.slipMark}>
-                <i>X</i>
-                <span>
-                  {EVENT.edition} · {EVENT.place}
-                </span>
-              </div>
-              <div className={styles.slipHeadline}>{headline(car)}</div>
-              <div className={styles.slipOwner}>
-                {car.owner} · {car.town}
-              </div>
-
-              <div className={styles.slipRows}>
-                {[
-                  ['MOTOR', car.engine],
-                  ['PUTERE', car.power ? `${car.power} CP` : '—'],
-                  ['TRACȚIUNE', car.drive],
-                  ['VOPSEA', car.paint],
-                ].map(([k, v]) => (
-                  <div key={k} className={styles.slipRow}>
-                    <b>{k}</b>
-                    <div className="spacer" />
-                    <span>{v}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="spacer" />
-              <div className={styles.slipScan}>
-                <QrCode value={url} size={QR_SIZE} dark="#0B0B0C" light="#F4F3EF" />
-                <p>
-                  SCANEAZĂ PENTRU LISTA
-                  <br />
-                  DE MODIFICĂRI, POVESTE
-                  <br />
-                  ȘI REȚELELE PROPRIETARULUI.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.slipFoot}>
-            <b>{SITE_HOST.toUpperCase()} / {car.no || '—'}</b>
-            <span>VOTUL SE ÎNCHIDE LA {EVENT.votingCloses}</span>
-          </div>
-        </div>
-
-        {/* ── 1i · Photo plate — the car on the card ── */}
-        <div className={styles.caption}>
-          <span className={styles.captionTag}>1i</span>
-          <span>Plăcuță foto — mai scumpă de tipărit, potrivită pentru câștigători.</span>
-        </div>
-        <div className={`${styles.card} ${styles.dark}`}>
-          <div className={styles.photoBand}>
-            <ImageSlot src={leadPhoto(car.photos)} hint={headline(car)} readOnly />
-            <div className={styles.photoScrim} />
-            <div className={styles.photoBadge}>{EVENT.edition}</div>
-            <div className={styles.photoCaption}>
-              <div style={{ flex: 1 }}>
-                <b>{headline(car)}</b>
-                <span>
-                  {car.owner} · {car.town}
-                </span>
-              </div>
-              <div className={styles.photoNo}>{orDash(car.no)}</div>
-            </div>
-          </div>
-
-          <div className={styles.photoBody}>
-            <QrCode value={url} size={QR_SIZE} dark="#F2F2F0" light="#0B0B0C" />
-            <div className={styles.photoSpecs}>
-              {[
-                ['MOTOR', car.engine],
-                ['PUTERE', car.power ? `${car.power} CP` : '—'],
-                ['CUPLU', `${car.tq} NM`],
-                ['TRACȚIUNE', car.drive],
-                ['GREUTATE', `${car.weight} KG`],
-                ['CLASĂ', car.cls],
-              ].map(([k, v]) => (
-                <div key={k} className={styles.photoSpec}>
-                  <b>{k}</b>
-                  <span>{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.photoFoot}>
-            SCANEAZĂ PENTRU TOT PROIECTUL · {modCount(car)} MODIFICĂRI · {car.town}
-          </div>
-        </div>
+        <EntryCard
+          car={car}
+          qr={<QrCode value={url} size="100%" dark="#0B0B0C" light="#F4F3EF" />}
+        />
       </div>
     </div>
   );

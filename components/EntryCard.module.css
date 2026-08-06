@@ -1,0 +1,255 @@
+/* ─────────────────────────────────────────────────────────────
+   THE ENTRY CARD · A5 LANDSCAPE, 210 × 148 MM
+
+   The card that gets printed, propped on the dashboard, and — since
+   the entrant is handed it at the end of registration — photographed
+   and posted. One component, so what is shared is what is printed.
+
+   Drawn once in the 520 x 366 proportions of the design; `--u` decides
+   what one of those units is worth. A CSS pixel on the print sheet,
+   210mm/520 on paper, a slice of the container when it is `fluid`.
+   Nothing is re-measured per surface, so they cannot drift apart.
+   ───────────────────────────────────────────────────────────── */
+
+/*
+ * A unit is a CSS pixel at the design width and a proportional slice of
+ * the box below it — a phone gets the whole card scaled down rather than
+ * the middle of an A5 sheet. It never grows past 1px: a card blown up to
+ * fill a desktop window is a mockup of a poster, not of a card.
+ *
+ * `cqi` and not a percentage because the height has to follow the
+ * *width*, and a percentage height resolves against the parent's height
+ * instead — which would collapse the card. The caller supplies the query
+ * container (.deck on the print sheet, .cardFrame at registration).
+ *
+ * Screen only. `@media print` below sets `--u` from the paper, and
+ * nothing on this card is a raster, so how it prints does not depend on
+ * how wide the screen was.
+ */
+.card {
+  --u: min(1px, 100cqi / 520);
+  width: calc(520 * var(--u));
+  height: calc(366 * var(--u));
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Paper stock. Ink-light on purpose — a marshal prints 142 of these. */
+  background: #f4f3ef;
+  color: #0b0b0c;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* ── The scan column ──────────────────────────────────────────
+   The code leads the card. It is the only thing on it that does
+   anything: everything else is a fact you can also read on the
+   phone the code opens. */
+
+.scanCol {
+  flex: none;
+  width: calc(196 * var(--u));
+  border-right: 2px solid var(--red);
+  padding: calc(20 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.scanLabel {
+  font-family: var(--font-sans);
+  font-size: calc(9 * var(--u));
+  letter-spacing: 0.08em;
+  color: rgba(11, 11, 12, 0.45);
+}
+
+/* The card owns the size; the caller owns which renderer draws it —
+   the print sheet needs the code in the HTML before the sheet prints,
+   the app can wait for the browser. Both hand it in at 100%. */
+.scanCode {
+  width: calc(140 * var(--u));
+  height: calc(140 * var(--u));
+  flex: none;
+  margin-top: calc(8 * var(--u));
+}
+
+.scanNote {
+  margin: calc(9 * var(--u)) 0 0;
+  font-family: var(--font-sans);
+  font-size: calc(8.5 * var(--u));
+  line-height: 1.6;
+  letter-spacing: 0.09em;
+  color: rgba(11, 11, 12, 0.6);
+}
+
+.scanFoot {
+  font-family: var(--font-sans);
+  font-size: calc(10 * var(--u));
+  letter-spacing: 0.045em;
+  line-height: 1.6;
+  border-top: 1px solid rgba(11, 11, 12, 0.2);
+  padding-top: calc(9 * var(--u));
+  width: 100%;
+}
+
+/* ── The identity column ─────────────────────────────────────── */
+
+.col {
+  flex: 1;
+  padding: calc(20 * var(--u));
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  gap: calc(11 * var(--u));
+}
+
+/* One font-size, and <Mark> scales the whole lockup off it. 32 is the
+   size the nav draws it at, so the card and the app carry the same
+   marque at the same weight — about 13mm on the printed sheet. */
+.markLockup {
+  flex: none;
+  font-size: calc(32 * var(--u));
+}
+
+/* Named, not `.mark span` — the lockup is built from spans of its own,
+   and a descendant selector reached inside it and set the whole marque
+   to 9 units. */
+.markMeta {
+  font-family: var(--font-sans);
+  font-size: calc(9 * var(--u));
+  letter-spacing: 0.05em;
+  color: rgba(11, 11, 12, 0.55);
+}
+
+.headline {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: calc(29 * var(--u));
+  line-height: 0.95;
+  margin-top: calc(16 * var(--u));
+}
+
+.owner {
+  font-family: var(--font-sans);
+  font-size: calc(10 * var(--u));
+  letter-spacing: 0.04em;
+  color: rgba(11, 11, 12, 0.5);
+  margin-top: calc(7 * var(--u));
+}
+
+.rows {
+  margin-top: calc(16 * var(--u));
+}
+
+/* Dotted leaders, like a form somebody filled in by hand. */
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: calc(8 * var(--u));
+  padding: calc(5 * var(--u)) 0;
+  border-bottom: 1px dotted rgba(11, 11, 12, 0.25);
+}
+
+.row b {
+  font-weight: 400;
+  font-family: var(--font-sans);
+  font-size: calc(9 * var(--u));
+  letter-spacing: 0.04em;
+  color: rgba(11, 11, 12, 0.5);
+}
+
+.row span {
+  font-family: var(--font-sans);
+  font-size: calc(11 * var(--u));
+}
+
+/* ── The entry number ────────────────────────────────────────
+   Small, and at the foot, because a marshal reading it already has
+   the card in their hand. It is also the one field a fresh
+   registration cannot fill — the number is assigned at the gate. */
+
+.entry {
+  display: flex;
+  align-items: baseline;
+  gap: calc(10 * var(--u));
+}
+
+.entryLabel {
+  font-family: var(--font-sans);
+  font-size: calc(9 * var(--u));
+  letter-spacing: 0.08em;
+  color: rgba(11, 11, 12, 0.45);
+}
+
+.entryNo {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: calc(54 * var(--u));
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+}
+
+.entryPending {
+  font-family: var(--font-sans);
+  font-size: calc(10 * var(--u));
+  letter-spacing: 0.08em;
+  color: rgba(11, 11, 12, 0.4);
+}
+
+.foot {
+  flex: none;
+  background: var(--ink);
+  padding: calc(9 * var(--u)) calc(20 * var(--u));
+  display: flex;
+  gap: calc(12 * var(--u));
+  font-family: var(--font-sans);
+  font-size: calc(9 * var(--u));
+  letter-spacing: 0.04em;
+}
+
+.foot b {
+  font-weight: 400;
+  flex: 1;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.foot span {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Print ───────────────────────────────────────────────────
+   One card per A5 sheet, bled to the edges. The card carries its
+   own print sizing rather than inheriting it from whatever page it
+   was dropped on — it is the sheet, wherever it is printed from. */
+
+@media print {
+  .card {
+    --u: calc(210mm / 520);
+    border: 0;
+    box-shadow: none;
+    break-inside: avoid;
+    break-after: page;
+    /* The backgrounds are the design; without them the card is blank. */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .card:last-child {
+    break-after: auto;
+  }
+
+  .foot {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

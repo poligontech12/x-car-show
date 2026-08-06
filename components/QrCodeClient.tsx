@@ -15,7 +15,9 @@ export function QrCodeClient({
   light = '#FFFFFF',
 }: {
   value: string;
-  size?: number;
+  /** A number is CSS pixels; a string passes straight through, so a card
+      can size its code in its own `--u` units, or at 100% of a well. */
+  size?: number | string;
   dark?: string;
   light?: string;
 }) {

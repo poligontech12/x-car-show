@@ -3,14 +3,15 @@
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { DigitDial } from '@/components/DigitDial';
+import { EntryCard } from '@/components/EntryCard';
 import { ImageSlot } from '@/components/ImageSlot';
 import { QrCodeClient } from '@/components/QrCodeClient';
 import { saveCarPhoto } from '@/lib/actions';
-import { EVENT } from '@/lib/event';
-import { BLANK_CAR, SITE_ORIGIN } from '@/lib/cars';
+import { BLANK_CAR, carUrl, headline, type Car } from '@/lib/cars';
 import { prepareCarPhoto } from '@/lib/photo-file';
 import { CAR_PHOTO_HINTS, CAR_PHOTO_LIMIT } from '@/lib/photos';
 import { errorMessage, useStore, type Drive } from '@/lib/store';
+import { useCar } from '@/lib/useCars';
 import styles from './onboard.module.css';
 
 const STEPS = [
@@ -21,7 +22,7 @@ const STEPS = [
     'Una principală și încă cinci, dacă le ai. Lasă goale câte vrei — le poți adăuga oricând pe pagina mașinii.',
   ],
   ['Descriere', 'Ce ar trebui să știe lumea despre mașină.'],
-  ['Ești înscris.', 'Cartonaș pregătit. Ne vedem pe 8 august.'],
+  ['Ești înscris.', 'Ăsta e cartonașul tău. Arată-l lumii.'],
 ] as const;
 
 const NEXT_LABELS = ['Continuă', 'Continuă', 'Arată bine', 'Gata', 'Vezi înscrișii'];
@@ -51,12 +52,83 @@ const STORY_LIMIT = 400;
 /** Four dials — no ceiling worth imposing on a horsepower figure. */
 const DIALS = [1000, 100, 10, 1] as const;
 
+/**
+ * Getting the entry off this screen and onto somebody's feed.
+ *
+ * The phone's own share sheet is the whole point — it is what reaches
+ * Instagram, WhatsApp and the group chat without us integrating with any
+ * of them. A desktop browser without a sheet gets the link on the
+ * clipboard instead, which is the same job done by hand.
+ */
+function ShareEntry({ url, title }: { url: string; title: string }) {
+  const [state, setState] = useState<'idle' | 'copied' | 'manual'>('idle');
+
+  const share = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title, text: `${title} · X Car Show`, url });
+        return;
+      } catch (e) {
+        // Cancelling the sheet is a decision, not a failure — only a
+        // sheet that could not open falls through to the clipboard.
+        if (e instanceof Error && e.name === 'AbortError') return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setState('copied');
+      setTimeout(() => setState('idle'), 2400);
+    } catch {
+      // No sheet, and a browser that will not hand over the clipboard.
+      // Put the link on screen rather than leave a button that does
+      // nothing when you press it.
+      setState('manual');
+    }
+  };
+
+  return (
+    <div className={styles.shareRow}>
+      <button type="button" className="btn btn--glass" onClick={() => void share()}>
+        {state === 'copied' ? 'Link copiat' : 'Trimite mai departe'}
+      </button>
+
+      {state === 'manual' && (
+        <input
+          className={styles.shareLink}
+          readOnly
+          value={url}
+          aria-label="Linkul mașinii"
+          onFocus={(e) => e.currentTarget.select()}
+        />
+      )}
+
+      <span className={styles.shareNote}>
+        Fă-i o poză cartonașului și pune-l pe Instagram — codul duce la pagina mașinii.
+      </span>
+    </div>
+  );
+}
+
 export default function OnboardScreen() {
   const router = useRouter();
-  const { onboarding, patchOnboarding, resetOnboarding, completeOnboarding, addCar } = useStore();
+  const { account, onboarding, patchOnboarding, resetOnboarding, completeOnboarding, addCar } =
+    useStore();
 
   const [step, setStep] = useState(0);
   const [story, setStory] = useState('');
+
+  /**
+   * The entry, once it exists. Registration happens on the way *into* the
+   * last step rather than on the way out of it, because that step now
+   * shows the entrant their card — and a card needs a real entry behind
+   * it: an id to build the code from, and a page for the code to open.
+   *
+   * Held here as well as read from the store so the card paints on the
+   * frame the step appears, instead of waiting for the refresh.
+   */
+  const [entry, setEntry] = useState<Car | null>(null);
+  const stored = useCar(entry?.id ?? '');
+  const card = stored ?? entry;
 
   /**
    * The photographs wait here until the car has an id. They used to be
@@ -113,47 +185,73 @@ export default function OnboardScreen() {
 
   const next = async () => {
     if (done) {
-      if (saving) return;
-      setSaving(true);
-      // The draft carries what the four steps could ask for without
-      // becoming a chore; everything else is filled in on the car itself.
-      const [make, ...rest] = onboarding.name.trim().split(/\s+/);
-      let id: string;
-      try {
-        id = await addCar({
-          ...BLANK_CAR,
-          make: make ?? '',
-          model: rest.join(' ') || (make ?? 'Mașina mea'),
-          year: Number(onboarding.year) || 0,
-          power: onboarding.power ? String(onboarding.power) : '',
-          drive: onboarding.drive,
-          story,
-        });
-      } catch (e) {
-        setSaving(false);
-        setFailed(errorMessage(e));
-        return;
-      }
-
-      /**
-       * Past this line the car exists, so nothing here may send anyone
-       * back to the button that registered it — they would end up with
-       * two entries. A photo that will not upload is left to the car
-       * page, where the empty well is both the report and the retry.
-       */
-      await Promise.allSettled(
-        photos.flatMap((dataUrl, slot) =>
-          dataUrl ? [saveCarPhoto(id, slot, dataUrl)] : [],
-        ),
-      );
-
-      resetOnboarding();
-      router.refresh();
-      router.push(`/car/${id}`);
+      router.push(card ? `/car/${card.id}` : '/roster');
       return;
     }
-    if (step === 3) completeOnboarding();
-    setStep(step + 1);
+    if (step < 3) {
+      setStep(step + 1);
+      return;
+    }
+
+    // Registering, once. Anything that could run this a second time —
+    // a double tap, a trip back through step 3 while the first write is
+    // still in flight — has to land on the entry that already exists
+    // rather than make another one.
+    if (saving) return;
+    if (entry) {
+      setStep(4);
+      return;
+    }
+
+    setSaving(true);
+    setFailed(null);
+    // The draft carries what the four steps could ask for without
+    // becoming a chore; everything else is filled in on the car itself.
+    const [make, ...rest] = onboarding.name.trim().split(/\s+/);
+    const draft = {
+      ...BLANK_CAR,
+      make: make ?? '',
+      model: rest.join(' ') || (make ?? 'Mașina mea'),
+      year: Number(onboarding.year) || 0,
+      power: onboarding.power ? String(onboarding.power) : '',
+      drive: onboarding.drive,
+      story,
+    };
+
+    let id: string;
+    try {
+      id = await addCar(draft);
+    } catch (e) {
+      setSaving(false);
+      setFailed(errorMessage(e));
+      return;
+    }
+
+    /**
+     * Past this line the car exists, so nothing here may send anyone back
+     * to the button that registered it — they would end up with two
+     * entries. The draft is cleared now rather than on the way out, so
+     * abandoning the last step cannot leave a filled form behind that
+     * registers the same car again tomorrow.
+     */
+    setEntry({
+      ...draft,
+      id,
+      owner: account?.name ?? '',
+      town: account?.town ?? '',
+      handle: account?.handle ?? '',
+    });
+    completeOnboarding();
+    resetOnboarding();
+    setStep(4);
+
+    // A photo that will not upload is left to the car page, where the
+    // empty well is both the report and the retry.
+    await Promise.allSettled(
+      photos.flatMap((dataUrl, slot) => (dataUrl ? [saveCarPhoto(id, slot, dataUrl)] : [])),
+    );
+    router.refresh();
+    setSaving(false);
   };
 
   return (
@@ -314,38 +412,32 @@ export default function OnboardScreen() {
           </>
         )}
 
-        {done && (
+        {done && card && (
           <>
-            {/* The stand is assigned at the gate, not here — the card
-                carries the car and the code that opens it, nothing we
-                would have to invent. */}
-            <div className={styles.card}>
-              <div className={styles.cardHead}>
-                <b>{EVENT.edition}</b>
-                <span>{EVENT.place}</span>
-              </div>
-              <div className={styles.cardBody}>
-                <div className={styles.cardQr}>
-                  <QrCodeClient value={SITE_ORIGIN} size={92} />
-                </div>
-                <div className={styles.cardDetails}>
-                  <div className={styles.cardName}>{onboarding.name.trim() || 'Mașina ta'}</div>
-                  <div className={styles.cardLine}>
-                    {[
-                      onboarding.year,
-                      onboarding.power ? `${onboarding.power} CP` : null,
-                      onboarding.drive,
-                    ]
-                      .filter(Boolean)
-                      .join(' · ')}
-                  </div>
-                </div>
-              </div>
+            {/* The card itself, not a preview of one — the same component
+                the print sheet renders. The number and the stand stay
+                empty: a marshal assigns those at the gate, and inventing
+                one here would be a promise the app cannot keep. */}
+            <div className={styles.cardFrame}>
+              <EntryCard
+                car={card}
+                qr={
+                  <QrCodeClient
+                    value={carUrl(card)}
+                    size="100%"
+                    dark="#0B0B0C"
+                    light="#F4F3EF"
+                  />
+                }
+              />
             </div>
+
+            <ShareEntry url={carUrl(card)} title={headline(card)} />
+
             <p className={styles.doneNote}>
-              Tipărim cartonașul ăsta și ți-l dăm la poartă. Lumea îl scanează, ți se deschide
-              pagina, și tu continui să vorbești în loc să repeți lista de specificații de
-              patruzeci de ori.
+              Tipărim cartonașul ăsta și ți-l dăm la poartă, cu numărul și standul completate.
+              Lumea îl scanează, ți se deschide pagina, și tu continui să vorbești în loc să
+              repeți lista de specificații de patruzeci de ori.
             </p>
           </>
         )}
