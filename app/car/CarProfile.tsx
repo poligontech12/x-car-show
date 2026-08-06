@@ -118,9 +118,11 @@ export function CarProfile({ id }: { id: string }) {
           ))}
         </div>
 
+        {/* Gradients only. A blur over the foot of the photograph bought
+            the headline contrast it already has from `heroBottom`, and
+            paid for it by softening the part of the car people actually
+            came to look at. */}
         <div className={styles.heroTop} />
-        {/* The blur that lets the name sit on the photograph. */}
-        <div className="photo-veil" style={{ zIndex: 3 }} />
         <div className={styles.heroBottom} />
 
         {frames.length > 1 && (

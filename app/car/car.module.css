@@ -3,23 +3,41 @@
 }
 
 /* ── Hero ────────────────────────────────────────────────────
-   Three photographs, swipeable, running under the nav. The
-   veil is what lets the name sit on top of them. */
+   Six photographs, swipeable, running under the nav. The
+   gradient at the foot is what lets the name sit on top of them. */
 
 .hero {
   position: relative;
+  /* The well is measured against this box rather than the window: on a
+     desktop the app sits inside a 390-wide phone, and a hero sized in vw
+     would be a screen and a half tall inside it. */
+  container-type: inline-size;
 }
 
+/*
+ * Upright, because the photographs are. Almost everything posted here is
+ * shot on a phone held the way a phone is held, and the old fixed 460px
+ * band went landscape on anything wider than a phone — so `cover` took a
+ * strip out of the middle of a 3:4 photo and threw away the roof and the
+ * wheels. 133cqi is four thirds of the well's own width, which is a
+ * portrait phone photo almost exactly.
+ *
+ * Sized in cqi and not `aspect-ratio`, because clamping the height of a
+ * box that has an aspect ratio transfers back through the ratio and
+ * narrows it: the hero came out 430px wide inside a 769px screen.
+ *
+ * The cap is the frame's height, so a window too short to hold a full
+ * 3:4 well gets a shallower one instead of a name pushed off the bottom.
+ */
 .rail {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  height: 460px;
+  height: min(133cqi, calc(min(var(--frame-h), 100dvh) * 0.75));
 }
 
 .frame {
   flex: 0 0 100%;
-  height: 460px;
   scroll-snap-align: start;
   position: relative;
   background: var(--slot);
