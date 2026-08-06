@@ -211,6 +211,14 @@ export function SpottedFeed({ posts }: { posts: SpottedPost[] }) {
           </section>
         )}
       </main>
+
+      {/* The shops page lost its only entrance with the menu, and the
+          account screen is no entrance at all for someone who has not
+          signed in. This is the landing page; put it where a visitor is. */}
+      <Link href="/partners" className={styles.partners}>
+        <b>Atelierele din spatele mașinilor</b>
+        <em>→</em>
+      </Link>
     </div>
   );
 }

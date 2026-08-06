@@ -372,3 +372,33 @@
     transition: none;
   }
 }
+
+/* The one way into the shops page for someone who has not signed in.
+   Sits under the last post, where a scroll to the bottom ends. */
+.partners {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px var(--gutter) 0;
+  padding: 16px;
+  border-radius: var(--r-panel);
+  background: var(--glass-faint);
+  border: 1px solid var(--rim);
+}
+
+.partners:hover {
+  border-color: var(--rim-bright);
+}
+
+.partners b {
+  flex: 1;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  color: var(--paper-70);
+}
+
+.partners em {
+  font-style: normal;
+  color: var(--red);
+}

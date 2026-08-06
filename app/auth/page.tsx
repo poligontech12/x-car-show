@@ -255,6 +255,18 @@ function AuthScreen() {
             >
               Deconectare
             </button>
+
+            {/* The menu that used to hold this is gone, and the shops on
+                that page are the ones with work on cars in the roster —
+                worth a way in that is not the address bar. */}
+            <Link href="/partners" className={styles.partners}>
+              Parteneri
+              <em>→</em>
+            </Link>
+
+            <p className={styles.credit}>
+              DEZVOLTAT DE <b>POLIGON TECH</b>
+            </p>
           </>
         )}
 

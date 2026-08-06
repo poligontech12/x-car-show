@@ -190,3 +190,46 @@
   line-height: 1.45;
   color: var(--paper-45);
 }
+
+/* A way into the shops page, which lost its only entrance when the
+   hamburger menu went. Quieter than the garage row above it — that is
+   the thing you came here to reach; this is a place to wander to. */
+.partners {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 15px 16px;
+  border-radius: var(--r-panel);
+  border: 1px solid var(--rim);
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  color: var(--paper-70);
+}
+
+.partners:hover {
+  border-color: var(--rim-bright);
+  color: var(--paper);
+}
+
+.partners em {
+  margin-left: auto;
+  font-style: normal;
+  color: var(--red);
+}
+
+/* Who built it. A signature, not a banner: it sits under everything
+   else on the one screen with time to read it. */
+.credit {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--paper-28);
+}
+
+.credit b {
+  font-weight: 600;
+  color: var(--paper-45);
+}

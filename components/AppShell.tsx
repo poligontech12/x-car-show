@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useCallback, useRef } from 'react';
 import { PhoneNav } from './PhoneNav';
+import { Splash } from './Splash';
 import { TabBar } from './TabBar';
 import styles from './AppShell.module.css';
 
@@ -48,6 +49,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className={styles.stage}>
+      {/* Outside the frame, so it covers the device chrome on a desktop
+          too. The print sheet returns above this and never sees it. */}
+      <Splash />
       <div className={styles.frame} onPointerMove={onPointerMove}>
         {/* Two slow blooms so the black floor has depth and the glass
             has something to refract. */}

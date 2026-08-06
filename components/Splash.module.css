@@ -1,0 +1,66 @@
+/* The opening frame: the marque, and who built it.
+   Shown once when the app is opened, never on a navigation inside it. */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  background: var(--ink);
+  opacity: 1;
+  transition: opacity 0.32s ease;
+  /* Never swallow a tap. If someone reaches for something the moment the
+     app opens, the reach lands — a splash that eats the first press is
+     indistinguishable from an app that has hung. */
+  pointer-events: none;
+}
+
+.leaving {
+  opacity: 0;
+}
+
+.mark {
+  font-size: 46px;
+}
+
+/* Quiet, and below the show's own marque. The event is the headline
+   here; the credit is a signature in the corner of the canvas. */
+.credit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.credit span {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--paper-28);
+}
+
+.credit b {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.09em;
+  color: var(--paper-70);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash {
+    transition: none;
+  }
+}
+
+/* A printed windshield card does not open with a title card. */
+@media print {
+  .splash {
+    display: none;
+  }
+}
