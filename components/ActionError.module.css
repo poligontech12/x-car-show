@@ -1,0 +1,43 @@
+/* Sits under the nav rather than over the tab bar: the thing you just
+   tapped is usually a card in the middle of the screen, and the message
+   about it should not land on the bar you are about to reach for. */
+
+.strip {
+  position: absolute;
+  top: var(--safe-top);
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 45;
+
+  display: block;
+  width: auto;
+  padding: 12px 14px;
+  border-radius: var(--r-panel);
+  background: color-mix(in oklab, var(--red) 22%, var(--ink));
+  border: 1px solid color-mix(in oklab, var(--red) 46%, transparent);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: var(--lift-sm);
+
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-wrap: pretty;
+
+  animation: errorIn 0.22s ease both;
+}
+
+@keyframes errorIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip {
+    animation: none;
+  }
+}

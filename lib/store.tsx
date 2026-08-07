@@ -82,6 +82,18 @@ interface Store extends UiState, ServerState {
   hydrated: boolean;
   signedIn: boolean;
 
+  /**
+   * The reason the last vote or follow did not take, in Romanian, or null.
+   *
+   * Those two are fired and forgotten — they paint immediately and let the
+   * server catch up — so a refusal used to arrive as the tap silently
+   * undoing itself. Signed out on another device, voting closed, three
+   * votes already spent: all of it looked identical to a tap that missed.
+   * Whoever is showing this clears it.
+   */
+  actionError: string | null;
+  clearActionError: () => void;
+
   /** Resolve to an error message in Romanian, or null when it worked. */
   signIn: (email: string, password: string) => Promise<string | null>;
   register: (email: string, password: string, name: string) => Promise<string | null>;
@@ -158,6 +170,7 @@ export function StoreProvider({
   const [pendingVotes, setPendingVotes] = useState<string[] | null>(null);
   const [pendingFollows, setPendingFollows] = useState<Record<string, boolean>>({});
   const [draftAccount, setDraftAccount] = useState<Partial<Account> | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   useEffect(() => {
     setUi(readUi());
@@ -212,6 +225,9 @@ export function StoreProvider({
       myCars,
       hydrated: true,
       signedIn: !!account,
+
+      actionError,
+      clearActionError: () => setActionError(null),
 
       signIn: async (email, password) => {
         const { error } = await authClient.signIn.email({ email: email.trim(), password });
@@ -295,9 +311,13 @@ export function StoreProvider({
         // Paint it immediately; a phone on two bars should not wait to
         // find out whether the tap registered.
         setPendingVotes(on ? votes.filter((id) => id !== carId) : [...votes, carId]);
+        setActionError(null);
         void toggleVoteAction(carId)
           .then(() => router.refresh())
-          .catch(() => setPendingVotes(null));
+          .catch((e) => {
+            setPendingVotes(null);
+            setActionError(message(e));
+          });
       },
 
       hasVoted: (carId) => votes.includes(carId),
@@ -306,15 +326,17 @@ export function StoreProvider({
       toggleFollow: (carId) => {
         const on = !following[carId];
         setPendingFollows((p) => ({ ...p, [carId]: on }));
+        setActionError(null);
         void toggleFollowAction(carId)
           .then(() => router.refresh())
-          .catch(() =>
+          .catch((e) => {
             setPendingFollows((p) => {
               const next = { ...p };
               delete next[carId];
               return next;
-            }),
-          );
+            });
+            setActionError(message(e));
+          });
       },
 
       isFollowing: (carId) => !!following[carId],
@@ -401,7 +423,7 @@ export function StoreProvider({
       resetOnboarding: () => patchUi({ onboarding: EMPTY_DRAFT }),
       completeOnboarding: () => {},
     };
-  }, [initial, ui, pendingVotes, pendingFollows, draftAccount, router, patchUi]);
+  }, [initial, ui, pendingVotes, pendingFollows, draftAccount, actionError, router, patchUi]);
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useCallback, useRef } from 'react';
 import { useRecordScreens } from '@/lib/flow-exit';
+import { ActionError } from './ActionError';
 import { PhoneNav } from './PhoneNav';
 import { Splash } from './Splash';
 import { TabBar } from './TabBar';
@@ -62,6 +63,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="aurora" aria-hidden="true" />
         <div className={styles.island} aria-hidden="true" />
         {!flow && <PhoneNav />}
+        <ActionError />
         <div className={`${styles.main} ${fill ? styles.mainFill : styles.mainScroll}`}>
           {children}
         </div>
