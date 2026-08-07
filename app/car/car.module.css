@@ -487,7 +487,10 @@
   white-space: nowrap;
 }
 
-.editCta {
+/* Compound with `.btn` so it outranks that rule's `width: 100%` rather
+   than tying with it and losing to whichever stylesheet the bundler puts
+   last — see the note on `.add` in garage.module.css. */
+:global(.btn).editCta {
   width: calc(100% - var(--gutter) * 2);
   margin: 20px var(--gutter) 0;
 }

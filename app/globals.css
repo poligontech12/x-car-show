@@ -384,6 +384,12 @@ textarea::placeholder {
    Controls
    ───────────────────────────────────────────────────────────── */
 
+/* A module rule that has to beat anything here — the width especially —
+   must name `.btn` alongside its own class, as `:global(.btn).thing`.
+   A bare `.thing` is the same weight as `.btn` and wins only while its
+   stylesheet comes last, which it does in development and does not in a
+   production build. Buttons that looked right everywhere they were checked
+   went 20px off the side of the phone that way. */
 .btn {
   position: relative;
   display: block;

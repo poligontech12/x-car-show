@@ -280,21 +280,37 @@
 .footer {
   flex: none;
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: center;
   padding: 14px var(--gutter) calc(var(--safe-bottom) + 14px);
   background: linear-gradient(to top, var(--ink) 70%, rgba(8, 8, 10, 0));
 }
 
-.back {
-  flex: none;
+/* `.btn` is 100% wide by default, which as a flex basis means "a whole
+   row to myself". Sizing these from zero instead lets the pair share one
+   line, and `min-width: 0` lets a long label wrap inside the button
+   rather than push it off the screen — Romanian runs long, and the
+   reader may have text scaled up. */
+.footer > :global(.btn) {
+  flex: 1 1 0;
   width: auto;
+  min-width: 0;
+}
+
+/* Only as wide as the word it holds, and first to give ground. */
+.footer > .back {
+  flex: 0 1 auto;
   padding: 17px 20px;
 }
 
-/* A registration that did not go through says so, next to the button. */
+/* A registration that did not go through says so, above the buttons.
+   Full width and ordered first: as a third item in the row it squeezed
+   the button it belongs to down to a stub. */
 .failed {
-  margin: 0 0 12px;
+  flex: 1 0 100%;
+  order: -1;
+  margin: 0;
   padding: 12px 14px;
   border-radius: var(--r-panel);
   background: color-mix(in oklab, var(--red) 14%, transparent);

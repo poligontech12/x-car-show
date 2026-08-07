@@ -100,7 +100,20 @@
   color: var(--red);
 }
 
-.add {
+/* Named alongside `.btn` on purpose, rather than on its own.
+ *
+ * `.btn` sets `width: 100%`, and this rule has to beat it. On its own the
+ * two are the same weight, so the winner is whichever stylesheet the
+ * bundler happens to put last — the module in development, the global one
+ * in a production build. That is exactly how this button sat correctly on
+ * every machine it was checked on and hung 20px off the side of the phone
+ * in people's hands. Written as a compound selector it outranks `.btn`
+ * whatever the order.
+ *
+ * The width is spelled out rather than left `auto` because a button sizes
+ * to its label, and this one lines up with the cards above it.
+ */
+:global(.btn).add {
   margin: 12px var(--gutter) 0;
   width: calc(100% - var(--gutter) * 2);
 }

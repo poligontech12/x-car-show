@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "dev"],
       "port": 3000,
       "autoPort": false
+    },
+    {
+      "name": "x-car-show-prod",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "start", "--port", "3000"],
+      "port": 3000,
+      "autoPort": false
     }
   ]
 }
