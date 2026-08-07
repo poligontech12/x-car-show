@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useCallback, useRef } from 'react';
+import { useRecordScreens } from '@/lib/flow-exit';
 import { PhoneNav } from './PhoneNav';
 import { Splash } from './Splash';
 import { TabBar } from './TabBar';
@@ -22,6 +23,9 @@ const isEdit = (p: string) => /^\/car\/[^/]+\/edit\/?$/.test(p);
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const lit = useRef<HTMLElement | null>(null);
+
+  // So a flow's close button knows whether there is a screen behind it.
+  useRecordScreens();
 
   /**
    * A light that follows the pointer across whichever panel it is over.

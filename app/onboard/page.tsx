@@ -8,6 +8,7 @@ import { ImageSlot } from '@/components/ImageSlot';
 import { QrCodeClient } from '@/components/QrCodeClient';
 import { saveCarPhoto } from '@/lib/actions';
 import { BLANK_CAR, carUrl, headline, type Car } from '@/lib/cars';
+import { useFlowExit } from '@/lib/flow-exit';
 import { prepareCarPhoto } from '@/lib/photo-file';
 import { CAR_PHOTO_HINTS, CAR_PHOTO_LIMIT } from '@/lib/photos';
 import { errorMessage, useStore, type Drive } from '@/lib/store';
@@ -114,6 +115,7 @@ export default function OnboardScreen() {
   const { account, hydrated, onboarding, patchOnboarding, resetOnboarding, completeOnboarding, addCar } =
     useStore();
 
+  const close = useFlowExit('/');
   const [step, setStep] = useState(0);
   const [story, setStory] = useState('');
 
@@ -204,7 +206,7 @@ export default function OnboardScreen() {
               type="button"
               className="icon-btn"
               aria-label="Închide"
-              onClick={() => router.push('/')}
+              onClick={close}
             >
               ×
             </button>
@@ -315,7 +317,7 @@ export default function OnboardScreen() {
             type="button"
             className="icon-btn"
             aria-label="Închide"
-            onClick={() => router.back()}
+            onClick={close}
           >
             ×
           </button>

@@ -6,6 +6,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { AvatarPicker } from '@/components/AvatarPicker';
 import { enforceCanonicalHttps } from '@/lib/canonical-url';
 import { displayModel } from '@/lib/cars';
+import { useFlowExit } from '@/lib/flow-exit';
 import { useStore } from '@/lib/store';
 import styles from './auth.module.css';
 
@@ -37,6 +38,7 @@ function AuthScreen() {
   const params = useSearchParams();
   const { account, hydrated, votes, cars, signIn, register, signOut, updateAccount } = useStore();
 
+  const close = useFlowExit('/');
   const [authMode, setAuthMode] = useState<'register' | 'signin'>(
     params.get('mode') === 'signin' ? 'signin' : 'register',
   );
@@ -125,7 +127,7 @@ function AuthScreen() {
             type="button"
             className="icon-btn"
             aria-label="Închide"
-            onClick={() => router.back()}
+            onClick={close}
           >
             ×
           </button>

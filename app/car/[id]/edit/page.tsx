@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { type Car, type CarClass, type ModCategory } from '@/lib/cars';
+import { useFlowExit } from '@/lib/flow-exit';
 import { useCar, useOwnsCar } from '@/lib/useCars';
 import { useStore } from '@/lib/store';
 import styles from './edit.module.css';
@@ -21,6 +22,9 @@ export default function EditCarScreen() {
   const car = useCar(id);
   const owns = useOwnsCar(id);
   const { updateCar, removeCar, hydrated } = useStore();
+  // Editing is reached from the car, so that is where closing it belongs —
+  // including when the edit screen was opened cold from a link.
+  const close = useFlowExit(`/car/${id}`);
 
   const [draft, setDraft] = useState<Car | null>(null);
   const [mods, setMods] = useState<Record<string, string>>({});
@@ -42,7 +46,7 @@ export default function EditCarScreen() {
       <div className={styles.screen}>
         <div className={styles.top}>
           <div className={styles.topRow}>
-            <button type="button" className="icon-btn" aria-label="Înapoi" onClick={() => router.back()}>
+            <button type="button" className="icon-btn" aria-label="Înapoi" onClick={close}>
               ←
             </button>
             <div className={styles.label}>Editare</div>
