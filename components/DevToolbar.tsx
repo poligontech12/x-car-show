@@ -15,7 +15,14 @@ const Toolbar = dynamic(() => import('agentation').then((m) => m.Agentation), {
   ssr: false,
 });
 
+/**
+ * Where `agentation-mcp` listens. Without it the toolbar keeps every
+ * annotation in localStorage and the agent never sees a thing, so this
+ * is the whole point of the wiring rather than an optional extra.
+ */
+const MCP_ENDPOINT = 'http://localhost:4747';
+
 export function DevToolbar() {
   if (process.env.NODE_ENV !== 'development') return null;
-  return <Toolbar />;
+  return <Toolbar endpoint={MCP_ENDPOINT} />;
 }
