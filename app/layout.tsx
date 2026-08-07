@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Albert_Sans } from 'next/font/google';
 import { AppShell } from '@/components/AppShell';
 import { DevToolbar } from '@/components/DevToolbar';
+import { RefreshOnReturn } from '@/components/RefreshOnReturn';
 import { followsOf, listCars, votesOf, voteTally } from '@/lib/db/queries';
 import { sessionUser } from '@/lib/session';
 import { type Account, StoreProvider } from '@/lib/store';
@@ -62,6 +63,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     >
       <body>
         <StoreProvider initial={{ account, votes, following, cars, tally }}>
+          <RefreshOnReturn />
           <AppShell>{children}</AppShell>
         </StoreProvider>
         <DevToolbar />
