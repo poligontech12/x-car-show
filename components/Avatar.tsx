@@ -19,7 +19,14 @@ export function Avatar({ src, name, className }: Props) {
   return (
     <div className={className}>
       {src ? (
-        <img className={styles.img} src={src} alt={name} draggable={false} />
+        <img
+          className={styles.img}
+          src={src}
+          alt={name}
+          draggable={false}
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <div className={styles.letter} aria-hidden="true">
           {initial}

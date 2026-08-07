@@ -108,7 +108,25 @@ export function ImageSlot({
         : {})}
     >
       {src ? (
-        <img className={styles.img} src={src} alt={hint} draggable={false} />
+        /**
+         * Fetched when it is nearly on screen, not when the page is.
+         *
+         * The roster is a hundred cars, each with a photograph averaging
+         * around a hundred kilobytes, and every one of them used to be
+         * asked for the moment the page opened — megabytes to show the
+         * four you can actually see. The showground has one saturated
+         * tower and a hundred and forty people on it. `lazy` defers only
+         * what is off screen, so the pictures under your thumb still
+         * arrive first.
+         */
+        <img
+          className={styles.img}
+          src={src}
+          alt={hint}
+          draggable={false}
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <div className={styles.empty}>
           <svg

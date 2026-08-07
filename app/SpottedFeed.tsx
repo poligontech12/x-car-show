@@ -189,7 +189,13 @@ export function SpottedFeed({ posts }: { posts: SpottedPost[] }) {
           posts.map((post) => (
             <article key={post.id} className={styles.post} data-spot>
               <div className={styles.postPhoto}>
-                <img src={post.imageUrl} alt={post.caption || `Mașină văzută de ${post.author}`} />
+                {/* A feed is scrolled, so only fetch what is reached. */}
+                <img
+                  src={post.imageUrl}
+                  alt={post.caption || `Mașină văzută de ${post.author}`}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <span className="photo-veil" />
                 <div className={styles.postMeta}>
                   <Avatar src={post.authorImage} name={post.author} className={styles.avatar} />
