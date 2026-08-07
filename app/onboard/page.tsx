@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DigitDial } from '@/components/DigitDial';
 import { EntryCard } from '@/components/EntryCard';
 import { ImageSlot } from '@/components/ImageSlot';
@@ -185,6 +185,19 @@ export default function OnboardScreen() {
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
 
+  /**
+   * Every step is drawn inside the same scrolling box — only its contents
+   * are swapped — so the distance you had scrolled stays where it was when
+   * the step changes. Scroll to the foot of the dials and carry on and the
+   * photographs open a hundred pixels down: their heading and the top of
+   * the main well are already above the edge, and the step reads as one
+   * that arrived broken. A step begins at its beginning.
+   */
+  const bodyRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 });
+  }, [step]);
+
   // ── Hooks end here. Everything below may return early. ──
 
   if (!hydrated) return <div className={styles.screen} />;
@@ -331,7 +344,10 @@ export default function OnboardScreen() {
         </div>
       </div>
 
-      <div className={styles.body}>
+      <div
+        className={styles.body}
+        ref={bodyRef}
+      >
         <h1 className={`${styles.title} a-up delay-100`}>{title}</h1>
         <p className={`${styles.sub} a-up delay-200`}>{sub}</p>
 
