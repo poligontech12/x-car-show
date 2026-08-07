@@ -1,0 +1,48 @@
+/* Shared by the failed-screen and the missing-page states. Both sit in the
+   middle of whatever height they are given, because neither has anything
+   above or below to anchor to. */
+
+.screen {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--safe-top) var(--gutter) 120px;
+}
+
+.body {
+  width: 100%;
+  max-width: 26rem;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.sub {
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--paper-45);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.code {
+  margin: 22px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--paper-28);
+}
