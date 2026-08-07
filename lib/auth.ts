@@ -121,11 +121,22 @@ export const auth = betterAuth({
     },
   },
 
-  // Keeps people signed in across the weekend without a round trip on
-  // every request — the vote screen reads the session constantly.
+  /**
+   * A month, so nobody is signed out between the announcement and the
+   * gate. Read from the database every time, deliberately.
+   *
+   * There used to be a five-minute cookie cache here, on the grounds that
+   * the vote screen reads the session constantly. It does not: the session
+   * is read once per page load, in the root layout, and once more by each
+   * write. What the cache bought was about two milliseconds of a local
+   * query. What it cost was five minutes in which a session that had been
+   * signed out or revoked still worked — measured, not assumed: deleting
+   * a session row and then editing a profile through the UI wrote to the
+   * database anyway. On a show whose promise is one vote per person, that
+   * is the wrong side of the trade.
+   */
   session: {
     expiresIn: 60 * 60 * 24 * 30,
-    cookieCache: { enabled: true, maxAge: 5 * 60 },
   },
 
   plugins: [nextCookies()],
