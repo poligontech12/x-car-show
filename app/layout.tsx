@@ -3,8 +3,11 @@ import { Albert_Sans } from 'next/font/google';
 import { AppShell } from '@/components/AppShell';
 import { DevToolbar } from '@/components/DevToolbar';
 import { RefreshOnReturn } from '@/components/RefreshOnReturn';
+import { cookies } from 'next/headers';
 import { followsOf, listCars, votesOf, voteTally } from '@/lib/db/queries';
 import { sessionUser } from '@/lib/session';
+import { VISIT_COOKIE } from '@/middleware';
+import { shuffled } from '@/lib/shuffle';
 import { type Account, StoreProvider } from '@/lib/store';
 import './globals.css';
 
@@ -36,12 +39,22 @@ export const viewport: Viewport = {
  */
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await sessionUser();
-  const [cars, tally, votes, following] = await Promise.all([
+  const [jar, registered, tally, votes, following] = await Promise.all([
+    cookies(),
     listCars(),
     voteTally(),
     user ? votesOf(user.id) : [],
     user ? followsOf(user.id) : {},
   ]);
+
+  /**
+   * Dealt fresh for each visitor and unchanged for the length of their
+   * visit. The seed is a cookie rather than a random number taken here,
+   * because this layout renders again on every vote and every return to
+   * the foreground, and a deck that reordered itself under a thumb mid-vote
+   * would be worse than one that never moved at all.
+   */
+  const cars = shuffled(registered, jar.get(VISIT_COOKIE)?.value ?? 'no-seed');
 
   const account: Account | null = user
     ? {

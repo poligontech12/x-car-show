@@ -22,7 +22,7 @@ test('closing a flow opened cold lands on the feed', async ({ page }) => {
 });
 
 test('closing a flow reached from inside the app goes back', async ({ page }) => {
-  await page.goto('/roster');
+  await page.goto('/spotted');
   await page.waitForTimeout(400);
 
   // Tapped, not typed — the app moves between screens without reloading,
@@ -31,7 +31,7 @@ test('closing a flow reached from inside the app goes back', async ({ page }) =>
   await expect(page.getByRole('heading', { name: 'Intră în show.' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Închide' }).click();
-  await expect(page).toHaveURL(/\/roster$/);
+  await expect(page).toHaveURL(/\/spotted$/);
 });
 
 test('closing registration opened cold lands on the feed', async ({ page }) => {

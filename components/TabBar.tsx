@@ -56,9 +56,9 @@ export function TabBar() {
         // the roster you opened it from, partners to the feed.
         const active =
           t.href === '/'
-            ? pathname === '/' || pathname.startsWith('/partners')
+            ? pathname === '/' || pathname.startsWith('/car')
             : pathname.startsWith(t.href) ||
-              (t.href === '/roster' && pathname.startsWith('/car'));
+              (t.href === '/spotted' && pathname.startsWith('/partners'));
 
         return (
           <Link

@@ -9,8 +9,14 @@ import { Splash } from './Splash';
 import { TabBar } from './TabBar';
 import styles from './AppShell.module.css';
 
-/** Screens that take the whole height and do their own scrolling. */
-const FILL = ['/roster', '/auth', '/onboard'];
+/**
+ * Screens that take the whole height and do their own scrolling.
+ *
+ * Matched with `startsWith`, which is why the roster is not in this list
+ * even though it is one of them: it lives at `/` now, and every path on
+ * earth starts with a slash. It is checked for exactly, below.
+ */
+const FILL = ['/auth', '/onboard'];
 
 /**
  * Register-a-car and the account screens are flows, not destinations:
@@ -49,7 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // The print sheet is not the app — it gets the bare page.
   if (pathname.startsWith('/cards')) return <>{children}</>;
 
-  const fill = FILL.some((p) => pathname.startsWith(p)) || isEdit(pathname);
+  const fill = pathname === '/' || FILL.some((p) => pathname.startsWith(p)) || isEdit(pathname);
   const flow = FLOW.some((p) => pathname.startsWith(p)) || isEdit(pathname);
 
   return (

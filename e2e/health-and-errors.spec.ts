@@ -33,8 +33,9 @@ test('an address that leads nowhere is still readable', async ({ page }) => {
   // The way back matters more than the message.
   await expect(page.getByRole('link', { name: 'Vezi înscrișii' })).toBeVisible();
 
+  // The entrants lead the app, so "see the entrants" is the front door.
   await page.getByRole('link', { name: 'Vezi înscrișii' }).click();
-  await expect(page).toHaveURL(/\/roster$/);
+  await expect(page).toHaveURL('/');
 });
 
 test('a car that was deleted says so in its own words', async ({ page }) => {

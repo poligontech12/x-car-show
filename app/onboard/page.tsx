@@ -250,7 +250,7 @@ export default function OnboardScreen() {
 
   const next = async () => {
     if (done) {
-      router.push(card ? `/car/${card.id}` : '/roster');
+      router.push(card ? `/car/${card.id}` : '/');
       return;
     }
     if (step < 3) {

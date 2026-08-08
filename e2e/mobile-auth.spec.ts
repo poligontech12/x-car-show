@@ -35,7 +35,7 @@ test('sign-out remains stable on mobile Safari', async ({ page, browserName }) =
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Parolă').fill(password);
   await page.getByRole('button', { name: 'Creează contul' }).click();
-  await page.waitForURL('**/roster');
+  await page.waitForURL((url) => !url.pathname.startsWith('/auth'));
 
   await page.getByLabel('Contul meu').click();
   await page.waitForURL('**/auth');

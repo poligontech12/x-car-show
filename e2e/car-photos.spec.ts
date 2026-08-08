@@ -90,7 +90,7 @@ test('a car registered with photos opens showing them, everywhere', async ({ pag
   await expect(page.locator(`img[src="${heroSrc}"]`).first()).toBeVisible();
 
   // ── Coherence: the roster leads with the same picture, not its own ──
-  await page.goto('/roster');
+  await page.goto('/');
   await expect(page.locator(`img[src="${heroSrc}"]`).first()).toBeVisible();
 
   // ── And the garage row, which used to have a key of its own too ──

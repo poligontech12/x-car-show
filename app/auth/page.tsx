@@ -112,7 +112,7 @@ function AuthScreen() {
     if (authMode === 'signin') return router.push('/');
     // Somebody who tapped "register a car" carries on to doing that;
     // everybody else lands on the thing they came to look at.
-    router.push(headedForOnboarding ? '/onboard' : '/roster');
+    router.push(headedForOnboarding ? '/onboard' : '/');
   };
 
   // Hold the frame until we know whether there is an account, so the

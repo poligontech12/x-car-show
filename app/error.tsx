@@ -38,7 +38,7 @@ export default function ScreenError({
             href="/"
             className="btn btn--glass"
           >
-            Înapoi la Spotted
+            Vezi înscrișii
           </Link>
         </div>
 
