@@ -64,7 +64,7 @@ export function CarProfile({ id }: { id: string }) {
         <div className={styles.missing}>
           <h1>Mașina nu există.</h1>
           <p>Poate a fost ștearsă, sau linkul e greșit.</p>
-          <Link href="/roster" className="btn btn--glass">
+          <Link href="/" className="btn btn--glass">
             Vezi înscrișii
           </Link>
         </div>

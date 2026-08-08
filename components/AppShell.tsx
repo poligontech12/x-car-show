@@ -3,14 +3,20 @@
 import { usePathname } from 'next/navigation';
 import { useCallback, useRef } from 'react';
 import { useRecordScreens } from '@/lib/flow-exit';
+import { ROSTER } from '@/lib/navigation';
 import { ActionError } from './ActionError';
 import { PhoneNav } from './PhoneNav';
 import { Splash } from './Splash';
 import { TabBar } from './TabBar';
 import styles from './AppShell.module.css';
 
-/** Screens that take the whole height and do their own scrolling. */
-const FILL = ['/roster', '/auth', '/onboard'];
+/**
+ * Screens that take the whole height and do their own scrolling. Prefixes,
+ * so everything below them is covered too — which is exactly why the
+ * roster is not in this list. It sits at '/', and every route in the app
+ * starts with that.
+ */
+const FILL = ['/auth', '/onboard'];
 
 /**
  * Register-a-car and the account screens are flows, not destinations:
@@ -49,7 +55,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // The print sheet is not the app — it gets the bare page.
   if (pathname.startsWith('/cards')) return <>{children}</>;
 
-  const fill = FILL.some((p) => pathname.startsWith(p)) || isEdit(pathname);
+  const fill = pathname === ROSTER.href || FILL.some((p) => pathname.startsWith(p)) || isEdit(pathname);
   const flow = FLOW.some((p) => pathname.startsWith(p)) || isEdit(pathname);
 
   return (

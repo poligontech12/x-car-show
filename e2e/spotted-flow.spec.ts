@@ -15,7 +15,7 @@ function identity() {
 }
 
 test('roster no longer advertises cars that are not in the app', async ({ page }) => {
-  await page.goto('/roster');
+  await page.goto('/');
   await expect(page.getByText(/de mașini încă nu sunt în aplicație/i)).toHaveCount(0);
   await expect(page.getByText(/Le adăugăm până pe 8 august/i)).toHaveCount(0);
 });
@@ -30,7 +30,7 @@ test('a signed-in member can publish a persistent spotted photo', async ({ page 
   });
   expect(registration.status()).toBe(200);
 
-  await page.goto('/');
+  await page.goto('/spotted');
   await expect(page.getByRole('heading', { name: 'Spotted' })).toBeVisible();
   await page.getByRole('button', { name: /spotted/i }).click();
   await page.locator('input[type="file"]').setInputFiles({

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { PRIMARY_NAV } from '@/lib/navigation';
+import { FEED, PRIMARY_NAV } from '@/lib/navigation';
 import styles from './TabBar.module.css';
 
 /**
@@ -54,11 +54,14 @@ export function TabBar() {
       {PRIMARY_NAV.map((t) => {
         // Screens below a tab keep that tab lit: a car profile belongs to
         // the roster you opened it from, partners to the feed.
+        //
+        // The roster's href is '/', which is a prefix of everything, so it
+        // has to be matched exactly and then given its children by name.
         const active =
           t.href === '/'
-            ? pathname === '/' || pathname.startsWith('/partners')
+            ? pathname === '/' || pathname.startsWith('/car')
             : pathname.startsWith(t.href) ||
-              (t.href === '/roster' && pathname.startsWith('/car'));
+              (t.href === FEED.href && pathname.startsWith('/partners'));
 
         return (
           <Link

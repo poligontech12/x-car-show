@@ -35,7 +35,9 @@ test('sign-out remains stable on mobile Safari', async ({ page, browserName }) =
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Parolă').fill(password);
   await page.getByRole('button', { name: 'Creează contul' }).click();
-  await page.waitForURL('**/roster');
+  // Registering without having asked to enter a car lands on the roster,
+  // which is the root — a '**/roster' glob would wait forever.
+  await page.waitForURL((url) => url.pathname === '/');
 
   await page.getByLabel('Contul meu').click();
   await page.waitForURL('**/auth');

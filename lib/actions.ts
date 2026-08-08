@@ -147,7 +147,7 @@ export async function registerCar(input: CarInput): Promise<string> {
     await tx.update(users).set({ role: 'car', updatedAt: new Date() }).where(eq(users.id, user.id));
   });
 
-  revalidatePath('/roster');
+  revalidatePath('/');
   revalidatePath('/garage');
   return id;
 }
@@ -179,7 +179,7 @@ export async function saveCar(id: string, input: CarInput): Promise<void> {
   });
 
   revalidatePath(`/car/${id}`);
-  revalidatePath('/roster');
+  revalidatePath('/');
   revalidatePath('/garage');
 }
 
@@ -192,7 +192,7 @@ export async function deleteCar(id: string): Promise<void> {
     .returning({ id: cars.id });
   if (!deleted.length) throw new Error('Poți șterge doar mașinile pe care le-ai înscris tu.');
 
-  revalidatePath('/roster');
+  revalidatePath('/');
   revalidatePath('/garage');
   revalidatePath('/award');
 }
@@ -222,7 +222,7 @@ function photoFailure(error: unknown): PhotoResult {
 function revalidateCarPhoto(carId: string) {
   revalidatePath(`/car/${carId}`);
   revalidatePath(`/cards/${carId}`);
-  revalidatePath('/roster');
+  revalidatePath('/');
   revalidatePath('/garage');
   revalidatePath('/cards');
 }
@@ -460,7 +460,7 @@ export async function createSpottedPost(input: SpottedInput): Promise<SpottedRes
   // Persistence is already committed. Cache invalidation failure must never
   // tell the member that publishing failed and invite a duplicate retry.
   try {
-    revalidatePath('/');
+    revalidatePath('/spotted');
   } catch (error) {
     console.error('Spotted cache invalidation failed after commit.', error);
   }
@@ -628,9 +628,9 @@ export async function deleteAvatar(): Promise<PhotoResult> {
 /** Wherever a person's name and face are drawn beside each other. */
 function revalidateAccount() {
   revalidatePath('/auth');
-  revalidatePath('/roster');
-  revalidatePath('/garage');
   revalidatePath('/');
+  revalidatePath('/garage');
+  revalidatePath('/spotted');
 }
 
 export interface ProfileInput {
@@ -658,5 +658,5 @@ export async function saveProfile(input: ProfileInput): Promise<void> {
   await refreshSessionCache();
 
   revalidatePath('/auth');
-  revalidatePath('/roster');
+  revalidatePath('/');
 }

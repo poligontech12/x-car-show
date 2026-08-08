@@ -23,7 +23,7 @@ export default function NotFound() {
 
         <div className={styles.actions}>
           <Link
-            href="/roster"
+            href="/"
             className="btn btn--primary"
           >
             Vezi înscrișii

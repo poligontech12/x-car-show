@@ -27,7 +27,7 @@ export default function OwnerScreen() {
       <div className={styles.screen}>
         <div className={styles.missing}>
           <h1>Profilul nu există.</h1>
-          <Link href="/roster" className="btn btn--glass">
+          <Link href="/" className="btn btn--glass">
             Vezi înscrișii
           </Link>
         </div>

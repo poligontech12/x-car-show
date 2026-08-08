@@ -34,7 +34,9 @@ test('an address that leads nowhere is still readable', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Vezi înscrișii' })).toBeVisible();
 
   await page.getByRole('link', { name: 'Vezi înscrișii' }).click();
-  await expect(page).toHaveURL(/\/roster$/);
+  // The roster is the root now, so match the path exactly — a trailing
+  // slash matches most of the app.
+  await expect.poll(() => new URL(page.url()).pathname).toBe('/');
 });
 
 test('a car that was deleted says so in its own words', async ({ page }) => {
