@@ -14,7 +14,13 @@ export const FEED = { href: '/spotted', label: 'Spotted', glyph: 'feed' } as con
  */
 export const ROSTER = { href: '/', label: 'Înscriși', glyph: 'roster' } as const;
 
-/** The four tabs, in the order they sit in the bar, left to right. */
+/**
+ * The four tabs, in the order they sit in the bar, left to right.
+ *
+ * Înscriși is `/` — the entrants are what the app is for, and what somebody
+ * scanning a card at the gate came to see. The feed is a place to post to,
+ * which is a different thing and no longer the front door.
+ */
 export const PRIMARY_NAV = [
   ROSTER,
   FEED,

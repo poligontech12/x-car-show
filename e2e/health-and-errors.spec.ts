@@ -33,6 +33,7 @@ test('an address that leads nowhere is still readable', async ({ page }) => {
   // The way back matters more than the message.
   await expect(page.getByRole('link', { name: 'Vezi înscrișii' })).toBeVisible();
 
+  // The entrants lead the app, so "see the entrants" is the front door.
   await page.getByRole('link', { name: 'Vezi înscrișii' }).click();
   // The roster is the root now, so match the path exactly — a trailing
   // slash matches most of the app.

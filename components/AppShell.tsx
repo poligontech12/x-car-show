@@ -11,10 +11,11 @@ import { TabBar } from './TabBar';
 import styles from './AppShell.module.css';
 
 /**
- * Screens that take the whole height and do their own scrolling. Prefixes,
- * so everything below them is covered too — which is exactly why the
- * roster is not in this list. It sits at '/', and every route in the app
- * starts with that.
+ * Screens that take the whole height and do their own scrolling.
+ *
+ * Matched with `startsWith`, which is why the roster is not in this list
+ * even though it is one of them: it lives at `/` now, and every path on
+ * earth starts with a slash. It is checked for exactly, below.
  */
 const FILL = ['/auth', '/onboard'];
 

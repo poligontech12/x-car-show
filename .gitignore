@@ -19,3 +19,4 @@ next-env.d.ts
 
 # Uploaded photos live on a volume, never in the repo.
 /uploads/
+.gstack/
