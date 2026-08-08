@@ -2,7 +2,14 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { type Car, type CarClass, type ModCategory } from '@/lib/cars';
+import {
+  PLATE_EXAMPLE,
+  PLATE_MAX,
+  PLATE_NOTE,
+  type Car,
+  type CarClass,
+  type ModCategory,
+} from '@/lib/cars';
 import { useFlowExit } from '@/lib/flow-exit';
 import { useCar, useOwnsCar } from '@/lib/useCars';
 import { useStore } from '@/lib/store';
@@ -117,6 +124,15 @@ export default function EditCarScreen() {
             onChange={(v) => set({ nickname: v })}
             placeholder="Kouki"
           />
+          {/* Scrisă cum vrea proprietarul: fără format, fără majuscule
+              impuse, fiindcă vin mașini și din Ucraina și din Moldova. */}
+          <Field
+            label="Nr. înmatriculare"
+            value={draft.plate ?? ''}
+            onChange={(v) => set({ plate: v.slice(0, PLATE_MAX) })}
+            placeholder={PLATE_EXAMPLE}
+            note={PLATE_NOTE}
+          />
           <Choice
             label="Clasă"
             options={CLASS_OPTIONS}
@@ -224,12 +240,15 @@ function Field({
   onChange,
   placeholder,
   inputMode,
+  note,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
   inputMode?: 'numeric' | 'text';
+  /** Said under the input, where a decision about the field gets made. */
+  note?: string;
 }) {
   return (
     <label className={styles.field}>
@@ -241,6 +260,7 @@ function Field({
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
       />
+      {note && <span className={styles.fieldNote}>{note}</span>}
     </label>
   );
 }

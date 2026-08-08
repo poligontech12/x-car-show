@@ -106,8 +106,10 @@
 
 /* ── Index — the marshal's print list ────────────────────────── */
 
+/* Wider than it was: the gate controls sit on the row now, and a name
+   that wraps to two lines costs more scanning than the width does. */
 .index {
-  max-width: 520px;
+  max-width: 940px;
   margin: 0 auto;
   border-top: 1px solid var(--rim);
 }
@@ -122,6 +124,20 @@
 
 .entry:hover {
   background: rgba(255, 255, 255, 0.02);
+}
+
+/* A row that has been through the gate steps back: what a marshal is
+   looking for is the ones that have not. */
+.entry[data-done='true'] .entryOpen {
+  opacity: 0.55;
+}
+
+.entryOpen {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .entryNumber {
@@ -144,6 +160,9 @@
   line-height: 1.1;
   letter-spacing: -0.03em;
   color: var(--paper);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .entryName span {
@@ -153,7 +172,24 @@
   margin-top: 5px;
 }
 
+/* A column, not a label: these are read down the page while looking for
+   one car, so they are aligned, capitalised and evenly spaced. */
+.entryPlate {
+  width: 120px;
+  flex: none;
+  text-align: right;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
 .entryStand {
+  width: 44px;
+  flex: none;
+  text-align: right;
   font-size: 13px;
   color: var(--paper-45);
 }
@@ -161,6 +197,147 @@
 .entryArrow {
   font-size: 13px;
   color: var(--red);
+}
+
+/* ── The gate ────────────────────────────────────────────────
+   Typed with one thumb, in daylight, wearing a hi-vis. Everything
+   here is bigger than the list it sits beside. */
+
+.gate {
+  max-width: 420px;
+  margin: 64px auto;
+  padding: 24px;
+  border: 1px solid var(--rim);
+  border-radius: var(--r-panel);
+  background: var(--glass);
+}
+
+.gateTitle {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--paper);
+}
+
+.gateBody {
+  margin: 10px 0 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--paper-45);
+}
+
+.gateRow {
+  display: flex;
+  gap: 10px;
+}
+
+.gateInput {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: var(--r-panel);
+  border: 1px solid var(--rim);
+  background: var(--slot);
+  color: var(--paper);
+  font-size: 17px;
+  letter-spacing: 0.1em;
+}
+
+.gateInput[aria-invalid='true'] {
+  border-color: var(--red);
+}
+
+.gateBtn {
+  flex: none;
+  padding: 14px 20px;
+  border-radius: var(--r-panel);
+  border: none;
+  background: var(--red);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.gateError {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--red);
+}
+
+/* ── Check-in — the one press per entry ──────────────────────── */
+
+.checkIn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.checkInNo {
+  width: 58px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--rim);
+  background: var(--slot);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.checkInBtn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* Already done reads as a state, not as the thing to press next. */
+.checkInBtn[data-done='true'] {
+  background: transparent;
+  border-color: var(--rim);
+  color: var(--paper-45);
+}
+
+.checkInUndo {
+  padding: 10px 6px;
+  border: none;
+  background: none;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--paper-28);
+}
+
+.checkInUndo:hover {
+  color: var(--red);
+}
+
+/* Under the row it belongs to, so two marshals working the same list do
+   not read each other's errors. */
+.checkInError {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  font-size: 11.5px;
+  line-height: 1.3;
+  text-align: right;
+  color: var(--red);
+}
+
+@media print {
+  .gate,
+  .checkIn {
+    display: none;
+  }
 }
 
 /* ── Print ───────────────────────────────────────────────────

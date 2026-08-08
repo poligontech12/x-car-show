@@ -89,6 +89,18 @@ export default function AwardScreen() {
         </div>
       )}
 
+      {hydrated && rows.length === 0 && (
+        // Not an error and not an empty database — the paddocks simply
+        // have not opened yet. Cars join the board as they reach the gate.
+        <div className={`${styles.gate} a-up delay-400`}>
+          <div className={styles.gateTitle}>Nicio mașină la poartă încă.</div>
+          <p className={styles.gateBody}>
+            Clasamentul se deschide pe măsură ce mașinile intră în paddock. Poți vota doar
+            mașinile care au ajuns.
+          </p>
+        </div>
+      )}
+
       <div className={styles.tower}>
         {rows.map((r, i) => (
           <button

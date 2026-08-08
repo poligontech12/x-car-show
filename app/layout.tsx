@@ -35,6 +35,28 @@ export const metadata: Metadata = {
   title: 'X Car Show — Cajvana',
   description:
     'Întâlnirea anuală și comunitatea de peste an a scenei auto din Bucovina. 142 de înscrieri, un premiu, un vot de persoană.',
+  /*
+    Kept to the home screen on iOS. The name under the icon, and the
+    status bar it runs behind.
+
+    `black-translucent` lets the app run under the status bar rather
+    than beside it, which is only safe because the layout already
+    expects to: app/tokens.css takes its insets from
+    env(safe-area-inset-*), and PhoneNav sits below the top one.
+  */
+  appleWebApp: {
+    capable: true,
+    title: 'X Car Show',
+    statusBarStyle: 'black-translucent',
+  },
+  /*
+    `capable: true` above renders as <meta name="mobile-web-app-capable">,
+    the unprefixed name every current browser reads. iOS 16.4 and later
+    get standalone from app/manifest.ts anyway; iPhones older than that
+    read only Apple's original spelling, and phones at a car meet are
+    not all new phones. Anything that does not want it ignores it.
+  */
+  other: { 'apple-mobile-web-app-capable': 'yes' },
 };
 
 export const viewport: Viewport = {

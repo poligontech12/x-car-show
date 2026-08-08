@@ -58,7 +58,10 @@ while standing in a field.
 ## Capabilities and Constraints
 
 Eight screens: feed, roster, car profile, scan, award, account/auth, a
-four-step car registration, and partners — plus a print surface at `/cards`.
+four-step car registration, and partners — plus the marshals' surface at
+`/cards`, which both prints the windscreen cards and runs the gate. It is
+the only screen not open to everyone: it hands out entry numbers and decides
+which cars are on the ballot, so it sits behind a code the marshals share.
 
 **Confirmed:**
 
@@ -66,6 +69,11 @@ four-step car registration, and partners — plus a print surface at `/cards`.
   until voting closes. Entrants cannot vote for their own car.
 - **Voting is open to anyone with an account** — not gated to ticket holders,
   and not gated on a gate scan. Confirmed, not assumed.
+- **Only cars that came through the gate are on the ballot.** This is the
+  other half of the rule above and does not weaken it: anyone with an
+  account may still cast a vote, but a car can only *receive* one once a
+  marshal has checked it in. An entry registered in June whose owner stayed
+  home cannot take a prize decided by the people walking the paddocks.
 - **The roster and the standings must work offline on show day.** There is no
   reliable signal in a field outside Cajvana. Cached reads and queued votes are
   a hard requirement on anything built from here, not a nice-to-have.
@@ -83,8 +91,10 @@ app before.
 
 **Undecided — do not invent an answer:**
 
-- Who assigns stand numbers, marshals or owners. It changes the last step of
-  registration.
+- Who assigns **stand** numbers, marshals or owners. It changes the last step
+  of registration. (Entry numbers are settled: marshals, at the gate. The
+  plate is the owner's, given at registration, and is what a marshal matches
+  a car against on the print list.)
 - Whether the thin feed is too quiet between editions, or whether the missing
   thing is a shop/parts board rather than more posts.
 

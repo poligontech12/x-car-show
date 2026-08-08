@@ -56,6 +56,8 @@ function toCar(
     handle: owner.handle,
     followers: String(followers),
     nickname: row.nickname ?? undefined,
+    plate: row.plate ?? undefined,
+    checkedIn: row.checkedInAt != null,
     instagram: owner.instagram ?? undefined,
     facebook: owner.facebook ?? undefined,
     ownerImage: owner.image ?? undefined,

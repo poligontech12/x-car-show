@@ -246,6 +246,15 @@
   letter-spacing: -0.03em;
 }
 
+/* Plates are read as capitals wherever they are issued. Doing it here
+   rather than on the way into the database keeps whatever the owner
+   typed intact — the app corrects how it looks, not what they wrote. */
+.plate {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Sections ────────────────────────────────────────────────── */
 
 .sectionHead {

@@ -53,6 +53,8 @@ export interface Account {
 export interface OnboardingDraft {
   name: string;
   year: string;
+  /** Asked for at registration: it is how the gate finds the car. */
+  plate: string;
   power: number;
   drive: Drive;
 }
@@ -72,7 +74,7 @@ interface UiState {
   onboarding: OnboardingDraft;
 }
 
-const EMPTY_DRAFT: OnboardingDraft = { name: '', year: '', power: 0, drive: 'RWD' };
+const EMPTY_DRAFT: OnboardingDraft = { name: '', year: '', plate: '', power: 0, drive: 'RWD' };
 const INITIAL_UI: UiState = { onboarding: EMPTY_DRAFT };
 
 interface Store extends UiState, ServerState {
@@ -360,6 +362,7 @@ export function StoreProvider({
           model: car.model,
           year: car.year,
           nickname: car.nickname,
+          plate: car.plate,
           cls: car.cls,
           power: car.power,
           tq: car.tq,
@@ -382,6 +385,7 @@ export function StoreProvider({
           model: patch.model,
           year: patch.year,
           nickname: patch.nickname,
+          plate: patch.plate,
           cls: patch.cls,
           power: patch.power,
           tq: patch.tq,

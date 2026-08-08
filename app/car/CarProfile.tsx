@@ -196,13 +196,19 @@ export function CarProfile({ id }: { id: string }) {
             ['Tracțiune', [car.drive, car.gbox].filter(Boolean).join(' · ')],
             ['Jante', car.wheels],
             ['Vopsea', car.paint],
+            // Last, and blank for anyone who would rather not publish it.
+            ['Înmatriculare', car.plate ?? ''],
           ] as [string, string][]
         )
           .filter(([, v]) => v.trim())
           .map(([k, v]) => (
           <div key={k} className={styles.spec}>
             <div className={styles.specKey}>{k}</div>
-            <div className={styles.specValue}>{v}</div>
+            <div
+              className={`${styles.specValue} ${k === 'Înmatriculare' ? styles.plate : ''}`}
+            >
+              {v}
+            </div>
           </div>
           ))}
       </div>
