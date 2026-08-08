@@ -28,8 +28,9 @@ Open this on your phone:
 restarted for a reason. `commit` is what is actually serving, which is not
 always what you last pushed.
 
-> `commit` reads `COMMIT_SHA`, passed in at build time. Until the deploy
-> pipeline passes it, this says `unknown` — see §7.
+> `commit` reads the `COMMIT_SHA` environment variable **on the container**.
+> Until the deploy script sets it this says `unknown` — see §7. It is read
+> at request time, so it needs no rebuild.
 
 ---
 
@@ -160,9 +161,28 @@ deployer kept the old one — which is the system working. Read
       origin and the cold-load weight in one go.
 - [ ] Know your `ssh` line without looking it up. Save it somewhere that
       works with no signal.
-- [ ] Optional but worth it: have the pipeline pass `COMMIT_SHA` as a build
-      arg and set it on the container, so `/api/health` can tell you what is
-      live. Without it that field reads `unknown`.
+- [ ] Worth ten minutes: make `/api/health` report the live commit. It is a
+      plain environment variable on the container, read at request time, so
+      there is no rebuild and no build arg. Find the deploy script:
+
+      ```bash
+      systemctl cat x-car-show-deploy.service      # ExecStart names the script
+      ```
+
+      In its `docker run`, add `-e COMMIT_SHA="$SHA"` — reusing whatever
+      variable already feeds `--label org.opencontainers.image.revision=`,
+      because the script is passing the sha there already. Then:
+
+      ```bash
+      curl -s https://xcarshow.poligontech.ro/api/health
+      ```
+
+      Until then, the sha is still readable the long way, with SSH:
+
+      ```bash
+      docker inspect x-car-show-live \
+        --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}'
+      ```
 
 ---
 

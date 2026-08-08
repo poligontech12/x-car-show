@@ -59,9 +59,11 @@ export async function GET() {
     database,
     cars,
     /**
-     * Passed in at build time by the deploy pipeline. Absent locally, and
-     * absent on the server until the pipeline is told to pass it — say so
-     * rather than print nothing, or an old build looks like a fresh one.
+     * Read here, at request time, rather than inlined — Next only bakes
+     * `NEXT_PUBLIC_*` into a build, so this is a plain environment variable
+     * on the container and needs no rebuild to change. Absent locally, and
+     * absent on the server until the deploy script sets it: say so rather
+     * than print nothing, or an old build passes for a fresh one.
      */
     commit: process.env.COMMIT_SHA ?? 'unknown',
     uptime: since(Date.now() - startedAt),
