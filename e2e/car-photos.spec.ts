@@ -129,6 +129,22 @@ test('a car carries six photo slots, and only its owner is offered them', async 
   // Six wells for the owner — three was the old ceiling.
   await expect(page.getByRole('button', { name: /Adaugă o poză/ })).toHaveCount(6);
 
+  // Editing details is where an owner expects to manage the whole entry.
+  // The same six durable slots must be available there after registration,
+  // including empty ones that can receive a new photograph later.
+  await page.goto(`${carUrl}/edit`);
+  await expect(page.getByRole('heading', { name: 'Fotografii' })).toBeVisible();
+  await expect(page.locator('input[type="file"]')).toHaveCount(6);
+  await page.locator('input[type="file"]').nth(1).setInputFiles({
+    name: 'engine.png',
+    mimeType: 'image/png',
+    buffer: PIXEL_PNG,
+  });
+  await expect(page.getByAltText('Compartiment motor')).toBeVisible();
+
+  await page.goto(carUrl);
+  await expect(page.getByAltText('Compartiment motor')).toBeVisible();
+
   // A visitor is shown the car, never a control the server would refuse.
   await page.context().clearCookies();
   await page.goto(carUrl);
