@@ -7,7 +7,15 @@ import { EntryCard } from '@/components/EntryCard';
 import { ImageSlot } from '@/components/ImageSlot';
 import { QrCodeClient } from '@/components/QrCodeClient';
 import { saveCarPhoto } from '@/lib/actions';
-import { BLANK_CAR, carUrl, headline, type Car } from '@/lib/cars';
+import {
+  BLANK_CAR,
+  PLATE_EXAMPLE,
+  PLATE_MAX,
+  PLATE_NOTE,
+  carUrl,
+  headline,
+  type Car,
+} from '@/lib/cars';
 import { useFlowExit } from '@/lib/flow-exit';
 import { prepareCarPhoto } from '@/lib/photo-file';
 import { CAR_PHOTO_HINTS, CAR_PHOTO_LIMIT } from '@/lib/photos';
@@ -281,6 +289,7 @@ export default function OnboardScreen() {
       make: rest.length ? first : '',
       model: rest.length ? rest.join(' ') : first || 'Mașina mea',
       year: Number(onboarding.year) || 0,
+      plate: onboarding.plate,
       power: onboarding.power ? String(onboarding.power) : '',
       drive: onboarding.drive,
       story,
@@ -400,6 +409,27 @@ export default function OnboardScreen() {
                   patchOnboarding({ year: e.target.value.replace(/\D/g, '').slice(0, 4) })
                 }
               />
+            </div>
+
+            {/* Asked here rather than left to the car page, because the
+                gate reads this list to find a car and print its card —
+                a plate that arrives a week later arrives too late. */}
+            <div className={styles.field}>
+              <label className={styles.fieldLabel} htmlFor="car-plate">
+                Nr. înmatriculare
+              </label>
+              <input
+                id="car-plate"
+                className={styles.input}
+                type="text"
+                placeholder={PLATE_EXAMPLE}
+                maxLength={PLATE_MAX}
+                autoComplete="off"
+                autoCapitalize="characters"
+                value={onboarding.plate}
+                onChange={(e) => patchOnboarding({ plate: e.target.value })}
+              />
+              <span className={styles.fieldNote}>{PLATE_NOTE}</span>
             </div>
           </>
         )}

@@ -36,6 +36,20 @@
       "when": 1785866826890,
       "tag": "0004_user_avatars",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1786152195226,
+      "tag": "0005_car_plate",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786155129004,
+      "tag": "0006_gate_check_in",
+      "breakpoints": true
     }
   ]
 }

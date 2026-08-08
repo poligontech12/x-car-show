@@ -127,13 +127,30 @@ If the app container runs on a user-defined network rather than the default
 bridge, add the `db` service to that network instead and use the host name
 `x-car-show-db` in `DATABASE_URL`.
 
-## The three variables
+## The four variables
 
 | Variable | Where it is needed | What it is |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | **build** and container | The public origin, baked into every printed QR code |
 | `DATABASE_URL` | container only | `postgres://xcs:<POSTGRES_PASSWORD>@172.17.0.1:5432/xcarshow` |
 | `BETTER_AUTH_SECRET` | container only | `openssl rand -base64 32`. Changing it signs everybody out |
+| `GATE_PIN` | container only | The marshals' code for `/cards`, 4+ characters |
+
+`GATE_PIN` is the one that has to be right **before the gate opens**, not
+after. `/cards` hands out entry numbers and decides which cars are in the
+award, so it refuses to open at all until this is set — a deploy that
+forgets it leaves the marshals with a page that says so and no way in.
+
+Four digits is the intended shape: it is typed one-handed, standing up, on
+every marshal's phone. The length is not what protects it — the form is
+throttled to **twenty wrong answers per address per ten minutes**, held in
+the container's memory and cleared whenever someone gets it right. That
+turns guessing all ten thousand from a few minutes into several days,
+which is longer than the show. A marshal who mistypes and then succeeds is
+never counted towards it.
+Changing it mid-show signs every marshal's phone out; they retype the new
+one and carry on. It is checked against the cookie using
+`BETTER_AUTH_SECRET`, so rotating that secret closes the gate too.
 
 `NEXT_PUBLIC_SITE_URL` is the awkward one, because it is needed **three
 times**: by `npm run build`, by `docker build` as `--build-arg`, and by the

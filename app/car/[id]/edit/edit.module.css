@@ -85,6 +85,16 @@
   color: var(--paper-45);
 }
 
+/* Under the input rather than over it: a field you are deciding whether
+   to fill in is read after you have seen what it asks for. */
+.fieldNote {
+  display: block;
+  margin-top: 7px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--paper-45);
+}
+
 .input,
 .area {
   width: 100%;

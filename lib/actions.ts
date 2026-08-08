@@ -5,7 +5,7 @@ import { and, count, eq, gte, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 import { auth } from './auth';
-import type { CarClass, ModCategory, ModGroup } from './cars';
+import { PLATE_MAX, type CarClass, type ModCategory, type ModGroup } from './cars';
 import { db } from './db';
 import {
   carPhotos,
@@ -67,6 +67,20 @@ const text = (v: unknown): string | null => {
   return s ? s : null;
 };
 
+/**
+ * A plate, tidied and never reshaped.
+ *
+ * There is no pattern to check against. `SV 14 XCS` is Romanian, but the
+ * show draws cars from Ucraina and Moldova too, and a custom plate obeys
+ * nobody's format — so anything stricter than collapsing runs of spaces
+ * would reject something that turned up in the field. The cap is shared
+ * with the two forms that ask for it, so typing stops where saving does.
+ */
+const plateText = (v: unknown): string | null => {
+  const s = typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, PLATE_MAX) : '';
+  return s ? s : null;
+};
+
 /** A blank number is null, never 0 — the profile hides what nobody filled in. */
 const num = (v: unknown): number | null => {
   const n = Number(String(v ?? '').replace(/[^\d.-]/g, ''));
@@ -81,6 +95,7 @@ export interface CarInput {
   model?: string;
   year?: string | number;
   nickname?: string;
+  plate?: string;
   cls?: string;
   power?: string | number;
   tq?: string | number;
@@ -100,6 +115,7 @@ function carColumns(input: CarInput) {
     model: text(input.model) ?? '',
     year: num(input.year),
     nickname: text(input.nickname),
+    plate: plateText(input.plate),
     cls: oneOf(input.cls, CLASSES, 'JDM'),
     power: num(input.power),
     tq: num(input.tq),
@@ -484,12 +500,15 @@ export async function toggleVote(carId: string): Promise<boolean> {
   if (!votingOpen()) throw new Error(`Votul s-a închis la ${EVENT.votingCloses}.`);
 
   const [car] = await db
-    .select({ ownerId: cars.ownerId })
+    .select({ ownerId: cars.ownerId, checkedInAt: cars.checkedInAt })
     .from(cars)
     .where(eq(cars.id, carId))
     .limit(1);
   if (!car) throw new Error('Mașina asta nu există.');
   if (car.ownerId === user.id) throw new Error('Nu poți vota propria mașină.');
+  // The award screen already leaves these off the board; the ballot is
+  // public, so the rule has to hold here too and not only where it is drawn.
+  if (!car.checkedInAt) throw new Error('Mașina asta n-a ajuns încă la poartă.');
 
   const added = await db.transaction(async (tx) => {
     const mine = await tx

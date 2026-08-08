@@ -84,6 +84,16 @@
   margin-top: 24px;
 }
 
+/* Under the input: what a field is for is read after seeing what it
+   asks for, and this one is answering "why do you want my plate?". */
+.fieldNote {
+  display: block;
+  margin-top: 8px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--paper-45);
+}
+
 .input {
   width: 100%;
   margin-top: 8px;

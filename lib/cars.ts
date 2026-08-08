@@ -13,6 +13,21 @@ export type CarClass = 'JDM' | 'Germane' | 'Muscle' | 'Clasice' | 'Stance' | 'Of
 
 export type ModCategory = 'Motor' | 'Suspensie' | 'Jante' | 'Exterior' | 'Interior';
 
+/**
+ * The plate is how a car is picked out of the list at the gate, so the
+ * cap, the example and the promise made about it live in one place —
+ * registration, the edit form and the server all read them from here,
+ * and a person is told the same thing wherever they are asked.
+ *
+ * The cap is about a line on a marshal's list, not about any country's
+ * format: nothing is validated, because the show draws cars from Ucraina
+ * and Moldova and a custom plate matches no pattern at all.
+ */
+export const PLATE_MAX = 16;
+export const PLATE_EXAMPLE = 'SV 14 XCS';
+export const PLATE_NOTE =
+  'Așa te găsim la poartă, când tipărim cartonașele. Apare public pe pagina mașinii — lasă gol dacă nu vrei asta.';
+
 export interface ModGroup {
   name: ModCategory;
   items: string[];
@@ -41,6 +56,12 @@ export interface Car {
   followers: string;
   /** What the owner calls it. Printed on the card under the headline. */
   nickname?: string;
+  /**
+   * The registration plate, as the owner writes it. Absent whenever they
+   * left it blank — which is a normal thing to want — and absent on the
+   * modelled builds below, which stand in for real people's cars.
+   */
+  plate?: string;
   /** The owner's own photograph, if they have added one. */
   ownerImage?: string;
   /** Where the owner sends people. Handles, not URLs — we build the link. */
@@ -48,6 +69,15 @@ export interface Car {
   facebook?: string;
   /** True for an entry a member registered themselves, rather than seed data. */
   mine?: boolean;
+  /**
+   * True once a marshal has handed over the printed card at the gate. Set
+   * on the day and never by the owner, which is why the modelled builds
+   * below carry no value for it — like [mine], it is a fact about a row in
+   * the database rather than part of how a build is described.
+   *
+   * The award reads this: only cars that turned up can be voted for.
+   */
+  checkedIn?: boolean;
   /**
    * Uploaded photographs, by slot. Absent on the modelled builds below,
    * which have never had any — the screens show an empty well for those.
@@ -487,18 +517,25 @@ export interface Standing {
 }
 
 /**
- * Car of the show, as it stands. Every entry is on the board, because the
- * board is also the ballot — a car with no votes yet still has to be
- * tappable, or nobody could ever cast the first one.
+ * Car of the show, as it stands. Every entry that turned up is on the
+ * board, because the board is also the ballot — a car with no votes yet
+ * still has to be tappable, or nobody could ever cast the first one.
+ *
+ * Cars that have not been through the gate are not on it at all. Someone
+ * who entered in June and stayed home cannot win a prize decided by the
+ * people walking the paddocks, and leaving them on the ballot would let
+ * an absent car take it. The percentages are of the votes cast for cars
+ * that are here, so the column still adds up to the board you are reading.
  */
 export function standings(
   cars: Car[],
   tally: Record<string, number>,
   myVotes: string[],
 ): Standing[] {
-  const total = Object.values(tally).reduce((a, n) => a + n, 0);
+  const present = cars.filter((car) => car.checkedIn);
+  const total = present.reduce((sum, car) => sum + (tally[car.id] ?? 0), 0);
 
-  return cars
+  return present
     .map((car) => ({ id: car.id, car, votes: tally[car.id] ?? 0 }))
     .sort(
       (a, b) =>

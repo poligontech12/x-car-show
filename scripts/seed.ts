@@ -281,6 +281,11 @@ async function main() {
       story: c.story || null,
       no: c.no || null,
       stand: c.stand || null,
+      plate: c.plate ?? null,
+      // A modelled build carrying a gate number is one that came through
+      // the gate, so it is checked in — otherwise the votes seeded below
+      // would sit on cars the award screen refuses to show.
+      checkedInAt: c.no ? new Date() : null,
       win: c.win,
     });
 

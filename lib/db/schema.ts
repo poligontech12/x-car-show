@@ -110,6 +110,16 @@ export const cars = pgTable(
     year: integer('year'),
     /** What the owner calls it. Printed under the headline on the card. */
     nickname: text('nickname'),
+    /**
+     * The registration plate, exactly as the owner writes it. Optional on
+     * purpose — plenty of people will not want theirs on a public page,
+     * and a blank one has to read as a choice rather than a gap.
+     *
+     * No format is imposed. The show draws cars from Ucraina and Moldova
+     * as well as Romania, and a custom plate follows no country's pattern
+     * at all; the only rule is a length a card and a phone can hold.
+     */
+    plate: text('plate'),
     cls: text('cls').$type<CarClass>().notNull().default('JDM'),
 
     /** Blank until the owner fills it in — never zero. */
@@ -127,13 +137,36 @@ export const cars = pgTable(
     /** Handed out by the organiser at the gate, not by the owner. */
     no: text('no'),
     stand: text('stand'),
+    /**
+     * The gate, in one column. A marshal sets this when they print the
+     * card and hand it over, and it carries three facts at once: the card
+     * exists on paper, the number beside it is `no`, and the car is in the
+     * running for car of the show.
+     *
+     * That last one is why this is not called `printed_at`. A car that
+     * registered online in June and never turned up in the field has this
+     * null, and the award has to leave it out — the room can only pick
+     * between cars the room can see. Voting itself stays open to anyone
+     * with an account; this governs which cars may *receive* a vote, never
+     * who may cast one.
+     */
+    checkedInAt: timestamp('checked_in_at', { withTimezone: true }),
     /** The year this car took car of the show, if it ever has. */
     win: text('win'),
 
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [index('cars_owner_idx').on(t.ownerId)],
+  (t) => [
+    index('cars_owner_idx').on(t.ownerId),
+    // Two cars wearing 14 is a argument in a field with no way to settle
+    // it, so the database refuses the second one. Nulls do not collide,
+    // which is what lets every unnumbered entry sit here until the gate.
+    unique('cars_no').on(t.no),
+    // NULL passes a check, so "no plate" stays free; an empty string does
+    // not, which keeps blank spelled one way rather than two.
+    check('cars_plate_length', sql`char_length(${t.plate}) between 1 and 16`),
+  ],
 );
 
 /** One row per part, grouped by category and ordered within it. */
