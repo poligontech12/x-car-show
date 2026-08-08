@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Albert_Sans } from 'next/font/google';
+import Script from 'next/script';
 import { AppShell } from '@/components/AppShell';
 import { DevToolbar } from '@/components/DevToolbar';
 import { RefreshOnReturn } from '@/components/RefreshOnReturn';
@@ -14,6 +15,21 @@ const albert = Albert_Sans({
   variable: '--font-albert',
   display: 'swap',
 });
+
+/**
+ * Google Analytics. The app had no measurement of any kind, which meant a
+ * printed poster and somebody typing the address in were indistinguishable
+ * from each other and from nothing at all.
+ *
+ * Loaded `afterInteractive`, so it never sits in front of the first paint
+ * on a phone with one bar of signal in a field.
+ *
+ * Route changes: GA4's enhanced measurement raises a page_view on history
+ * events, which is how this app navigates. If the property shows one view
+ * per session and no more, that setting is the thing to turn on — it is
+ * on by default, and it is not something this file can do from here.
+ */
+const GA_ID = 'G-X5J08Z9Y20';
 
 export const metadata: Metadata = {
   title: 'X Car Show — Cajvana',
@@ -67,6 +83,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <AppShell>{children}</AppShell>
         </StoreProvider>
         <DevToolbar />
+
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+        <Script id="ga" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_ID}');
+        `}</Script>
       </body>
     </html>
   );
