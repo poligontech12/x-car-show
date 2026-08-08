@@ -1,5 +1,5 @@
 import type { Car } from '@/lib/cars';
-import { SITE_HOST, headline } from '@/lib/cars';
+import { headline } from '@/lib/cars';
 import { EVENT } from '@/lib/event';
 import { Mark } from './Mark';
 import styles from './EntryCard.module.css';
@@ -84,13 +84,6 @@ export function EntryCard({ car, qr }: Props) {
             )}
           </div>
         </div>
-      </div>
-
-      <div className={styles.foot}>
-        <b>
-          {SITE_HOST.toUpperCase()} / {orDash(car.no)}
-        </b>
-        <span>VOTUL SE ÎNCHIDE LA {EVENT.votingCloses}</span>
       </div>
     </div>
   );

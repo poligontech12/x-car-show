@@ -192,27 +192,6 @@
   color: rgba(11, 11, 12, 0.4);
 }
 
-.foot {
-  flex: none;
-  background: var(--ink);
-  padding: calc(9 * var(--u)) calc(20 * var(--u));
-  display: flex;
-  gap: calc(12 * var(--u));
-  font-family: var(--font-sans);
-  font-size: calc(9 * var(--u));
-  letter-spacing: 0.04em;
-}
-
-.foot b {
-  font-weight: 400;
-  flex: 1;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.foot span {
-  color: rgba(255, 255, 255, 0.4);
-}
-
 /* ── Print ───────────────────────────────────────────────────
    One card per A5 sheet, bled to the edges. The card carries its
    own print sizing rather than inheriting it from whatever page it
@@ -236,10 +215,5 @@
 
   .card:last-child {
     break-after: auto;
-  }
-
-  .foot {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 }

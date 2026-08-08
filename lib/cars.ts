@@ -500,9 +500,6 @@ export const SITE_ORIGIN = (
   process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 ).replace(/\/+$/, '');
 
-/** How the origin reads on a printed card: no scheme, no trailing slash. */
-export const SITE_HOST = SITE_ORIGIN.replace(/^https?:\/\//, '');
-
 /** Where a scanned card lands. Printed as a QR on every windshield card. */
 export const carUrl = (c: Car, origin = SITE_ORIGIN): string => `${origin}/car/${c.id}`;
 
