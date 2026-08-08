@@ -53,6 +53,16 @@ export const photoAt = (photos: CarPhoto[] | undefined, position: number): strin
   photos?.find((p) => p.position === position)?.url ?? null;
 
 /**
+ * The same photograph, rendered for a smaller tile.
+ *
+ * Widths are the ones the route will render and nothing else — see
+ * PHOTO_WIDTHS. Added to a URL that already carries its version stamp, so
+ * each size stays as cacheable as the original was.
+ */
+export const atWidth = (url: string | null, width: 240 | 720 | 1200): string | null =>
+  url ? `${url}${url.includes('?') ? '&' : '?'}w=${width}` : null;
+
+/**
  * A member's own photograph. Keyed by handle rather than account id
  * because the handle is already the public name for a person — it is what
  * /owner/<handle> is built from and what gets printed on a card.

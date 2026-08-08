@@ -94,8 +94,14 @@ test('a car registered with photos opens showing them, everywhere', async ({ pag
   await expect(page.locator(`img[src="${heroSrc}"]`).first()).toBeVisible();
 
   // ── And the garage row, which used to have a key of its own too ──
+  //
+  // Matched on the front of the URL rather than all of it: the row draws a
+  // 76px tile and asks for a rendered width, so its src is the hero's plus
+  // `&w=240`. That still catches the thing this line is here for — a
+  // garage that invents a key of its own would not share the prefix — but
+  // does not insist the tile fetch a 1200px photograph to show it small.
   await page.goto('/garage');
-  await expect(page.locator(`img[src="${heroSrc}"]`).first()).toBeVisible();
+  await expect(page.locator(`img[src^="${heroSrc}"]`).first()).toBeVisible();
 });
 
 test('a car carries six photo slots, and only its owner is offered them', async ({ page }) => {

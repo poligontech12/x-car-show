@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ImageSlot } from '@/components/ImageSlot';
 import { ScreenTitle } from '@/components/StickyHeader';
 import { displayModel } from '@/lib/cars';
-import { leadPhoto } from '@/lib/photos';
+import { atWidth, leadPhoto } from '@/lib/photos';
 import { useStore } from '@/lib/store';
 import { useCars } from '@/lib/useCars';
 import styles from './garage.module.css';
@@ -80,7 +80,13 @@ export default function GarageScreen() {
                 style={{ animationDelay: `${0.3 + i * 0.07}s` }}
               >
                 <span className={styles.thumb}>
-                  <ImageSlot src={leadPhoto(c.photos)} hint={displayModel(c)} mode="inline" readOnly />
+                  {/* Drawn at 76px. The full picture is 1200 wide. */}
+                  <ImageSlot
+                    src={atWidth(leadPhoto(c.photos), 240)}
+                    hint={displayModel(c)}
+                    mode="inline"
+                    readOnly
+                  />
                 </span>
                 <span className={styles.rowBody}>
                   <b>{displayModel(c) || 'Fără nume'}</b>
