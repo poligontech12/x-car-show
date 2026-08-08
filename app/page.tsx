@@ -38,6 +38,29 @@ export default function RosterScreen() {
     setIndex(0);
   }, [hydrated]);
 
+  /**
+   * Nothing registered yet. The deck is scroll-snap panels over
+   * photographs, so with no cars it collapses to a black screen that
+   * reads as broken rather than as empty — and this is the front door,
+   * so that is the first thing a visitor sees. Say it instead, in the
+   * same voice the feed uses when it has nothing either.
+   *
+   * The cars are fetched on the server and handed to the store, so this
+   * is already right on the first paint — no populated roster ever
+   * flashes this on its way in.
+   */
+  if (cars.length === 0) {
+    return (
+      <div className={styles.blank}>
+        <section className={`${styles.empty} a-up delay-200`}>
+          <span aria-hidden="true">◎</span>
+          <h2>Prima apariție e încă pe drum.</h2>
+          <p>Înscrierile sunt deschise. Prima mașină din listă poate fi a ta.</p>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={deck}

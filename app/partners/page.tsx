@@ -1,7 +1,6 @@
 'use client';
 
 import { ScreenTitle } from '@/components/StickyHeader';
-import { PARTNERS } from '@/lib/partners';
 import styles from './partners.module.css';
 
 function Wrench() {
@@ -27,26 +26,18 @@ export default function PartnersScreen() {
         lines={['Parteneri']}
       />
 
-      <p className={`${styles.note} a-up delay-300`}>
-        Fiecare atelier de aici a lucrat la cel puțin o mașină din listă. Fără plasări plătite.
-      </p>
-
-      <div className={styles.list}>
-        {PARTNERS.map((p, i) => (
-          <div
-            key={p.name}
-            className={`${styles.partner} a-up`}
-            data-spot
-            style={{ animationDelay: `${0.35 + i * 0.07}s` }}
-          >
-            <div className={styles.logo} />
-            <div className={styles.body}>
-              <b>{p.name}</b>
-              <span>{p.meta}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* The shops are held back until they are real ones. The list
+          itself is still in lib/partners.ts and the panel styles below
+          are still here, so putting it back is the map that used to
+          stand where this section does. */}
+      <section className={`${styles.empty} a-up delay-300`}>
+        <span aria-hidden="true">◎</span>
+        <h2>Atelierele se adună.</h2>
+        <p>
+          Fiecare atelier care ajunge aici a lucrat la cel puțin o mașină din listă. Fără plasări
+          plătite.
+        </p>
+      </section>
     </div>
   );
 }

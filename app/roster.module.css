@@ -136,3 +136,43 @@
   height: 22px;
   background: var(--red);
 }
+
+/* ── Nothing registered yet ──────────────────────────────────
+   Same shape as the feed's empty state, because it carries the
+   same sentence — an identical line should look identical. It
+   centres in the deck's own height rather than scrolling, since
+   there are no panels to snap between. */
+
+.blank {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 0 24px calc(var(--safe-bottom) + 40px);
+  text-align: center;
+}
+
+.empty > span {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--red);
+  font-size: 32px;
+  line-height: 1;
+}
+
+.empty h2 {
+  max-width: 280px;
+  margin: 0 auto;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.empty p {
+  max-width: 290px;
+  margin: 13px auto 0;
+  color: var(--paper-45);
+  font-size: 14px;
+  line-height: 1.5;
+}

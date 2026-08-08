@@ -11,6 +11,47 @@
   text-wrap: pretty;
 }
 
+/* ── Nothing to show yet ─────────────────────────────────────
+   Same shape as the feed's and the roster's, so the three empty
+   screens in this app read as one thing rather than three. */
+
+.empty {
+  min-height: 42vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 30px 24px;
+  text-align: center;
+}
+
+.empty > span {
+  margin-bottom: 18px;
+  color: var(--red);
+  font-size: 32px;
+  line-height: 1;
+}
+
+.empty h2 {
+  max-width: 280px;
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.empty p {
+  max-width: 290px;
+  margin: 13px 0 0;
+  color: var(--paper-45);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── The shop list ───────────────────────────────────────────
+   Dormant while the shops are held back. Kept whole so the page
+   comes back by restoring its markup, not by rebuilding its look. */
+
 .list {
   display: flex;
   flex-direction: column;
