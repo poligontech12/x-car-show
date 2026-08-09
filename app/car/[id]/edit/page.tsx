@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { CarPhotoSlot } from '@/components/CarPhotoSlot';
 import {
   PLATE_EXAMPLE,
   PLATE_MAX,
@@ -11,6 +12,7 @@ import {
   type ModCategory,
 } from '@/lib/cars';
 import { useFlowExit } from '@/lib/flow-exit';
+import { CAR_PHOTO_HINTS, CAR_PHOTO_LIMIT, photoAt } from '@/lib/photos';
 import { useCar, useOwnsCar } from '@/lib/useCars';
 import { useStore } from '@/lib/store';
 import styles from './edit.module.css';
@@ -18,6 +20,7 @@ import styles from './edit.module.css';
 const CLASS_OPTIONS: CarClass[] = ['JDM', 'Germane', 'Muscle', 'Clasice', 'Stance', 'Off-road'];
 const DRIVES: Car['drive'][] = ['FWD', 'RWD', 'AWD', '4WD'];
 const MOD_CATEGORIES: ModCategory[] = ['Motor', 'Suspensie', 'Jante', 'Exterior', 'Interior'];
+const PHOTO_SLOTS = Array.from({ length: CAR_PHOTO_LIMIT }, (_, position) => position);
 
 /** Mod groups are edited as one line per item — faster than a list builder. */
 const groupText = (car: Car, name: ModCategory) =>
@@ -107,6 +110,22 @@ export default function EditCarScreen() {
           Tot ce completezi aici apare pe pagina mașinii și pe cartonașul tipărit.
           Poți lăsa gol ce nu știi încă.
         </p>
+
+        <Section title="Fotografii" note="Poți adăuga, înlocui sau șterge oricând.">
+          <div className={styles.photoGrid}>
+            {PHOTO_SLOTS.map((position) => (
+              <div key={position} className={styles.photoWell}>
+                <CarPhotoSlot
+                  carId={car.id}
+                  position={position}
+                  src={photoAt(car.photos, position)}
+                  hint={CAR_PHOTO_HINTS[position]}
+                  canEdit
+                />
+              </div>
+            ))}
+          </div>
+        </Section>
 
         <Section title="Identitate">
           <Field label="Model" value={draft.model} onChange={(v) => set({ model: v })} placeholder="Silvia S14" />
