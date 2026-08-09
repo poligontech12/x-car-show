@@ -26,8 +26,12 @@ import {
  */
 
 const COOKIE = 'xcs_gate';
-/** One long day in a field, and expired by the time the next one starts. */
-const MAX_AGE = 16 * 60 * 60;
+/**
+ * Keep this phone authorized until a marshal explicitly closes the gate.
+ * Chromium caps persistent cookies at 400 days, so use that ceiling rather
+ * than silently ending the gate session during or between event days.
+ */
+const MAX_AGE = 400 * 24 * 60 * 60;
 
 /**
  * Four digits, typed one-handed on a phone in a field, is the point. It

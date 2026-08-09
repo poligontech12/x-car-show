@@ -94,6 +94,17 @@ test.describe('the gate', () => {
     await expect(page.getByRole('link', { name: '← APLICAȚIA' })).toBeVisible();
   });
 
+  test('the gate stays open on that phone until a marshal closes it', async ({ page }) => {
+    await openGate(page);
+
+    const gateCookie = (await page.context().cookies()).find((cookie) => cookie.name === 'xcs_gate');
+    expect(gateCookie).toBeDefined();
+    expect(gateCookie!.expires).toBeGreaterThan(Date.now() / 1000 + 300 * 24 * 60 * 60);
+
+    await page.reload();
+    await expect(page.getByRole('link', { name: '← APLICAȚIA' })).toBeVisible();
+  });
+
   test('one press numbers a car, prints its card and puts it in the award', async ({ page }) => {
     const plate = `gate ${Date.now() % 100000}`;
     const { id: carId, owner } = await registerCar(page, 'Dacia 1310', plate);
